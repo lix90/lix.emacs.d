@@ -1,0 +1,12 @@
+/auto-save-list/
+/backups/
+/elpa/
+/snippets/
+/helm-adaptive-history
+/ido.last
+/places
+/recentf
+/smex-items
+/srecode-map.el
+*.elc
+*~
