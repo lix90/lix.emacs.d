@@ -8,5 +8,6 @@
 /recentf
 /smex-items
 /srecode-map.el
+/places
 *.elc
 *~

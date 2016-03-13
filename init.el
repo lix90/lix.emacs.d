@@ -2,39 +2,25 @@
 ;; Debugging
 (setq message-log-max 10000)
 
-(setq my-lisp-dir (expand-file-name "lisp" user-emacs-directory))
-(add-to-list 'load-path my-lisp-dir)
-(let ((default-directory my-lisp-dir))
-  (normal-top-level-add-subdirs-to-load-path))
+(defvar local-dir user-emacs-directory
+  "The root dir of the Emacs configuration.")
 
-;; Package management
-;; Please don't load outdated byte code
+(defun local-file-name (file-name)
+  (let* ((file-path (expand-file-name file-name local-dir))
+         (parent-dir (file-name-directory file-path)))
+    (unless (or (not parent-dir)
+                (file-exists-p parent-dir))
+      (make-directory parent-dir))
+    file-path))
+
 (setq load-prefer-newer t)
 
-(require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
+(load (local-file-name "core/core-packages"))
 
-(package-initialize)
-
-;; Bootstrap `use-package'
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-;; Requires
-(eval-when-compile
-  (require 'use-package))
-(require 'config-keybind)
-(require 'diminish)
-(require 'config-looking)
-(require 'config-edit)
-;; language
-(require 'config-lang)
-;; tool
-(require 'config-tool)
+(load (local-file-name "config/config-keybind"))
+(load (local-file-name "config/config-looking"))
+(load (local-file-name "config/config-edit"))
+(load (local-file-name "config/config-tool"))
+(load (local-file-name "config/config-lang"))
 
 ;;; end init.el
