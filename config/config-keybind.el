@@ -89,6 +89,22 @@
           (if this-win-2nd (other-window 1))))))
 
 (global-set-key (kbd "C-x |") 'toggle-window-split)
+;; -------------------------------------------------------------------
+;; windowMove
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
 
+(defun ignore-error-wrapper (fn)
+  "Funtion return new function that ignore errors.
+   The function wraps a function with `ignore-errors' macro."
+  (lexical-let ((fn fn))
+    (lambda ()
+      (interactive)
+      (ignore-errors
+        (funcall fn)))))
+(global-set-key [s-left] (ignore-error-wrapper 'windmove-left))
+(global-set-key [s-right] (ignore-error-wrapper 'windmove-right))
+(global-set-key [s-up] (ignore-error-wrapper 'windmove-up))
+(global-set-key [s-down] (ignore-error-wrapper 'windmove-down))
 ;;--------------------------------------------------------------------
 (provide 'config-keybind)
