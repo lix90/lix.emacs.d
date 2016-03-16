@@ -333,11 +333,11 @@
   (define-key ivy-minibuffer-map (kbd "<C-S-tab>") 'ivy-previous-line)
   :diminish ivy-mode)
 
-(use-package hlinum
-  :ensure t
-  :config
-  (hlinum-activate)
-  (global-linum-mode t))
+;; (use-package hlinum
+;;   :ensure t
+;;   :config
+;;   (hlinum-activate)
+;;   (global-linum-mode t))
 
 (use-package rainbow-delimiters
   :ensure t

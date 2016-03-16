@@ -1,7 +1,7 @@
 ;;; core-packages.el ---
 
 (require 'cl)
-(require 'package)
+;; (require 'package)
 (setq package-enable-at-startup nil)
 
 (when (>= emacs-major-version 24)

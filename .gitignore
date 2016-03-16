@@ -10,5 +10,7 @@
 /srecode-map.el
 /places
 /cache/
+/undo/
 *.elc
 *~
+.#*

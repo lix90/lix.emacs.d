@@ -30,13 +30,14 @@
   (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input))
 
 ;; Octave
-(use-package octave-mode
-  :mode "\\.m$")
+;; (use-package octave-mode
+;;   :mode "\\.m$")
 
 ;; matlab
 (use-package matlab-mode
   :ensure t
   :defer t
+  :mode ("\\.m$" . matlab-mode)
   :init (setq matlab-shell-command
               (or
                (executable-find "matlab")
