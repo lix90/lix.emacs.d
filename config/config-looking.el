@@ -43,10 +43,10 @@
       nil t))
 (cond
  ((eq window-system nil) nil)
- ((font-existsp "DejaVu Sans Mono")
+ ((font-existsp "Source Code Pro")
   (set-face-attribute 'default nil
                       :height 100
-                      :font "DejaVu Sans Mono")))
+                      :font "Source Code Pro")))
 ;; (cond
 ;;  ((eq window-system nil) nil)
 ;;  ((font-existsp "Source Code Pro")

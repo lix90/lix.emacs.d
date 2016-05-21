@@ -53,7 +53,9 @@
   :ensure t
   :commands markdown-mode
   :mode (("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)))
+         ("\\.markdown\\'" . markdown-mode)
+         ("\\.text\\'" . markdown-mode))
+  :config (add-hook 'markdown-mode-hook 'visual-line-mode))
 (use-package markdown-toc
   :ensure t
   )
