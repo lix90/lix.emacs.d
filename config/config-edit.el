@@ -111,7 +111,7 @@
   (when buffer-file-name (save-buffer)))
 
 ;; diminish keeps the modeline tidy
-(require 'diminish)
+;; (require 'diminish)
 
 ;; ediff - don't start another frame
 (require 'ediff)

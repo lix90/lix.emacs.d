@@ -24,12 +24,18 @@
 
 (load (local-file-name "core/core-packages"))
 
+
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-option-modifier 'alt)
   (setq mac-command-modifier 'meta)
   (global-set-key [kp-delete] 'delete-char) ;; sets fn-delete to be right-delete
   (set-fontset-font "fontset-default" 'gb18030' ("STHeiti" . "unicode-bmp"))
   (set-frame-font "Monaco 14")
+  ;; set exec-path
+  (use-package exec-path-from-shell
+    :ensure t
+    :defer t
+    :init (exec-path-from-shell-initialize))
   )
 
 ;; (load (local-file-name "config/config-os"))
@@ -47,7 +53,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (magit-gitflow markdown-toc markdown-mode matlab-mode yasnippet whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree swiper sublimity spaceline smex smartparens rainbow-delimiters neotree multiple-cursors monokai-theme magit hungry-delete helm fix-word expand-region evil-nerd-commenter esup ess company-emoji color-theme-approximate better-defaults aggressive-indent))))
+    (elpy magit-gitflow markdown-toc markdown-mode matlab-mode yasnippet whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree swiper sublimity spaceline smex smartparens rainbow-delimiters neotree multiple-cursors monokai-theme magit hungry-delete helm fix-word expand-region evil-nerd-commenter esup ess company-emoji color-theme-approximate better-defaults aggressive-indent))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
