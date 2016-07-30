@@ -1,11 +1,11 @@
 ;; 1. 判定系统
-(defconst be-macos (eq system-type 'darwin))
-(defconst be-linux (eq system-type 'gnu/linux))
-(cond
- (be-macos
-  (progn (message "System: MacOS")))
- (be-linux
-  (progn (message "System: Linux"))))
+;; (defconst be-macos (eq system-type 'darwin))
+;; (defconst be-linux (eq system-type 'gnu/linux))
+;; (cond
+;;  (be-macos
+;;   (progn (message "System: MacOS")))
+;;  (be-linux
+;;   (progn (message "System: Linux"))))
 
 ;; 设置环境变量 exec-path (emacs 的 exec-path 相当于 shell 的 $path)
 ;; MacOS does not run a shell during the login
@@ -14,17 +14,34 @@
 
 ;; 2. 交互设置
 ;; 键盘和字体
-(cond
- (be-macos
-  (progn
-    ;; 重映射Meta键
-    (setq mac-option-modifier 'alt)
-    (setq mac-command-modifier 'meta)
-    ;; sets fn-delete to be right-delete
-    (global-set-key [kp-delete] 'delete-char)
-    ;; 中文字体
-    (set-fontset-font "fontset-default" 'gb18030' ("STHeiti" . "unicode-bmp"))
-    )))
+;; key bindings
+(when (eq system-type 'darwin) ;; mac specific settings
+  (setq mac-option-modifier 'alt)
+  (setq mac-command-modifier 'meta)
+  (global-set-key [kp-delete] 'delete-char) ;; sets fn-delete to be right-delete
+  (set-fontset-font "fontset-default" 'gb18030' ("STHeiti" . "unicode-bmp"))
+  (set-default-font "Consolas 15")
+  ;; https://gist.github.com/liuyix/6849902
+  ;; (set-frame-font "Consolas:pixelsize=15") ;;original: Monaco
+  ;; (dolist (charset '(han kana symbol cjk-misc bopomofo))
+  ;;   (set-fontset-font (frame-parameter nil 'font)
+  ;;                     charset
+  ;;                     (font-spec :family "Hiragino Sans GB" :size 18)
+  ;;                     )
+  ;;   )
+  )
+
+;; (cond
+;;  (be-macos
+;;   (progn
+;;     ;; 重映射Meta键
+;;     (setq mac-option-modifier 'alt)
+;;     (setq mac-command-modifier 'meta)
+;;     ;; sets fn-delete to be right-delete
+;;     (global-set-key [kp-delete] 'delete-char)
+;;     ;; 中文字体
+;;     (set-fontset-font "fontset-default" 'gb18030' ("STHeiti" . "unicode-bmp"))
+;;     )))
 
 ;; 窗口最大化
 ;; (cond

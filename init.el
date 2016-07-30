@@ -23,7 +23,16 @@
 (setq load-prefer-newer t)
 
 (load (local-file-name "core/core-packages"))
-(load (local-file-name "config/config-os"))
+
+(when (eq system-type 'darwin) ;; mac specific settings
+  (setq mac-option-modifier 'alt)
+  (setq mac-command-modifier 'meta)
+  (global-set-key [kp-delete] 'delete-char) ;; sets fn-delete to be right-delete
+  (set-fontset-font "fontset-default" 'gb18030' ("STHeiti" . "unicode-bmp"))
+  (set-frame-font "Monaco 14")
+  )
+
+;; (load (local-file-name "config/config-os"))
 (load (local-file-name "config/config-keybind"))
 (load (local-file-name "config/config-looking"))
 (load (local-file-name "config/config-edit"))

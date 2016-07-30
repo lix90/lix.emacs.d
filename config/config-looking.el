@@ -59,16 +59,16 @@
             (spaceline-spacemacs-theme)))
 
 ;; font
-(defun font-existsp (font)
-  "Check to see if the named FONT is available."
-  (if (null (x-list-fonts font))
-      nil t))
-(cond
- ((eq window-system nil) nil)
- ((font-existsp "Source Code Pro")
-  (set-face-attribute 'default nil
-                      :height 100
-                      :font "Source Code Pro")))
+;; (defun font-existsp (font)
+;;   "Check to see if the named FONT is available."
+;;   (if (null (x-list-fonts font))
+;;       nil t))
+;; (cond
+;;  ((eq window-system nil) nil)
+;;  ((font-existsp "Source Code Pro")
+;;   (set-face-attribute 'default nil
+;;                       :height 100
+;;                       :font "Source Code Pro")))
 ;; (cond
 ;;  ((eq window-system nil) nil)
 ;;  ((font-existsp "Source Code Pro")
