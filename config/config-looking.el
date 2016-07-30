@@ -4,9 +4,6 @@
   :defer t)
 (require 'better-defaults)
 
-;; theme
-(load-theme 'misterioso)
-
 ;; disable startup screen and *scratch* message
 (setq inhibit-startup-screen t
       initial-scratch-message nil)
@@ -25,15 +22,40 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; b) i don't care if the process is running
 (setq kill-buffer-query-functions
-  (remq 'process-kill-buffer-query-function
-        kill-buffer-query-functions))
+      (remq 'process-kill-buffer-query-function
+            kill-buffer-query-functions))
+
+;; theme
+;; (load-theme 'misterioso)
+;;----------- from markauskas, my-colors.el
+(use-package monokai-theme
+  :ensure t
+  :config
+  (progn
+    (load-theme 'monokai t)
+    )
+  )
+
+(use-package color-theme-approximate
+  :ensure t
+  :config
+  (progn
+    (color-theme-approximate-on)
+    )
+  )
+
 
 ;; modeline
 (use-package spaceline
   :ensure t
   :config (progn
             (require 'spaceline-config)
-            (setq powerline-default-separator 'zigzag)
+            (setq powerline-default-separator 'arrow)
+            (setq powerline-height 16)
+            (setq powerline-raw " ")
+            (setq ns-use-srgb-colorspace nil)
+            ;; (setq spaceline-separator-dir-left '(left . left))
+            ;; (setq spaceline-separator-dir-right '(right . right))
             (spaceline-spacemacs-theme)))
 
 ;; font

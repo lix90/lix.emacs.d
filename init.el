@@ -23,7 +23,7 @@
 (setq load-prefer-newer t)
 
 (load (local-file-name "core/core-packages"))
-
+(load (local-file-name "config/config-os"))
 (load (local-file-name "config/config-keybind"))
 (load (local-file-name "config/config-looking"))
 (load (local-file-name "config/config-edit"))
@@ -31,3 +31,17 @@
 (load (local-file-name "config/config-lang"))
 
 ;;; end init.el
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (magit-gitflow markdown-toc markdown-mode matlab-mode yasnippet whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree swiper sublimity spaceline smex smartparens rainbow-delimiters neotree multiple-cursors monokai-theme magit hungry-delete helm fix-word expand-region evil-nerd-commenter esup ess company-emoji color-theme-approximate better-defaults aggressive-indent))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
