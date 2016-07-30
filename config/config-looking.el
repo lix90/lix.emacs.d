@@ -59,6 +59,8 @@
             (spaceline-spacemacs-theme)))
 
 ;; font
+
+
 ;; (defun font-existsp (font)
 ;;   "Check to see if the named FONT is available."
 ;;   (if (null (x-list-fonts font))

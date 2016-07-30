@@ -33,3 +33,9 @@
 (eval-when-compile
   (require 'use-package))
 (require 'diminish)
+
+;; set exec-path
+(use-package exec-path-from-shell
+  :ensure t
+  :defer t
+  :init (exec-path-from-shell-initialize))
