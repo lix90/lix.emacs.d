@@ -72,6 +72,20 @@
                         (elpy-enable)
                         (elpy-use-ipython)))))
 
+(use-package ein
+  :ensure t
+  ;; :disabled t
+  :init (setq ein:use-auto-complete t)
+  (progn
+    ;; Use Jedi with EIN
+    ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
+    (setq ein:default-url-or-port "http://localhost:8888"
+          ein:output-type-perference '(emacs-lisp svg png jpeg
+                                                  html text latex javascript))
+    )
+  :config
+  (require 'websocket)
+  )
 ;; (use-package company-jedi
 ;;   :ensure t
 ;;   :config

@@ -11,6 +11,12 @@
   (set-frame-font "Monaco 14")
   )
 
+;; auto-complete mode
+(use-package auto-complete
+  :ensure t
+  :config (global-auto-complete-mode t))
+(diminish 'auto-complete-mode)
+
 ;; enable subword-mode
 (global-subword-mode t)
 (diminish 'subword-mode)
