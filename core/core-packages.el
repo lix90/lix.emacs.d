@@ -32,10 +32,10 @@
 ;; Requires
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
+(require 'diminish);; if you use :diminish
+(require 'bind-key);; if you use any :bind variant
 
 ;; set exec-path
 (use-package exec-path-from-shell
   :ensure t
-  :defer t
   :init (exec-path-from-shell-initialize))

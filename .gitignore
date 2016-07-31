@@ -1,4 +1,5 @@
 /auto-save-list/
+/anaconda-mode/
 /abbrev_defs/
 /backups/
 /elpa/
@@ -7,11 +8,13 @@
 /ido.last
 /places
 /recentf
+/request/
 /smex-items
 /srecode-map.el
 /places
 /cache/
 /undo/
+/ac-comphist.dat
 *.elc
 *~
 .#*
