@@ -31,3 +31,17 @@
 (load (local-file-name "config/config-lang"))
 
 ;;; end init.el
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (flycheck whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree swiper sublimity spaceline smex smartparens rainbow-delimiters pkg-info paredit neotree multiple-cursors monokai-theme matlab-mode markdown-toc magit-gitflow hungry-delete hlinum helm-pydoc helm fix-word expand-region exec-path-from-shell evil-nerd-commenter esup ess elpy ein company-emoji company-anaconda color-theme-approximate better-defaults aggressive-indent ac-anaconda))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

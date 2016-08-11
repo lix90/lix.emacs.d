@@ -151,9 +151,16 @@
 
 ;; error checking
 ;; (use-package flycheck
-;;   :ensure flycheck
-;;   :init (global-flycheck-mode)
+;;   :ensure t
+;;   :config (progn
+;;             (global-flycheck-mode)
+;;             (setq flycheck-checkers '(javascript-eslint python-pylint)))
 ;;   :diminish flycheck-mode)
+
+;; ;; Do not prompt to remove commented code.
+;; ;; for R lintr
+;; (with-eval-after-load 'flycheck
+;;   (setq flycheck-lintr-linters "with_defaults(camel_case_linter = NULL, snake_case_linter, object_usage_linter = NULL, commented_code_linter = NULL, infix_spaces_linter = NULL, spaces_left_parentheses_linter = NULL, line_length_linter(120))"))
 
 ;; completion
 (use-package company
@@ -221,10 +228,10 @@
 
 (use-package whitespace-cleanup-mode
   :ensure t
-  :config (progn
-            (require 'whitespace-cleanup-mode)
-            (global-whitespace-cleanup-mode)
-            )
+  :init (progn
+          (require 'whitespace-cleanup-mode)
+          (global-whitespace-cleanup-mode)
+          )
   :diminish whitespace-cleanup-mode)
 
 (use-package smartparens
