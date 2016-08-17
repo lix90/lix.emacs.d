@@ -1,3 +1,9 @@
+;; I do not use Emacs without following settings!!!
+;;(global-set-key ("<f1>") #'help-command)
+;;(global-set-key ("C-h") #'delete-backward-char)
+;;(global-set-key ("M-h") #'backward-kill-word)
+;; (define-key isearch-mode-map "\C-h" 'isearch-delete-char)
+
 ;; key bindings
 (global-set-key (kbd "C-c C-j") 'join-line)
 (global-set-key (kbd "C-z") 'undo)
