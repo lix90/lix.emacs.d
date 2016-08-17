@@ -27,6 +27,7 @@
 (load (local-file-name "config/config-keybind"))
 (load (local-file-name "config/config-looking"))
 (load (local-file-name "config/config-edit"))
+(load (local-file-name "config/config-blog"))
 (load (local-file-name "config/config-tool"))
 (load (local-file-name "config/config-lang"))
 
