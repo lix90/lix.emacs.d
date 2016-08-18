@@ -169,12 +169,12 @@
 (use-package js2-mode
   :ensure t
   :defer t
-  :mode ("\\.js" . js2-mode))
+  :mode ("\\.js$" . js2-mode))
 
 (use-package json-mode
   :ensure t
   :defer t
-  :mode ("\\.json" . json-mode))
+  :mode ("\\.json$" . json-mode))
 
 (use-package nodejs-repl
   :ensure t
@@ -183,6 +183,10 @@
 (use-package css-mode
   :ensure t
   :mode ("\\.css$" . css-mode))
+
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.ya?ml$'" . yaml-mode))
 
 (use-package web-beautify
   :ensure t
@@ -212,3 +216,6 @@
 (provide 'config-lang)
 
 ;;; config-lang.el ends here
+
+
+
