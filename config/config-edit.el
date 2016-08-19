@@ -335,25 +335,26 @@
 ;;   )
 
 ;; sensible undo
-;; (use-package undo-tree
-;;   :ensure t
-;;   :commands undo-tree-visualize
-;;   :bind (("C-S-z" . undo-tree-redo)
-;;          ("C-S-u" . undo-tree-visualize))
-;;   :config (progn
-;;             (global-undo-tree-mode)
-;;             (setq undo-tree-visualizer-timestamps t
-;;                   undo-tree-visualizer-diff t
-;;                   undo-tree-auto-save-history t)
+(use-package undo-tree
+  :ensure t
+  :commands undo-tree-visualize
+  :bind (("C-S-z" . undo-tree-redo)
+         ("C-S-u" . undo-tree-visualize))
+  :init
+  (progn
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t
+          undo-tree-visualizer-diff t
+          undo-tree-auto-save-history t)
 
-;;             (defadvice undo-tree-make-history-save-file-name
-;;                 (after undo-tree activate)
-;;               (setq ad-return-value (concat ad-return-value ".gz")))
+    (defadvice undo-tree-make-history-save-file-name
+        (after undo-tree activate)
+      (setq ad-return-value (concat ad-return-value ".gz")))
 
-;;             (custom-set-variables
-;;              '(undo-tree-history-directory-alist
-;;                (quote (("." . "~/.emacs.d/undo/"))))))
-;;   :diminish undo-tree-mode)
+    (custom-set-variables
+     '(undo-tree-history-directory-alist
+       (quote (("." . "~/.emacs.d/undo/"))))))
+  :diminish undo-tree-mode)
 
 ;; (use-package swiper
 ;;   :ensure t
