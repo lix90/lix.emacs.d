@@ -22,27 +22,28 @@
 
 (setq load-prefer-newer t)
 
-(load (local-file-name "core/core-packages"))
-;; (load (local-file-name "config/config-os"))
+(load (local-file-name "config/config-package.el"))
+(load (local-file-name "config/config-os.el"))
+(load (local-file-name "config/config-edit"))
 (load (local-file-name "config/config-keybind"))
 (load (local-file-name "config/config-looking"))
-(load (local-file-name "config/config-edit"))
+
+;; productivity
+(load (local-file-name "config/config-fm")) ;; file management
+(load (local-file-name "config/config-paren"))
+(load (local-file-name "config/config-ac")) ;; auto completion
+
+;; tools
+(load (local-file-name "config/config-git"))
+
+;; languages
+(load (local-file-name "config/config-ess"))
+(load (local-file-name "config/config-python"))
+(load (local-file-name "config/config-matlab"))
+(load (local-file-name "config/config-web"))
+
+;; write
+(load (local-file-name "config/config-markdown"))
 (load (local-file-name "config/config-blog"))
-(load (local-file-name "config/config-tool"))
-(load (local-file-name "config/config-lang"))
 
 ;;; end init.el
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (flycheck whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree swiper sublimity spaceline smex smartparens rainbow-delimiters pkg-info paredit neotree multiple-cursors monokai-theme matlab-mode markdown-toc magit-gitflow hungry-delete hlinum helm-pydoc helm fix-word expand-region exec-path-from-shell evil-nerd-commenter esup ess elpy ein company-emoji company-anaconda color-theme-approximate better-defaults aggressive-indent ac-anaconda))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

@@ -8,4 +8,4 @@
            (progn (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)))))
 
 
-(provide 'config-tool)
+(provide 'config-git)

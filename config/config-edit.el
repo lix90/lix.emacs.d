@@ -3,26 +3,10 @@
 ;;; Commentary: as a newbie in emacs world, I stolen a lot of codes from emacs vaterans
 
 ;;; Code:
-(when (eq system-type 'darwin) ;; mac specific settings
-  (setq mac-option-modifier 'alt)
-  (setq mac-command-modifier 'meta)
-  (global-set-key [kp-delete] 'delete-char) ;; sets fn-delete to be right-delete
-  (set-fontset-font "fontset-default" 'gb18030' ("STHeiti" . "unicode-bmp"))
-  (set-frame-font "Monaco 14")
-  )
-
-;; auto-complete mode
-(use-package auto-complete
-  :ensure t
-  :diminish auto-complete-mode
-  :init (progn (global-auto-complete-mode t))
-  )
-
 
 ;; enable subword-mode
 (global-subword-mode t)
 (diminish 'subword-mode)
-
 ;; delete the selection with a keypress
 (delete-selection-mode t)
 
@@ -78,32 +62,32 @@
       savehist-file (local-file-name "cache/savehist"))
 (savehist-mode t)
 
-(require 'desktop)
-(setq-default desktop-missing-file-warning nil
-              desktop-load-locked-desktop t
-              desktop-restore-eager 0
-              desktop-path `(,(local-file-name "cache"))
-              desktop-save t)
-(desktop-save-mode t)
+;; (require 'desktop)
+;; (setq-default desktop-missing-file-warning nil
+;;               desktop-load-locked-desktop t
+;;               desktop-restore-eager 0
+;;               desktop-path `(,(local-file-name "cache"))
+;;               desktop-save t)
+;; (desktop-save-mode t)
 
-(setq desktop-globals-to-save
-      (append '((extended-command-history . 30)
-                (file-name-history        . 100)
-                (grep-history             . 30)
-                (minibuffer-history       . 50)
-                (query-replace-history    . 30)
-                (shell-command-history    . 50)
-                tags-file-name
-                register-alist))
-      desktop-locals-to-save nil)
-(desktop-read)
+;; (setq desktop-globals-to-save
+;;       (append '((extended-command-history . 30)
+;;                 (file-name-history        . 100)
+;;                 (grep-history             . 30)
+;;                 (minibuffer-history       . 50)
+;;                 (query-replace-history    . 30)
+;;                 (shell-command-history    . 50)
+;;                 tags-file-name
+;;                 register-alist))
+;;       desktop-locals-to-save nil)
+;; (desktop-read)
 
 ;; save recent files
-(require 'recentf)
-(setq recentf-save-file (local-file-name "cache/recentf")
-      recentf-max-saved-items 100
-      recentf-max-menu-items 15)
-(recentf-mode t)
+;; (require 'recentf)
+;; (setq recentf-save-file (local-file-name "cache/recentf")
+;;       recentf-max-saved-items 100
+;;       recentf-max-menu-items 15)
+;; (recentf-mode nil)
 
 ;; use shift + arrow keys to switch between visible buffers
 (require 'windmove)
@@ -143,101 +127,25 @@
 (require 'eshell)
 (setq eshell-directory-name (local-file-name "cache/eshell"))
 
-;; interface enhancement
-;; (use-package smex
-;;   :ensure t
-;;   :bind (("M-x" . smex)
-;;          ("M-X" . smex-major-mode-commands)))
-
-;; error checking
-;; (use-package flycheck
-;;   :ensure t
-;;   :config (progn
-;;             (global-flycheck-mode)
-;;             (setq flycheck-checkers '(javascript-eslint python-pylint)))
-;;   :diminish flycheck-mode)
-
-;; ;; Do not prompt to remove commented code.
-;; ;; for R lintr
-;; (with-eval-after-load 'flycheck
-;;   (setq flycheck-lintr-linters "with_defaults(camel_case_linter = NULL, snake_case_linter, object_usage_linter = NULL, commented_code_linter = NULL, infix_spaces_linter = NULL, spaces_left_parentheses_linter = NULL, line_length_linter(120))"))
-
-;; completion
-(use-package company
-  :ensure t
-  :diminish company-mode
-  :init (progn (add-hook 'after-init-hook 'global-company-mode)))
-
-;; (use-package company
-;;   :ensure t
-;;   :config (progn
-;;             (setq company-idle-delay 0.2
-;;                   company-minimum-prefix-length 2
-;;                   company-require-match nil
-;;                   company-dabbrev-ignore-case nil
-;;                   company-dabbrev-downcase nil
-;;                   company-frontends '(company-pseudo-tooltip-frontend))
-
-;;             (defvar-local company-fci-mode-on-p nil)
-;;             (defun company-turn-off-fci (&rest ignore)
-;;               (when (boundp 'fci-mode)
-;;                 (setq company-fci-mode-on-p fci-mode)
-;;                 (when fci-mode (fci-mode -1))))
-
-;;             (defun company-maybe-turn-on-fci (&rest ignore)
-;;               (when company-fci-mode-on-p (fci-mode 1)))
-
-;;             (add-hook 'company-completion-started-hook 'company-turn-off-fci)
-;;             (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
-;;             (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci)
-;;             (add-hook 'after-init-hook 'global-company-mode)
-
-;;             ;; key bindings
-;;             (let ((map company-active-map))
-;;               (define-key map (kbd "C-/") 'company-search-candidates)
-;;               (define-key map (kbd "C-M-/") 'company-filter-candidates)
-;;               (define-key map (kbd "C-d") 'company-show-doc-buffer)
-;;               (define-key map (kbd "C-j") 'company-select-next)
-;;               (define-key map (kbd "C-k") 'company-select-previous)
-;;               (define-key map (kbd "C-l") 'company-complete-selection))
-
-;;             (use-package company-emoji
-;;               :ensure t
-;;               :init (company-emoji-init))
-;;             (setq company-idle-delay 0.2)
-;;             )
-;;   :diminish company-mode)
-
-;; programming
 (use-package aggressive-indent
   :ensure t
   :diminish aggressive-indent-mode
   :init (progn
-          (global-aggressive-indent-mode 1)
-          )
-  )
+          (global-aggressive-indent-mode 1)))
 
-;; (use-package yasnippet
-;;   :ensure t
-;;   :diminish yas-minor-mode
-;;   :config (progn
-;;             (yas-reload-all)
-;;             (add-hook 'prog-mode-hook #'yas-minor-mode)
-;;             )
-;;   )
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :config (progn
+            (yas-reload-all)
+            (add-hook 'prog-mode-hook #'yas-minor-mode)))
 
 (use-package whitespace-cleanup-mode
   :ensure t
   :init (progn
-          (require 'whitespace-cleanup-mode)
           (global-whitespace-cleanup-mode)
           )
   :diminish whitespace-cleanup-mode)
-
-(use-package smartparens
-  :ensure t
-  :init (smartparens-global-mode t)
-  :diminish smartparens-mode)
 
 ;; (use-package evil-nerd-commenter
 ;;   :ensure t
@@ -251,88 +159,14 @@
 ;;    )
 ;;   )
 
-;; ---------------------------
-;; file manager
-;; ---------------------------
-(use-package neotree
-  :ensure t
-  :bind ("<f8>" . neotree-toggle)
-  :config (setq neo-theme 'nerd)
-  )
-
 ;; paredit
-(use-package paredit
-  :ensure t
-  :commands (enable-paredit-mode)
-  :diminish paredit-mode
-  :init (progn
-          (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-          (add-hook 'clojure-mode-hook 'enable-paredit-mode)))
-
-(use-package helm-config
-  :ensure helm
-  :config
-  (helm-mode 1)
-  (helm-adaptive-mode 1)
-  (helm-push-mark-mode 1))
-
-(use-package helm
-  :ensure t
-  :init
-  (progn
-    (require 'helm-config)
-    (setq helm-split-window-in-side-p t
-          helm-M-x-fuzzy-match t
-          helm-buffers-fuzzy-matching t
-          helm-recentf-fuzzy-match t
-          helm-move-to-line-cycle-in-source t
-          helm-ff-search-library-in-sexp t
-          helm-ff-file-name-history-use-recentf t
-          helm-echo-input-in-header-line t)
-    ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-    ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-    ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-    ;; (c) Emacs Prelude
-    (global-set-key (kbd "C-c h") 'helm-command-prefix)
-    (global-unset-key (kbd "C-x c"))
-    (helm-mode))
-  :diminish helm-mode
-  :bind (("C-c h" . helm-mini)
-         ("C-c i" . helm-imenu)
-         ("C-h a" . helm-apropos)
-         ("C-x f" . helm-recentf)
-         ("C-x b" . helm-for-files)
-         ("C-x C-b" . helm-buffers-list)
-         ("C-x C-f" . helm-find-files)
-         ("M-y" . helm-show-kill-ring)
-         ("M-x" . helm-M-x))
-  )
-
-;; (use-package dired :ensure t)
-
-;; (use-package dired
+;; (use-package paredit
 ;;   :ensure t
-;;   :config (progn
-;;             (use-package dired+ :ensure t)
-;;             (use-package dired-details :ensure t)
-;;             (use-package dired-details+ :ensure t)
-;;             (use-package dired-isearch :ensure t)
-;;             (use-package dired-single :ensure t)
-
-;;             (put 'dired-find-alternate-file 'disabled nil)
-;;             (setq dired-recursive-copies (quote always))
-;;             (setq dired-recursive-deletes (quote top))
-;;             (put 'dired-find-alternate-file 'disabled nil)
-;;             (setq dired-dwim-target t)
-
-;;             (add-hook 'dired-mode-hook
-;;                       (lambda ()
-;;                         (define-key dired-mode-map (kbd "<return>")
-;;                           'dired-find-alternate-file) ; was dired-advertised-find-file
-;;                         (define-key dired-mode-map (kbd "^")
-;;                           (lambda () (interactive) (find-alternate-file "..")))))
-;;             )
-;;   )
+;;   :commands (enable-paredit-mode)
+;;   :diminish paredit-mode
+;;   :init (progn
+;;           (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+;;           (add-hook 'clojure-mode-hook 'enable-paredit-mode)))
 
 ;; sensible undo
 (use-package undo-tree
@@ -384,10 +218,6 @@
 ;;   (hlinum-activate)
 ;;   (global-linum-mode t))
 
-(use-package rainbow-delimiters
-  :ensure t
-  :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-
 ;; editing
 (use-package expand-region
   :ensure t
@@ -430,7 +260,6 @@
          ("M-l" . fix-word-downcase)
          ("M-c" . fix-word-capitalize))
   :diminish fix-word)
-
 
 (use-package  which-key
   :ensure t

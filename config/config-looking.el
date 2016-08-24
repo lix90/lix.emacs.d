@@ -2,7 +2,6 @@
 (use-package better-defaults
   :ensure t
   :defer t)
-(require 'better-defaults)
 
 ;; disable startup screen and *scratch* message
 (setq inhibit-startup-screen t
@@ -30,54 +29,28 @@
 ;;----------- from markauskas, my-colors.el
 (use-package monokai-theme
   :ensure t
-  :config
+  :init
   (progn
-    (load-theme 'monokai t)
-    )
-  )
+    (load-theme 'monokai t)))
 
 (use-package color-theme-approximate
   :ensure t
-  :config
-  (progn
-    (color-theme-approximate-on)
-    )
-  )
+  :init (progn
+          (color-theme-approximate-on)))
 
 
 ;; modeline
 (use-package spaceline
   :ensure t
-  :config (progn
-            (require 'spaceline-config)
-            (setq powerline-default-separator 'arrow)
-            (setq powerline-height 16)
-            (setq powerline-raw " ")
-            (setq ns-use-srgb-colorspace nil)
-            ;; (setq spaceline-separator-dir-left '(left . left))
-            ;; (setq spaceline-separator-dir-right '(right . right))
-            (spaceline-spacemacs-theme)))
-
-;; font
-
-
-;; (defun font-existsp (font)
-;;   "Check to see if the named FONT is available."
-;;   (if (null (x-list-fonts font))
-;;       nil t))
-;; (cond
-;;  ((eq window-system nil) nil)
-;;  ((font-existsp "Source Code Pro")
-;;   (set-face-attribute 'default nil
-;;                       :height 100
-;;                       :font "Source Code Pro")))
-;; (cond
-;;  ((eq window-system nil) nil)
-;;  ((font-existsp "Source Code Pro")
-;;   (set-face-attribute 'default nil
-;;                       :height 100
-;;                       :font "Source Code Pro")))
-
+  :init (progn
+          (require 'spaceline-config)
+          (setq powerline-default-separator 'arrow)
+          (setq powerline-height 18)
+          (setq powerline-raw " ")
+          (setq ns-use-srgb-colorspace nil)
+          ;; (setq spaceline-separator-dir-left '(left . left))
+          ;; (setq spaceline-separator-dir-right '(right . right))
+          (spaceline-spacemacs-theme)))
 
 ;; startup time
 (use-package esup

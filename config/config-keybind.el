@@ -1,21 +1,34 @@
-;; I do not use Emacs without following settings!!!
-;;(global-set-key ("<f1>") #'help-command)
-;;(global-set-key ("C-h") #'delete-backward-char)
-;;(global-set-key ("M-h") #'backward-kill-word)
+;; -----------------------------------
+;; key bindings
+;; -----------------------------------
+;; (global-set-key (kbd "C-h") nil)
+;; (bind-key "<f1>" #'help-command)
+;; (bind-key "C-h" #'delete-backward-char)
+;; (bind-key "M-h" #'backward-kill-word)
 ;; (define-key isearch-mode-map "\C-h" 'isearch-delete-char)
 
-;; key bindings
 (global-set-key (kbd "C-c C-j") 'join-line)
-(global-set-key (kbd "C-z") 'undo)
+;; (global-set-key (kbd "C-z") 'undo)
+(global-set-key (kbd "C-S-c r") 'replace-regexp)
+(global-set-key (kbd "C-c m") 'set-mark-command)
+(global-set-key [f7] 'eval-region)
+(global-set-key (kbd "C-c r") 'replace-string)
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+;; resize window
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
 ;;--------------------------------------------------------------------
 ;; set other window
 ;; next window
-(defun other-window-backward ( )
-  "select the previous window."
-  (interactive)
-  (other-window -1))
-(global-set-key "\C-x\C-n" 'other-window)
-(global-set-key "\C-x\C-p" 'other-window-backward)
+;; (defun other-window-backward ( )
+;;   "select the previous window."
+;;   (interactive)
+;;   (other-window -1))
+;; (global-set-key "\C-x\C-n" 'other-window)
+;; (global-set-key "\C-x\C-p" 'other-window-backward)
 ;;--------------------------------------------------------------------
 ;; change default keybindings
 ;; (global-set-key "\M-?" 'help-command)
@@ -58,17 +71,6 @@
 (global-set-key "\M-p" 'move-text-up)
 (global-set-key "\M-n" 'move-text-down)
 ;;--------------------------------------------------------------------
-;; resize window
-(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "S-C-<down>") 'shrink-window)
-(global-set-key (kbd "S-C-<up>") 'enlarge-window)
-
-;; some personal key bindings
-(global-set-key (kbd "C-c r") 'replace-string)
-;; newline behavior
-(global-set-key (kbd "RET") 'newline-and-indent)
-;;--------------------------------------------------------------------
 (defun toggle-window-split ()
   (interactive)
   (if (= (count-windows) 2)
@@ -97,21 +99,21 @@
 (global-set-key (kbd "C-x |") 'toggle-window-split)
 ;; -------------------------------------------------------------------
 ;; windowMove
-(when (fboundp 'windmove-default-keybindings)
-  (windmove-default-keybindings))
+;; (when (fboundp 'windmove-default-keybindings)
+;;   (windmove-default-keybindings))
 
-(defun ignore-error-wrapper (fn)
-  "Funtion return new function that ignore errors.
-   The function wraps a function with `ignore-errors' macro."
-  (lexical-let ((fn fn))
-    (lambda ()
-      (interactive)
-      (ignore-errors
-        (funcall fn)))))
-(global-set-key [s-left] (ignore-error-wrapper 'windmove-left))
-(global-set-key [s-right] (ignore-error-wrapper 'windmove-right))
-(global-set-key [s-up] (ignore-error-wrapper 'windmove-up))
-(global-set-key [s-down] (ignore-error-wrapper 'windmove-down))
+;; (defun ignore-error-wrapper (fn)
+;;   "Funtion return new function that ignore errors.
+;;    The function wraps a function with `ignore-errors' macro."
+;;   (lexical-let ((fn fn))
+;;     (lambda ()
+;;       (interactive)
+;;       (ignore-errors
+;;         (funcall fn)))))
+;; (global-set-key [s-left] (ignore-error-wrapper 'windmove-left))
+;; (global-set-key [s-right] (ignore-error-wrapper 'windmove-right))
+;; (global-set-key [s-up] (ignore-error-wrapper 'windmove-up))
+;; (global-set-key [s-down] (ignore-error-wrapper 'windmove-down))
 ;; ------------------------------------------------------------------
 ;; easy comment
 (defun my-comment-or-uncomment-region (beg end &optional arg)
@@ -119,8 +121,8 @@
                    (list (region-beginning) (region-end) nil)
                  (list (line-beginning-position)
                        (line-beginning-position 2))))
-  (comment-or-uncomment-region beg end arg)
-  )
+  (comment-or-uncomment-region beg end arg))
+
 (global-set-key [remap comment-or-uncomment-region] 'my-comment-or-uncomment-region)
 
 (global-set-key [?\C-c ?\C-/] 'comment-or-uncomment-region)
@@ -130,5 +132,6 @@
   (interactive)
   (mapc 'kill-buffer (buffer-list)))
 (global-set-key (kbd "C-c k") 'close-all-buffers)
+
 ;;--------------------------------------------------------------------
 (provide 'config-keybind)

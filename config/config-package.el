@@ -1,5 +1,4 @@
 ;;; core-packages.el ---
-
 (require 'cl)
 ;; (require 'package)
 (setq package-enable-at-startup nil)
@@ -39,3 +38,7 @@
 (use-package exec-path-from-shell
   :ensure t
   :init (exec-path-from-shell-initialize))
+
+(provide 'config-package.el)
+
+;;; config-package.el ends here
