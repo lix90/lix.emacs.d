@@ -133,12 +133,13 @@
   :init (progn
           (global-aggressive-indent-mode 1)))
 
-(use-package yasnippet
-  :ensure t
-  :diminish yas-minor-mode
-  :config (progn
-            (yas-reload-all)
-            (add-hook 'prog-mode-hook #'yas-minor-mode)))
+;; (use-package yasnippet
+;;   :ensure t
+;;   :diminish yas-minor-mode
+;;   :config (progn
+;;             (yas-reload-all)
+;;             (add-hook 'prog-mode-hook #'yas-minor-mode)
+;;             ))
 
 (use-package whitespace-cleanup-mode
   :ensure t
@@ -295,6 +296,15 @@
 
 ;; use word-count
 ;; (require 'word-count)
+
+(use-package smart-shift
+  :ensure t
+  :init (global-smart-shift-mode 1))
+
+(use-package benchmark-init
+  :ensure t
+  :init
+  (benchmark-init/activate))
 
 (provide 'config-edit)
 

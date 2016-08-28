@@ -27,11 +27,12 @@
 ;; theme
 ;; (load-theme 'misterioso)
 ;;----------- from markauskas, my-colors.el
-(use-package monokai-theme
-  :ensure t
-  :init
-  (progn
-    (load-theme 'monokai t)))
+;; (use-package monokai-theme
+;;   :ensure t
+;;   :init
+;;   (progn
+;;     (load-theme 'monokai t)))
+(load-theme 'deeper-blue)
 
 (use-package color-theme-approximate
   :ensure t
@@ -40,21 +41,21 @@
 
 
 ;; modeline
-(use-package spaceline
-  :ensure t
-  :init (progn
-          (require 'spaceline-config)
-          (setq powerline-default-separator 'arrow)
-          (setq powerline-height 18)
-          (setq powerline-raw " ")
-          (setq ns-use-srgb-colorspace nil)
-          ;; (setq spaceline-separator-dir-left '(left . left))
-          ;; (setq spaceline-separator-dir-right '(right . right))
-          (spaceline-spacemacs-theme)))
+;; (use-package spaceline
+;;   :ensure t
+;;   :init (progn
+;;           (require 'spaceline-config)
+;;           (setq powerline-default-separator 'arrow)
+;;           (setq powerline-height 18)
+;;           (setq powerline-raw " ")
+;;           (setq ns-use-srgb-colorspace nil)
+;;           ;; (setq spaceline-separator-dir-left '(left . left))
+;;           ;; (setq spaceline-separator-dir-right '(right . right))
+;;           (spaceline-spacemacs-theme)))
 
 ;; startup time
-(use-package esup
-  :ensure t)
+;; (use-package esup
+;;   :ensure t)
 
 ;; auto-revert
 (global-auto-revert-mode)

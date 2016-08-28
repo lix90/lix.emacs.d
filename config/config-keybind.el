@@ -1,11 +1,15 @@
 ;; -----------------------------------
 ;; key bindings
 ;; -----------------------------------
-;; (global-set-key (kbd "C-h") nil)
-;; (bind-key "<f1>" #'help-command)
-;; (bind-key "C-h" #'delete-backward-char)
-;; (bind-key "M-h" #'backward-kill-word)
-;; (define-key isearch-mode-map "\C-h" 'isearch-delete-char)
+(global-set-key (kbd "C-h") nil)
+(bind-key "<f1>" #'help-command)
+(bind-key "C-h" #'delete-backward-char)
+(bind-key "M-h" #'backward-kill-word)
+(define-key isearch-mode-map "\C-h" 'isearch-delete-char)
+(global-set-key (kbd "C-c C-e")
+                (lambda ()
+                  (interactive)
+                  (find-file "~/.emacs.d/init.el")))
 
 (global-set-key (kbd "C-c C-j") 'join-line)
 ;; (global-set-key (kbd "C-z") 'undo)

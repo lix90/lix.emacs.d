@@ -5,42 +5,40 @@
 (use-package company
   :ensure t
   :diminish company-mode
-  :init (progn
-          (add-hook 'after-init-hook 'global-company-mode)
-          (setq company-idle-delay 0.2
-                company-minimum-prefix-length 2
-                company-require-match nil
-                company-dabbrev-ignore-case nil
-                company-dabbrev-downcase nil)
-          ;; set backends
-          (setq company-backends
-                (quote
-                 (company-elisp
-                  ;; company-emoji
-                  company-css
-                  company-semantic
-                  company-etags
-                  company-files)))))
+  :config (progn
+            (add-hook 'after-init-hook 'global-company-mode)
+            (setq company-idle-delay 0.2
+                  company-minimum-prefix-length 2
+                  company-require-match nil
+                  company-dabbrev-ignore-case nil
+                  company-dabbrev-downcase nil)
+            ;; set backends
+            (setq company-backends
+                  (quote
+                   (company-elisp
+                    ;; company-emoji
+                    company-css
+                    company-semantic
+                    company-etags
+                    company-files)))
+            (use-package company-quickhelp
+              :ensure t
+              :config
+              (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
+            (use-package helm-company
+              :ensure t
+              :config (progn
+                        (define-key company-mode-map (kbd "C-:") 'helm-company)
+                        (define-key company-active-map (kbd "C-:") 'helm-company)))
+            (use-package company-tern
+              :ensure t
+              :config (progn
+                        (add-to-list 'company-backends 'company-tern)
+                        (setq company-tern-meta-as-single-line t)
+                        ))
+            ))
 
-(use-package company-quickhelp
-  :ensure t)
 
-(eval-after-load 'company
-  '(define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
-
-(use-package helm-company
-  :ensure t)
-
-(eval-after-load 'company
-  '(progn
-     (define-key company-mode-map (kbd "C-:") 'helm-company)
-     (define-key company-active-map (kbd "C-:") 'helm-company)))
-
-(use-package company-tern
-  :ensure company-tern)
-(eval-after-load 'company
-  '(progn (add-to-list 'company-backends 'company-tern)
-          (setq company-tern-meta-as-single-line t)))
 
 ;; (use-package company
 ;;   :ensure t

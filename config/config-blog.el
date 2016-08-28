@@ -4,7 +4,7 @@
 ;;; Code:
 (use-package blog-admin
   :ensure t
-  :init
+  :config
   (progn
     (setq blog-admin-backend-path "~/github/hexo-blog/")
     (setq blog-admin-backend-type 'hexo)

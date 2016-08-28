@@ -4,14 +4,16 @@
 (use-package neotree
   :ensure t
   :bind ("<f8>" . neotree-toggle)
-  :config (setq neo-theme 'nerd)
+  :config (progn
+            (setq neo-theme 'nerd)
+            )
   )
 
 
 ;; setting helm
 (use-package helm
   :ensure t
-  :init
+  :config
   (progn
     (require 'helm-config)
     (setq helm-split-window-in-side-p t
@@ -34,7 +36,7 @@
   :diminish helm-mode
   :bind (("C-c h" . helm-mini)
          ("C-c i" . helm-imenu)
-         ("C-h a" . helm-apropos)
+         ("C-c a" . helm-apropos)
          ("C-x f" . helm-recentf)
          ("C-x b" . helm-for-files)
          ("C-x C-b" . helm-buffers-list)

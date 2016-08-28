@@ -40,10 +40,13 @@
 (load (local-file-name "config/config-ess"))
 (load (local-file-name "config/config-python"))
 (load (local-file-name "config/config-matlab"))
+(load (local-file-name "config/config-ruby"))
+;; (load (local-file-name "config/config-php"))
 (load (local-file-name "config/config-web"))
+(load (local-file-name "config/config-cc"))
 
 ;; write
 (load (local-file-name "config/config-markdown"))
-(load (local-file-name "config/config-blog"))
+;; (load (local-file-name "config/config-blog"))
 
 ;;; end init.el

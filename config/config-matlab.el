@@ -5,6 +5,8 @@
   :ensure t
   :mode ("\\.m$" . matlab-mode)
   :commands (matlab-mode matlab-shell)
+  :bind (("C-M-c" . matlab-shell-run-cell)
+         ("C-M-r" . matlab-shell-run-region))
   :config (progn
             (setq matlab-indent-function-body t)
             (setq matlab-shell-command
