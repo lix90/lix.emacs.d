@@ -32,7 +32,12 @@
 ;;   :init
 ;;   (progn
 ;;     (load-theme 'monokai t)))
-(load-theme 'deeper-blue)
+;; (load-theme 'deeper-blue)
+(use-package hc-zenburn-theme
+  :ensure t
+  :init
+  (progn
+    (load-theme 'hc-zenburn t)))
 
 (use-package color-theme-approximate
   :ensure t
