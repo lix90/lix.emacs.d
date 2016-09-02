@@ -67,10 +67,10 @@
    (move-text-internal arg))
 
 (defun move-text-up (arg)
-   "Move region (transient-mark-mode active) or current line
+  "Move region (transient-mark-mode active) or current line
   arg lines up."
-   (interactive "*p")
-   (move-text-internal (- arg)))
+  (interactive "*p")
+  (move-text-internal (- arg)))
 
 (global-set-key "\M-p" 'move-text-up)
 (global-set-key "\M-n" 'move-text-down)

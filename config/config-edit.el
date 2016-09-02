@@ -62,32 +62,32 @@
       savehist-file (local-file-name "cache/savehist"))
 (savehist-mode t)
 
-;; (require 'desktop)
-;; (setq-default desktop-missing-file-warning nil
-;;               desktop-load-locked-desktop t
-;;               desktop-restore-eager 0
-;;               desktop-path `(,(local-file-name "cache"))
-;;               desktop-save t)
-;; (desktop-save-mode t)
+(require 'desktop)
+(setq-default desktop-missing-file-warning nil
+              desktop-load-locked-desktop t
+              desktop-restore-eager 0
+              desktop-path `(,(local-file-name "cache"))
+              desktop-save t)
+(desktop-save-mode t)
 
-;; (setq desktop-globals-to-save
-;;       (append '((extended-command-history . 30)
-;;                 (file-name-history        . 100)
-;;                 (grep-history             . 30)
-;;                 (minibuffer-history       . 50)
-;;                 (query-replace-history    . 30)
-;;                 (shell-command-history    . 50)
-;;                 tags-file-name
-;;                 register-alist))
-;;       desktop-locals-to-save nil)
-;; (desktop-read)
+(setq desktop-globals-to-save
+      (append '((extended-command-history . 30)
+                (file-name-history        . 100)
+                (grep-history             . 30)
+                (minibuffer-history       . 50)
+                (query-replace-history    . 30)
+                (shell-command-history    . 50)
+                tags-file-name
+                register-alist))
+      desktop-locals-to-save nil)
+(desktop-read)
 
 ;; save recent files
-;; (require 'recentf)
-;; (setq recentf-save-file (local-file-name "cache/recentf")
-;;       recentf-max-saved-items 100
-;;       recentf-max-menu-items 15)
-;; (recentf-mode nil)
+(require 'recentf)
+(setq recentf-save-file (local-file-name "cache/recentf")
+      recentf-max-saved-items 100
+      recentf-max-menu-items 15)
+(recentf-mode nil)
 
 ;; use shift + arrow keys to switch between visible buffers
 (require 'windmove)
@@ -144,8 +144,7 @@
 (use-package whitespace-cleanup-mode
   :ensure t
   :init (progn
-          (global-whitespace-cleanup-mode)
-          )
+          (global-whitespace-cleanup-mode))
   :diminish whitespace-cleanup-mode)
 
 ;; (use-package evil-nerd-commenter
@@ -175,7 +174,7 @@
   :commands undo-tree-visualize
   :bind (("C-S-z" . undo-tree-redo)
          ("C-S-u" . undo-tree-visualize))
-  :init
+  :config
   (progn
     (global-undo-tree-mode)
     (setq undo-tree-visualizer-timestamps t

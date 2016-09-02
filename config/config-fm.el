@@ -11,39 +11,39 @@
 
 
 ;; setting helm
-(use-package helm
-  :ensure t
-  :config
-  (progn
-    (require 'helm-config)
-    (setq helm-split-window-in-side-p t
-          helm-M-x-fuzzy-match t
-          helm-buffers-fuzzy-matching t
-          helm-recentf-fuzzy-match t
-          helm-move-to-line-cycle-in-source t
-          helm-ff-search-library-in-sexp t
-          helm-ff-file-name-history-use-recentf t
-          helm-echo-input-in-header-line t)
-    ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-    ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-    ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-    ;; (c) Emacs Prelude
-    (global-set-key (kbd "C-c h") 'helm-command-prefix)
-    (global-unset-key (kbd "C-x c"))
-    (helm-mode 1)
-    (helm-adaptive-mode 1)
-    (helm-push-mark-mode 1))
-  :diminish helm-mode
-  :bind (("C-c h" . helm-mini)
-         ("C-c i" . helm-imenu)
-         ("C-c a" . helm-apropos)
-         ("C-x f" . helm-recentf)
-         ("C-x b" . helm-for-files)
-         ("C-x C-b" . helm-buffers-list)
-         ("C-x C-f" . helm-find-files)
-         ("M-y" . helm-show-kill-ring)
-         ("M-x" . helm-M-x))
-  )
+;; (use-package helm
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (require 'helm-config)
+;;     (setq helm-split-window-in-side-p t
+;;           helm-M-x-fuzzy-match t
+;;           helm-buffers-fuzzy-matching t
+;;           helm-recentf-fuzzy-match t
+;;           helm-move-to-line-cycle-in-source t
+;;           helm-ff-search-library-in-sexp t
+;;           helm-ff-file-name-history-use-recentf t
+;;           helm-echo-input-in-header-line t)
+;;     ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;;     ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;;     ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+;;     ;; (c) Emacs Prelude
+;;     (global-set-key (kbd "C-c h") 'helm-command-prefix)
+;;     (global-unset-key (kbd "C-x c"))
+;;     (helm-mode 1)
+;;     (helm-adaptive-mode 1)
+;;     (helm-push-mark-mode 1))
+;;   :diminish helm-mode
+;;   :bind (("C-c h" . helm-mini)
+;;          ("C-c i" . helm-imenu)
+;;          ("C-c a" . helm-apropos)
+;;          ("C-x f" . helm-recentf)
+;;          ("C-x b" . helm-for-files)
+;;          ("C-x C-b" . helm-buffers-list)
+;;          ("C-x C-f" . helm-find-files)
+;;          ("M-y" . helm-show-kill-ring)
+;;          ("M-x" . helm-M-x))
+;;   )
 
 ;; (use-package dired :ensure t)
 

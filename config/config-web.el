@@ -53,7 +53,8 @@
 
 (use-package css-mode
   :ensure t
-  :mode ("\\.css$" . css-mode))
+  :mode ("\\.css$" . css-mode)
+  :config (setq css-indent-offset 2))
 
 (use-package yaml-mode
   :ensure t
@@ -90,18 +91,20 @@
     (setq inferior-js-program-arguments '("--interactive"))))
 
 (eval-after-load 'js2-mode
-  '(progn (add-hook 'js2-mode-hook '(lambda ()
-                                      (local-set-key "\C-x\C-e" 'js-send-last-sexp)
-                                      (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
-                                      (local-set-key "\C-cb" 'js-send-buffer)
-                                      (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
-                                      (local-set-key "\C-c\C-r" 'js-send-region-and-go)
-                                      (local-set-key "\C-cl" 'js-load-file-and-go)
-                                      (local-set-key "\C-c\C-z" 'run-js)
-                                      ;; js2 ignores some commands
-                                      (local-set-key (kbd "RET") 'newline-and-indent)
-                                      (local-set-key "\C-a" 'back-to-indentation)
-                                      (local-set-key (kbd "\C-c i") 'jslint-current-buffer)))))
+  '(progn
+     (setq js-indent-level 2)
+     (add-hook 'js2-mode-hook '(lambda ()
+                                 (local-set-key "\C-x\C-e" 'js-send-last-sexp)
+                                 (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
+                                 (local-set-key "\C-cb" 'js-send-buffer)
+                                 (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
+                                 (local-set-key "\C-c\C-r" 'js-send-region-and-go)
+                                 (local-set-key "\C-cl" 'js-load-file-and-go)
+                                 (local-set-key "\C-c\C-z" 'run-js)
+                                 ;; js2 ignores some commands
+                                 (local-set-key (kbd "RET") 'newline-and-indent)
+                                 (local-set-key "\C-a" 'back-to-indentation)
+                                 (local-set-key (kbd "\C-c i") 'jslint-current-buffer)))))
 
 
 (provide 'config-web)
