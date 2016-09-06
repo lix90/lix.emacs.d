@@ -54,41 +54,6 @@
 ;; saveplace remembers your location in a file when saving files
 (setq save-place-file (local-file-name "cache/saveplace"))
 
-;; savehist keeps track of some history
-(require 'savehist)
-(setq savehist-additional-variables
-      '(search ring regexp-search-ring)
-      savehist-autosave-interval 60
-      savehist-file (local-file-name "cache/savehist"))
-(savehist-mode t)
-
-(require 'desktop)
-(setq-default desktop-missing-file-warning nil
-              desktop-load-locked-desktop t
-              desktop-restore-eager 0
-              desktop-path `(,(local-file-name "cache"))
-              desktop-save t)
-(desktop-save-mode t)
-
-(setq desktop-globals-to-save
-      (append '((extended-command-history . 30)
-                (file-name-history        . 100)
-                (grep-history             . 30)
-                (minibuffer-history       . 50)
-                (query-replace-history    . 30)
-                (shell-command-history    . 50)
-                tags-file-name
-                register-alist))
-      desktop-locals-to-save nil)
-(desktop-read)
-
-;; save recent files
-(require 'recentf)
-(setq recentf-save-file (local-file-name "cache/recentf")
-      recentf-max-saved-items 100
-      recentf-max-menu-items 15)
-(recentf-mode nil)
-
 ;; use shift + arrow keys to switch between visible buffers
 (require 'windmove)
 (windmove-default-keybindings)
@@ -130,16 +95,18 @@
 (use-package aggressive-indent
   :ensure t
   :diminish aggressive-indent-mode
-  :init (progn
-          (global-aggressive-indent-mode 1)))
+  :init
+  (global-aggressive-indent-mode 1)
+  )
 
-;; (use-package yasnippet
-;;   :ensure t
-;;   :diminish yas-minor-mode
-;;   :config (progn
-;;             (yas-reload-all)
-;;             (add-hook 'prog-mode-hook #'yas-minor-mode)
-;;             ))
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :config (progn
+            (yas-reload-all)
+            (yas-global-mode t)
+            ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
+            ))
 
 (use-package whitespace-cleanup-mode
   :ensure t
@@ -189,34 +156,6 @@
      '(undo-tree-history-directory-alist
        (quote (("." . "~/.emacs.d/undo/"))))))
   :diminish undo-tree-mode)
-
-;; (use-package swiper
-;;   :ensure t
-;;   :init
-;;   (ivy-mode 1)
-;;   :config
-;;   (setq ivy-use-virtual-buffers t)
-;;   (setq ivy-wrap t)
-;;   :diminish swiper-mode)
-
-;; (use-package ivy
-;;   :ensure t
-;;   :init
-;;   (ivy-mode 1)
-;;   ;; show recently killed buffers when calling `ivy-switch-buffer'
-;;   (setq ivy-use-virtual-buffers t)
-;;   (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ; default
-;;   ;; (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
-
-;;   (define-key ivy-minibuffer-map (kbd "<C-tab>") 'ivy-next-line)
-;;   (define-key ivy-minibuffer-map (kbd "<C-S-tab>") 'ivy-previous-line)
-;;   :diminish ivy-mode)
-
-;; (use-package hlinum
-;;   :ensure t
-;;   :config
-;;   (hlinum-activate)
-;;   (global-linum-mode t))
 
 ;; editing
 (use-package expand-region
@@ -273,32 +212,9 @@
 ;;   :config
 ;;   (sublimity-mode 1))
 
-;; multiple-cursors-mode
-;; (require-package 'multiple-cursors)
-;; multiple-cursors
-;; (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-;; (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-;; (global-set-key (kbd "C-+") 'mc/mark-next-like-this)
-;; (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-;; From active region to multiple cursors:
-;; (global-set-key (kbd "C-c c r") 'set-rectangular-region-anchor)
-;; (global-set-key (kbd "C-c c c") 'mc/edit-lines)
-;; (global-set-key (kbd "C-c c e") 'mc/edit-ends-of-lines)
-;; (global-set-key (kbd "C-c c a") 'mc/edit-beginnings-of-lines)
-;; switch-window
-;; outline-minor-mode
-;; use C-u C-u C-s/r to trigger the flexible search action
-;; set some compilation shortcuts
-;; set smooth-scrolling
-;; set stripe-buffer
-;; (require 'stripe-buffer)
-
-;; use word-count
-;; (require 'word-count)
-
-(use-package smart-shift
-  :ensure t
-  :init (global-smart-shift-mode 1))
+;; (use-package smart-shift
+;;   :ensure t
+;;   :init (global-smart-shift-mode 1))
 
 (use-package benchmark-init
   :ensure t

@@ -18,7 +18,14 @@
 (global-set-key [f7] 'eval-region)
 (global-set-key (kbd "C-c r") 'replace-string)
 (global-set-key (kbd "RET") 'newline-and-indent)
+;; -----------------------------------
+;; insert data
+(defun my-insert-date ()
+  (interactive)
+  (insert (format-time-string "%Y-%m-%d %H:%M:%S" (current-time))))
 
+(global-set-key (kbd "C-c d") 'my-insert-date)
+;;-----------------------------------
 ;; resize window
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)

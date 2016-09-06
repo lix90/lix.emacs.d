@@ -16,6 +16,11 @@
          ("\\.[Jj][Oo][Gg]\\'" . ess-jags-mode)
          ("\\.[Jj][Mm][Dd]\\'" . ess-jags-mode))
   :commands R
+  ;; :bind (:map ess-mode-map
+  ;;             ("M-b" . ess-eval-buffer)
+  ;;             ("M-r" . ess-eval-region)
+  ;;             ("M-f" . ess-eval-function)
+  ;;             ("M-l" . ess-eval-line))
   :config (progn
             (add-hook 'ess-mode-hook 'company-mode)))
 
@@ -33,7 +38,9 @@
         ess-history-directory "~/.R/")
   (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
   (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
-  (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input))
+  (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
+  (add-hook 'inferior-ess-mode-hook 'company-mode)
+  (add-hook 'inferior-ess-mode-hook 'smartparens-mode))
 
 (provide 'config-ess)
 

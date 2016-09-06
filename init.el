@@ -32,7 +32,6 @@
 (load (local-file-name "config/config-fm")) ;; file management
 (load (local-file-name "config/config-paren"))
 (load (local-file-name "config/config-ac")) ;; auto completion
-(load (local-file-name "config/config-ivy"))
 ;; tools
 (load (local-file-name "config/config-git"))
 
@@ -57,8 +56,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flx counsel company-web yaml-mode whole-line-or-region whitespace-cleanup-mode which-key web-mode web-beautify use-package undo-tree swiper sublimity spaceline smex smartparens smart-shift rvm robe rbenv rainbow-delimiters py-autopep8 paredit nodejs-repl neotree multiple-cursors monokai-theme matlab-mode markdown-toc magit-gitflow json-mode js2-mode js-comint hungry-delete hlinum helm-pydoc helm-company flycheck fix-word expand-region exec-path-from-shell evil-nerd-commenter esup ess elpy ein disaster company-tern company-quickhelp company-emoji company-anaconda color-theme-approximate clang-format blog-admin better-defaults benchmark-init aggressive-indent ac-anaconda)))
- '(undo-tree-history-directory-alist (quote (("." . "~/.emacs.d/undo/")))))
+    (yaml-mode whole-line-or-region whitespace-cleanup-mode which-key web-mode web-beautify use-package undo-tree sublimity spaceline smex smartparens smart-shift rvm robe rbenv rainbow-delimiters py-autopep8 paredit nodejs-repl neotree multiple-cursors monokai-theme matlab-mode markdown-toc magit-gitflow json-mode js2-mode js-comint hungry-delete hlinum hc-zenburn-theme flycheck flx fix-word expand-region exec-path-from-shell evil-nerd-commenter esup ess elpy ein disaster dired-subtree dired-filter counsel company-web company-tern company-quickhelp company-emoji company-anaconda color-theme-approximate clang-format blog-admin better-defaults benchmark-init aggressive-indent ac-anaconda))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

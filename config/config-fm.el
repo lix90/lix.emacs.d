@@ -9,6 +9,81 @@
             )
   )
 
+;;; stolen from: https://github.com/marktran/emacs.d
+(use-package ivy
+  :diminish ivy-mode
+  :init
+  (ivy-mode 1)
+  :bind ("C-S-m" . ivy-immediate-done)
+
+  :config
+  (use-package counsel
+    :ensure t)
+  (use-package flx :ensure t)
+  (use-package swiper
+    :ensure t
+    :bind (("<f5>" . swiper)))
+
+  (setq ivy-fixed-height-minibuffer t
+        ivy-height 20
+        ivy-use-virtual-buffers t
+
+        ivy-ignore-buffers `("^\\*alchemist-server\\*"
+                             "^\\*alchemist test report\\*"
+                             "^\\*Compile-Log\\*"
+                             "^\\*Completions\\*"
+                             "^\\*Help\\*"
+                             "^\\*Messages\\*"
+                             "^\\*Warnings\\*"
+                             "^\\*eshell"
+                             "^\\*magit"
+                             "^\\*scratch\\*"
+                             "^\\*rspec-compilation\\*"
+                             (lambda (name)
+                               (save-excursion
+                                 (equal major-mode 'dired-mode))))
+
+        ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
+
+;; savehist keeps track of some history
+(require 'savehist)
+(setq savehist-additional-variables
+      '(search ring regexp-search-ring)
+      savehist-autosave-interval 60
+      savehist-file (local-file-name "cache/savehist"))
+(savehist-mode t)
+
+(require 'desktop)
+(setq-default desktop-missing-file-warning nil
+              desktop-load-locked-desktop t
+              desktop-restore-eager 0
+              desktop-path `(,(local-file-name "cache"))
+              desktop-save t)
+(desktop-save-mode t)
+
+(setq desktop-globals-to-save
+      (append '((extended-command-history . 30)
+                (file-name-history        . 100)
+                (grep-history             . 30)
+                (minibuffer-history       . 50)
+                (query-replace-history    . 30)
+                (shell-command-history    . 50)
+                tags-file-name
+                register-alist))
+      desktop-locals-to-save nil)
+(desktop-read)
+
+;; save recent files
+(use-package recentf
+  :init
+  (recentf-mode t)
+  :bind ("C-x C-r" . recentf-open-files)
+  :config
+  (progn
+    (setq recentf-save-file (local-file-name "cache/recentf")
+          recentf-max-saved-items 100
+          recentf-max-menu-items 25)
+    ))
 
 ;; setting helm
 ;; (use-package helm
@@ -45,31 +120,18 @@
 ;;          ("M-x" . helm-M-x))
 ;;   )
 
-;; (use-package dired :ensure t)
+;; (use-package dired)
 
-;; (use-package dired
+;; (use-package dired-subtree
 ;;   :ensure t
-;;   :config (progn
-;;             (use-package dired+ :ensure t)
-;;             (use-package dired-details :ensure t)
-;;             (use-package dired-details+ :ensure t)
-;;             (use-package dired-isearch :ensure t)
-;;             (use-package dired-single :ensure t)
-
-;;             (put 'dired-find-alternate-file 'disabled nil)
-;;             (setq dired-recursive-copies (quote always))
-;;             (setq dired-recursive-deletes (quote top))
-;;             (put 'dired-find-alternate-file 'disabled nil)
-;;             (setq dired-dwim-target t)
-
-;;             (add-hook 'dired-mode-hook
-;;                       (lambda ()
-;;                         (define-key dired-mode-map (kbd "<return>")
-;;                           'dired-find-alternate-file) ; was dired-advertised-find-file
-;;                         (define-key dired-mode-map (kbd "^")
-;;                           (lambda () (interactive) (find-alternate-file "..")))))
-;;             )
-;;   )
+;;   :bind (:map dired-mode-map
+;;               ("C-i" . dired-subtree-insert)
+;;               ("C-k" . dired-subtree-remove)
+;;               ("C-M-s" . dired-subtree-beginning)
+;;               ("C-M-e" . dired-subtree-end)))
+;; (use-package dired-filter
+;;   :ensure t
+;;   :config (define-key dired-mode-map (kbd "C-/") dired-filter-map))
 
 
 (provide 'config-fm)

@@ -9,6 +9,8 @@
          ("\\.text\\'" . markdown-mode))
   :config (progn
             (add-hook 'markdown-mode-hook 'visual-line-mode)
+            (add-hook 'markdown-mode-hook 'company-mode)
+            (add-hook 'markdown-mode-hook 'smartparens-mode)
             (use-package markdown-toc
               :ensure t)))
 
