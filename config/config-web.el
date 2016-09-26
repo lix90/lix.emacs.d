@@ -130,9 +130,7 @@
 (use-package psysh
   :if (executable-find "psysh")
   :ensure t
-  :defer t
-  :config
-  (add-hook 'psysh-mode-hook 'smartparens-mode))
+  :defer t)
 
 (provide 'config-web)
 
