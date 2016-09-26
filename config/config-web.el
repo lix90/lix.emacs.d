@@ -106,6 +106,33 @@
                                  (local-set-key "\C-a" 'back-to-indentation)
                                  (local-set-key (kbd "\C-c i") 'jslint-current-buffer)))))
 
+;;; php mode
+(use-package php-mode
+  :ensure t
+  :mode "\\.php\\'"
+  :config
+  (progn
+    (add-hook 'php-mode-hook 'smartparens-mode)
+    (use-package ac-php
+      :ensure t
+      :config
+      (add-hook 'php-mode-hook
+                '(lambda ()
+                   (use-package company-php :ensure t)
+                   (company-mode t)
+                   (add-to-list 'company-backends 'company-ac-php-backend))))
+    (use-package php-eldoc
+      :ensure t
+      :config
+      (add-hook 'php-mode-hook 'php-eldoc-enable))))
+
+;;; php REPL
+(use-package psysh
+  :if (executable-find "psysh")
+  :ensure t
+  :defer t
+  :config
+  (add-hook 'psysh-mode-hook 'smartparens-mode))
 
 (provide 'config-web)
 

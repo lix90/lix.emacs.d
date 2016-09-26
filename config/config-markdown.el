@@ -12,7 +12,11 @@
             (add-hook 'markdown-mode-hook 'company-mode)
             (add-hook 'markdown-mode-hook 'smartparens-mode)
             (use-package markdown-toc
-              :ensure t)))
+              :ensure t)
+            (use-package vmd-mode
+              :ensure t
+              :config (add-hook 'markdown-mode-hook 'vmd-mode))
+            ))
 
 (provide 'config-markdown)
 

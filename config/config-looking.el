@@ -27,17 +27,17 @@
 ;; theme
 ;; (load-theme 'misterioso)
 ;;----------- from markauskas, my-colors.el
-;; (use-package monokai-theme
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (load-theme 'monokai t)))
-;; (load-theme 'deeper-blue)
-(use-package hc-zenburn-theme
+(use-package monokai-theme
   :ensure t
   :init
   (progn
-    (load-theme 'hc-zenburn t)))
+    (load-theme 'monokai t)))
+;; (load-theme 'deeper-blue)
+;; (use-package hc-zenburn-theme
+;;   :ensure t
+;;   :init
+;;   (progn
+;;     (load-theme 'hc-zenburn t)))
 
 (use-package color-theme-approximate
   :ensure t

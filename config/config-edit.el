@@ -92,6 +92,11 @@
 (require 'eshell)
 (setq eshell-directory-name (local-file-name "cache/eshell"))
 
+;; shell
+(setq shell-file-name "/bin/zsh")
+(global-set-key (kbd "C-c z") 'shell) 
+(global-set-key (kbd "<f10>") 'rename-buffer)
+
 (use-package aggressive-indent
   :ensure t
   :diminish aggressive-indent-mode
