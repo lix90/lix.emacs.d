@@ -56,7 +56,7 @@
             (setq ein:default-url-or-port "http://localhost:8888"
                   ein:output-type-perference '(emacs-lisp svg png jpeg
                                                           html text latex javascript))
-            (require 'websocket)))
+            (use-package websocket :ensure t)))
 
 ;; (use-package company-jedi
 ;;   :ensure t

@@ -40,7 +40,7 @@
 (load (local-file-name "config/config-python"))
 (load (local-file-name "config/config-matlab"))
 (load (local-file-name "config/config-ruby"))
-;; (load (local-file-name "config/config-php"))
+(load (local-file-name "config/config-php"))
 (load (local-file-name "config/config-web"))
 (load (local-file-name "config/config-cc"))
 (load (local-file-name "config/config-sql"))
@@ -51,17 +51,3 @@
 ;; (load (local-file-name "config/config-blog"))
 
 ;;; end init.el
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (markdown-preview-mode markdown-preview yaml-mode whole-line-or-region whitespace-cleanup-mode which-key web-mode web-beautify vmd-mode use-package undo-tree sublimity sqlup-mode sql-indent spaceline smex smartparens smart-shift rvm robe rbenv rainbow-delimiters py-autopep8 psysh php-eldoc paredit nodejs-repl neotree multiple-cursors monokai-theme matlab-mode markdown-toc magit-gitflow json-mode js2-mode js-comint hungry-delete hlinum hc-zenburn-theme flycheck flx fix-word expand-region exec-path-from-shell evil-nerd-commenter esup ess elpy ein disaster dired-subtree dired-filter counsel company-web company-tern company-quickhelp company-php company-emoji company-emacs-eclim company-anaconda color-theme-approximate clang-format blog-admin better-defaults benchmark-init aggressive-indent ac-php ac-anaconda))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
