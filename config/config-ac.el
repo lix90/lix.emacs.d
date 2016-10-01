@@ -6,77 +6,43 @@
   :ensure t
   :diminish company-mode
   :bind ("C-x M-c" . company-complete)
-  :config (progn
-            (add-hook 'after-init-hook 'global-company-mode)
-            (setq company-idle-delay 0.2
-                  company-minimum-prefix-length 2
-                  company-require-match nil
-                  company-dabbrev-ignore-case nil
-                  company-dabbrev-downcase nil)
-            ;; set backends
-            (setq company-backends
-                  (quote
-                   (company-elisp
-                    ;; company-emoji
-                    company-css
-                    company-semantic
-                    company-etags
-                    company-files)))
-            ;; (use-package company-quickhelp
-            ;;   :ensure t
-            ;;   :config
-            ;;   (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
-            ;; (use-package company-tern
-            ;;   :ensure t
-            ;;   :config (progn
-            ;;             (add-to-list 'company-backends 'company-tern)
-            ;;             (setq company-tern-meta-as-single-line t)
-            ;;             ))
-            )
-  )
+  :init
+  (progn
+    (add-hook 'after-init-hook 'global-company-mode)
+    (setq company-idle-delay 0.2
+          company-minimum-prefix-length 2
+          company-require-match nil
+          company-dabbrev-ignore-case nil
+          company-dabbrev-downcase nil
+          company-tooltip-limit 10
+          company-tooltip-align-annotations 't
+          company-begin-commands '(self-insert-command))
+    ;; set backends
+    (setq company-backends
+          (quote
+           (company-elisp
+            company-emoji
+            company-keywords
+            ;; company-css
+            company-semantic
+            company-etags
+            company-files
+            company-yasnippet)))))
 
-
-
-;; (use-package company
+(use-package company-statistics
+  :ensure t
+  :init
+  (add-hook 'after-init-hook 'company-statistics-mode))
+;; (use-package company-quickhelp
+;;   :ensure t
+;;   :config
+;;   (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
+;; (use-package company-tern
 ;;   :ensure t
 ;;   :config (progn
-;;             (setq company-idle-delay 0.2
-;;                   company-minimum-prefix-length 2
-;;                   company-require-match nil
-;;                   company-dabbrev-ignore-case nil
-;;                   company-dabbrev-downcase nil
-;;                   company-frontends '(company-pseudo-tooltip-frontend))
-
-;;             (defvar-local company-fci-mode-on-p nil)
-;;             (defun company-turn-off-fci (&rest ignore)
-;;               (when (boundp 'fci-mode)
-;;                 (setq company-fci-mode-on-p fci-mode)
-;;                 (when fci-mode (fci-mode -1))))
-
-;;             (defun company-maybe-turn-on-fci (&rest ignore)
-;;               (when company-fci-mode-on-p (fci-mode 1)))
-
-;;             (add-hook 'company-completion-started-hook 'company-turn-off-fci)
-;;             (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
-;;             (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci)
-;;             (add-hook 'after-init-hook 'global-company-mode)
-
-;; ;; key bindings
-;; (let ((map company-active-map))
-;;   (define-key map (kbd "C-/") 'company-search-candidates)
-;;   (define-key map (kbd "C-M-/") 'company-filter-candidates)
-;;   (define-key map (kbd "C-d") 'company-show-doc-buffer)
-;;   (define-key map (kbd "C-j") 'company-select-next)
-;;   (define-key map (kbd "C-k") 'company-select-previous)
-;;   (define-key map (kbd "C-l") 'company-complete-selection))
-
-;;             (use-package company-emoji
-;;               :ensure t
-;;               :init (company-emoji-init))
-;;             (setq company-idle-delay 0.2)
-;;             )
-;;   :diminish company-mode)
+;;             (add-to-list 'company-backends 'company-tern)
+;;             (setq company-tern-meta-as-single-line t)
+;;             ))
 
 (provide 'config-ac)
-
 ;;; config-ac.el ends here

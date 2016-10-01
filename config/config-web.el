@@ -1,7 +1,6 @@
 ;; -----------------------------------
 ;; web-mode
 ;; -----------------------------------
-
 (use-package web-mode
   :ensure t
   :mode
@@ -19,20 +18,14 @@
    ("\\.hbs\\'"        . web-mode)
    ("\\.eco\\'"        . web-mode)
    ("\\.ejs\\'"        . web-mode)
-   ("\\.djhtml\\'"     . web-mode))
-  :config (progn
-            (use-package company-web
-              :ensure t
-              :init
-              (progn (require 'company-web-html)))))
+   ("\\.djhtml\\'"     . web-Mode)))
 
-(eval-after-load 'company-web
+(use-package company-web :ensure t)
+
+(eval-after-load 'web-mode
   '(progn
-     (add-hook 'web-mode-hook
-               (lambda ()
-                 (set
-                  (make-local-variable 'company-backends) '(company-web-html))
-                 (company-mode t)))))
+     (add-to-list 'company-backends 'company-web-html)
+     (define-key web-mode-map (kbd "C-c b") 'web-beautify-html)))
 
 ;; -----------------------------------
 ;; javascript
@@ -47,45 +40,48 @@
   :defer t
   :mode ("\\.json$" . json-mode))
 
-(use-package nodejs-repl
-  :ensure t
-  :defer t)
-
 (use-package css-mode
   :ensure t
   :mode ("\\.css$" . css-mode)
   :config (setq css-indent-offset 2))
 
+(use-package scss-mode
+  :ensure t
+  :mode ("\\.scss\\'" . scss-mode))
+
 (use-package yaml-mode
   :ensure t
   :mode ("\\.ya?ml$'" . yaml-mode))
 
-(use-package web-beautify
-  :ensure t
-  :init
-  (progn
-    (eval-after-load 'js2-mode
-      '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
-    ;; Or if you're using 'js-mode' (a.k.a 'javascript-mode')
-    ;; (eval-after-load 'js
-    ;;   '(define-key js-mode-map (kbd "C-c b") 'web-beautify-js))
+(use-package web-beautify :ensure t)
 
-    (eval-after-load 'json-mode
-      '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
+(eval-after-load 'js2-mode
+  '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
+;; Or if you're using 'js-mode' (a.k.a 'javascript-mode')
+;; (eval-after-load 'js
+;;   '(define-key js-mode-map (kbd "C-c b") 'web-beautify-js))
 
-    ;; (eval-after-load 'sgml-mode
-    ;;   '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
+(eval-after-load 'json-mode
+  '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
+;; (eval-after-load 'sgml-mode
+;;   '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
 
-    (eval-after-load 'web-mode
-      '(define-key web-mode-map (kbd "C-c b") 'web-beautify-html))
+(eval-after-load 'css-mode
+  '(progn
+     (define-key css-mode-map (kbd "C-c b") 'web-beautify-css)
+     (add-to-list 'company-backends 'company-css)))
 
-    (eval-after-load 'css-mode
-      '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))))
-
+;; -----------------------------------
 ;; javascript REPL
+;; -----------------------------------
+
+;; (use-package nodejs-repl
+;;   :ensure t
+;;   :defer t)
+
 (use-package js-comint
   :ensure t
-  :config
+  :init
   (progn
     (setq inferior-js-program-command "node")
     (setq inferior-js-program-arguments '("--interactive"))))
@@ -106,32 +102,31 @@
                                  (local-set-key "\C-a" 'back-to-indentation)
                                  (local-set-key (kbd "\C-c i") 'jslint-current-buffer)))))
 
-;;; php mode
+;; -----------------------------------
+;; php mode
+;; -----------------------------------
 (use-package php-mode
   :ensure t
-  :mode "\\.php\\'"
-  :config
-  (progn
-    (add-hook 'php-mode-hook 'smartparens-mode)
-    (use-package ac-php
-      :ensure t
-      :config
-      (add-hook 'php-mode-hook
-                '(lambda ()
-                   (use-package company-php :ensure t)
-                   (company-mode t)
-                   (add-to-list 'company-backends 'company-ac-php-backend))))
-    (use-package php-eldoc
-      :ensure t
-      :config
-      (add-hook 'php-mode-hook 'php-eldoc-enable))))
+  :mode ("\\.php\\'" . php-mode))
+(use-package company-php :ensure t)
+(use-package ac-php :ensure t)
+(use-package php-eldoc :ensure t)
+(eval-after-load 'php-mode
+  '(progn
+     (add-hook 'php-mode-hook 'smartparens-mode)
+     (add-hook 'php-mode-hook 'php-eldoc-enable)
+     (add-hook 'php-mode-hook
+               (lambda ()
+                 (company-mode t)
+                 (add-to-list 'company-backends 'company-ac-php-backend)))
+     ))
 
-;;; php REPL
+;; -----------------------------------
+;; php REPL
+;; -----------------------------------
 (use-package psysh
   :if (executable-find "psysh")
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (provide 'config-web)
-
 ;;; config-web.el ends here

@@ -58,7 +58,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (latex-preview-pane yaml-mode whole-line-or-region whitespace-cleanup-mode which-key web-mode web-beautify use-package undo-tree spaceline smartparens rainbow-delimiters py-autopep8 psysh php-mode nodejs-repl neotree monokai-theme matlab-mode markdown-toc magit-gitflow json-mode js2-mode js-comint hungry-delete flx fix-word expand-region exec-path-from-shell ess elpy disaster counsel company-emacs-eclim company-auctex company-anaconda color-theme-approximate clang-format better-defaults benchmark-init aggressive-indent))))
+    (company-php company-web latex-preview-pane yaml-mode whole-line-or-region whitespace-cleanup-mode which-key web-mode web-beautify use-package undo-tree spaceline smartparens rainbow-delimiters py-autopep8 psysh php-mode nodejs-repl neotree monokai-theme matlab-mode markdown-toc magit-gitflow json-mode js2-mode js-comint hungry-delete flx fix-word expand-region exec-path-from-shell ess elpy disaster counsel company-emacs-eclim company-auctex company-anaconda color-theme-approximate clang-format better-defaults benchmark-init aggressive-indent))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
