@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: markdown read more
+# key: rdmore
+# --
+<!--more-->

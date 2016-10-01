@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: markdown yaml
+# key: mdyaml
+# --
+---
+title: ${1:title}
+author: ${2:Li Xiang}
+date: $3
+layout: ${4:post}
+tags: [$5]
+categories: [$6]
+---

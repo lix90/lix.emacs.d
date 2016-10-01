@@ -47,16 +47,16 @@
 ;;   :ensure t
 ;;   :defer t)
 
-(use-package ein
-  :ensure t
-  :config (progn
-            ;; Use Jedi with EIN
-            ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
-            (setq ein:use-auto-complete t)
-            (setq ein:default-url-or-port "http://localhost:8888"
-                  ein:output-type-perference '(emacs-lisp svg png jpeg
-                                                          html text latex javascript))
-            (use-package websocket :ensure t)))
+;; (use-package ein
+;;   :ensure t
+;;   :config (progn
+;;             ;; Use Jedi with EIN
+;;             ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
+;;             (setq ein:use-auto-complete t)
+;;             (setq ein:default-url-or-port "http://localhost:8888"
+;;                   ein:output-type-perference '(emacs-lisp svg png jpeg
+;;                                                           html text latex javascript))
+;;             (use-package websocket :ensure t)))
 
 ;; (use-package company-jedi
 ;;   :ensure t
@@ -68,7 +68,5 @@
 (eval-after-load 'python-mode
   '(setq python-indent-offset 4))
 
-
 (provide 'config-python)
-
 ;;; config-python.el ends here
