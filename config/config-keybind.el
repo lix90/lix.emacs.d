@@ -13,24 +13,28 @@
 
 (global-set-key (kbd "C-c C-j") 'join-line)
 ;; (global-set-key (kbd "C-z") 'undo)
-(global-set-key (kbd "C-S-c r") 'replace-regexp)
+;; (global-set-key (kbd "C-S-c r") 'replace-regexp)
 (global-set-key (kbd "C-c m") 'set-mark-command)
 (global-set-key [f7] 'eval-region)
-(global-set-key (kbd "C-c r") 'replace-string)
-(global-set-key (kbd "RET") 'newline-and-indent)
+;; (global-set-key (kbd "C-c r") 'replace-string)
+;; (global-set-key (kbd "RET") 'newline-and-indent)
+
 ;; -----------------------------------
 ;; insert data
+;; -----------------------------------
 (defun my-insert-date ()
   (interactive)
   (insert (format-time-string "%Y-%m-%d %H:%M:%S" (current-time))))
-
 (global-set-key (kbd "C-c d") 'my-insert-date)
-;;-----------------------------------
+
+;; -----------------------------------
 ;; resize window
+;; -----------------------------------
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
+
 ;;--------------------------------------------------------------------
 ;; set other window
 ;; next window
@@ -44,44 +48,49 @@
 ;; change default keybindings
 ;; (global-set-key "\M-?" 'help-command)
 ;; (global-set-key "\C-h" 'delete-backward-char)
-;;--------------------------------------------------------------------
+
+;; -----------------------------------
 ;; move line
-(defun move-text-internal (arg)
-  (cond
-   ((and mark-active transient-mark-mode)
-    (if (> (point) (mark))
-        (exchange-point-and-mark))
-    (let ((column (current-column))
-          (text (delete-and-extract-region (point) (mark))))
-      (forward-line arg)
-      (move-to-column column t)
-      (set-mark (point))
-      (insert text)
-      (exchange-point-and-mark)
-      (setq deactivate-mark nil)))
-   (t
-    (beginning-of-line)
-    (when (or (> arg 0) (not (bobp)))
-      (forward-line)
-      (when (or (< arg 0) (not (eobp)))
-        (transpose-lines arg))
-      (forward-line -1)))))
+;; -----------------------------------
+;; (defun move-text-internal (arg)
+;;   (cond
+;;    ((and mark-active transient-mark-mode)
+;;     (if (> (point) (mark))
+;;         (exchange-point-and-mark))
+;;     (let ((column (current-column))
+;;           (text (delete-and-extract-region (point) (mark))))
+;;       (forward-line arg)
+;;       (move-to-column column t)
+;;       (set-mark (point))
+;;       (insert text)
+;;       (exchange-point-and-mark)
+;;       (setq deactivate-mark nil)))
+;;    (t
+;;     (beginning-of-line)
+;;     (when (or (> arg 0) (not (bobp)))
+;;       (forward-line)
+;;       (when (or (< arg 0) (not (eobp)))
+;;         (transpose-lines arg))
+;;       (forward-line -1)))))
 
-(defun move-text-down (arg)
-   "Move region (transient-mark-mode active) or current line
-  arg lines down."
-   (interactive "*p")
-   (move-text-internal arg))
+;; (defun move-text-down (arg)
+;;    "Move region (transient-mark-mode active) or current line
+;;   arg lines down."
+;;    (interactive "*p")
+;;    (move-text-internal arg))
 
-(defun move-text-up (arg)
-  "Move region (transient-mark-mode active) or current line
-  arg lines up."
-  (interactive "*p")
-  (move-text-internal (- arg)))
+;; (defun move-text-up (arg)
+;;   "Move region (transient-mark-mode active) or current line
+;;   arg lines up."
+;;   (interactive "*p")
+;;   (move-text-internal (- arg)))
 
-(global-set-key "\M-p" 'move-text-up)
-(global-set-key "\M-n" 'move-text-down)
-;;--------------------------------------------------------------------
+;; (global-set-key "\M-p" 'move-text-up)
+;; (global-set-key "\M-n" 'move-text-down)
+
+;; -----------------------------------
+;; window split
+;; -----------------------------------
 (defun toggle-window-split ()
   (interactive)
   (if (= (count-windows) 2)
@@ -125,8 +134,10 @@
 ;; (global-set-key [s-right] (ignore-error-wrapper 'windmove-right))
 ;; (global-set-key [s-up] (ignore-error-wrapper 'windmove-up))
 ;; (global-set-key [s-down] (ignore-error-wrapper 'windmove-down))
-;; ------------------------------------------------------------------
+
+;; -----------------------------------
 ;; easy comment
+;; -----------------------------------
 (defun my-comment-or-uncomment-region (beg end &optional arg)
   (interactive (if (use-region-p)
                    (list (region-beginning) (region-end) nil)
@@ -135,14 +146,15 @@
   (comment-or-uncomment-region beg end arg))
 
 (global-set-key [remap comment-or-uncomment-region] 'my-comment-or-uncomment-region)
-
 (global-set-key [?\C-c ?\C-/] 'comment-or-uncomment-region)
-;;--------------------------------------------------------------------
+
+;; -----------------------------------
 ;; kill all buffers
+;; -----------------------------------
 (defun close-all-buffers ()
   (interactive)
   (mapc 'kill-buffer (buffer-list)))
 (global-set-key (kbd "C-c k") 'close-all-buffers)
 
-;;--------------------------------------------------------------------
 (provide 'config-keybind)
+;; config-keybind.el ends here

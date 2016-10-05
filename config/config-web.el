@@ -122,6 +122,19 @@
      ))
 
 ;; -----------------------------------
+;; jade
+;; -----------------------------------
+(use-package pug-mode
+  :ensure t
+  :mode (("\\.pug\\'" . pug-mode)
+         ("\\.jade\\'" . pug-mode)))
+
+;; (use-package jade
+;;   :ensure t)
+;; (eval-after-load 'js2-mode
+;;   '(add-hook 'js2-mode-hook #'jade-interaction-mode))
+
+;; -----------------------------------
 ;; php REPL
 ;; -----------------------------------
 (use-package psysh

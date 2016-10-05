@@ -1,6 +1,6 @@
-;; -----------------------------------
-;; useR
-;; -----------------------------------
+;;; useR --- ess
+;;; Commentary:
+;;; Code:
 (use-package ess-site
   :ensure ess
   :mode (("/R/.*\\.q\\'"       . R-mode)
@@ -16,13 +16,7 @@
          ("\\.[Jj][Oo][Gg]\\'" . ess-jags-mode)
          ("\\.[Jj][Mm][Dd]\\'" . ess-jags-mode))
   :commands R
-  ;; :bind (:map ess-mode-map
-  ;;             ("M-b" . ess-eval-buffer)
-  ;;             ("M-r" . ess-eval-region)
-  ;;             ("M-f" . ess-eval-function)
-  ;;             ("M-l" . ess-eval-line))
-  :config (progn
-            (add-hook 'ess-mode-hook 'company-mode)))
+  )
 
 
 (with-eval-after-load 'ess-site
@@ -44,4 +38,4 @@
 
 (provide 'config-ess)
 
-;; config-ess.el ends here
+;;; config-ess.el ends here

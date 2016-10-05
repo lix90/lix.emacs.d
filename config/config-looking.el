@@ -1,4 +1,7 @@
-;; defaults
+;;; looking --- looking configuration:
+;;; Commentary:
+;;; Code:
+
 (use-package better-defaults
   :ensure t
   :defer t)
@@ -6,12 +9,10 @@
 ;; disable startup screen and *scratch* message
 (setq inhibit-startup-screen t
       initial-scratch-message nil)
-
 ;; nice scrolling
 (setq scroll-margin 0
       scroll-conservatively 100000
       scroll-preserve-screen-position 1)
-
 (setq ring-bell-function 'ignore)
 (setq cursor-in-non-selected-windows nil
       use-dialog-box nil)
@@ -30,8 +31,7 @@
 (use-package monokai-theme
   :ensure t
   :init
-  (progn
-    (load-theme 'monokai t)))
+  (load-theme 'monokai t))
 ;; (load-theme 'deeper-blue)
 ;; (use-package hc-zenburn-theme
 ;;   :ensure t
@@ -39,33 +39,33 @@
 ;;   (progn
 ;;     (load-theme 'hc-zenburn t)))
 
-(use-package color-theme-approximate
-  :ensure t
-  :init (progn
-          (color-theme-approximate-on)))
+;; (use-package color-theme-approximate
+;;   :ensure t
+;;   :init (progn
+;;           (color-theme-approximate-on)))
 
 
 ;; modeline
-(use-package spaceline
-  :ensure t
-  :init (progn
-          (require 'spaceline-config)
-          (setq powerline-default-separator 'arrow)
-          (setq powerline-height 18)
-          (setq powerline-raw " ")
-          (setq ns-use-srgb-colorspace nil)
-          ;; (setq spaceline-separator-dir-left '(left . left))
-          ;; (setq spaceline-separator-dir-right '(right . right))
-          (spaceline-spacemacs-theme)))
+;; (use-package spaceline
+;;   :ensure t
+;;   :init (progn
+;;           (require 'spaceline-config)
+;;           (setq powerline-default-separator 'arrow)
+;;           (setq powerline-height 18)
+;;           (setq powerline-raw " ")
+;;           (setq ns-use-srgb-colorspace nil)
+;;           ;; (setq spaceline-separator-dir-left '(left . left))
+;;           ;; (setq spaceline-separator-dir-right '(right . right))
+;;           (spaceline-spacemacs-theme)))
 
 ;; startup time
 ;; (use-package esup
 ;;   :ensure t)
 
 ;; auto-revert
-(global-auto-revert-mode)
-(setq global-auto-revert-non-file-buffers t
-      auto-revert-verbose t)
+;; (global-auto-revert-mode)
+;; (setq global-auto-revert-non-file-buffers t
+;;       auto-revert-verbose t)
 
 ;; display time
 (display-time-mode t)
@@ -78,3 +78,4 @@
 
 ;;-------------------------------------------------------
 (provide 'config-looking)
+;;; config-looking.el ends here
