@@ -53,18 +53,3 @@
 ;; (load (local-file-name "config/config-blog"))
 
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (company-ess yaml-mode whole-line-or-region whitespace-cleanup-mode which-key web-mode web-beautify use-package undo-tree sws-mode spaceline smartparens scss-mode rvm robe rbenv rainbow-delimiters py-autopep8 pug-mode psysh php-eldoc origami nodejs-repl neotree multiple-cursors move-text monokai-theme matlab-mode markdown-toc magit-gitflow latex-preview-pane json-mode js-comint jade-mode jade hungry-delete flycheck flx fix-word expand-region exec-path-from-shell ess elpy disaster counsel company-web company-statistics company-php company-emoji company-emacs-eclim company-auctex company-anaconda color-theme-approximate clang-format better-defaults benchmark-init aggressive-indent ac-php)))
- '(undo-tree-history-directory-alist (quote (("." . "~/.emacs.d/undo/")))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
