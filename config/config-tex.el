@@ -1,3 +1,4 @@
+
 ;;; latex config
 (use-package auctex
   :ensure t

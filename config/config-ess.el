@@ -1,6 +1,7 @@
 ;;; useR --- ess
 ;;; Commentary:
 ;;; Code:
+
 (use-package ess-site
   :ensure ess
   :mode (("/R/.*\\.q\\'"       . R-mode)

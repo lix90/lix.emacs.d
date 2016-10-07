@@ -1,3 +1,4 @@
+
 ;; -----------------------------------
 ;; web-mode
 ;; -----------------------------------
@@ -20,7 +21,9 @@
    ("\\.ejs\\'"        . web-mode)
    ("\\.djhtml\\'"     . web-Mode)))
 
-(use-package company-web :ensure t)
+(use-package company-web
+  :ensure t
+  :after web-mode)
 
 (eval-after-load 'web-mode
   '(progn
@@ -33,12 +36,12 @@
 (use-package js2-mode
   :ensure t
   :defer t
-  :mode ("\\.js$" . js2-mode))
+  :mode ("\\.js\\'" . js2-mode))
 
 (use-package json-mode
   :ensure t
   :defer t
-  :mode ("\\.json$" . json-mode))
+  :mode ("\\.json\\'" . json-mode))
 
 (use-package css-mode
   :ensure t
@@ -53,7 +56,8 @@
   :ensure t
   :mode ("\\.ya?ml$'" . yaml-mode))
 
-(use-package web-beautify :ensure t)
+(use-package web-beautify
+  :ensure t)
 
 (eval-after-load 'js2-mode
   '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
@@ -89,18 +93,18 @@
 (eval-after-load 'js2-mode
   '(progn
      (setq js-indent-level 2)
-     (add-hook 'js2-mode-hook '(lambda ()
-                                 (local-set-key "\C-x\C-e" 'js-send-last-sexp)
-                                 (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
-                                 (local-set-key "\C-cb" 'js-send-buffer)
-                                 (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
-                                 (local-set-key "\C-c\C-r" 'js-send-region-and-go)
-                                 (local-set-key "\C-cl" 'js-load-file-and-go)
-                                 (local-set-key "\C-c\C-z" 'run-js)
-                                 ;; js2 ignores some commands
-                                 (local-set-key (kbd "RET") 'newline-and-indent)
-                                 (local-set-key "\C-a" 'back-to-indentation)
-                                 (local-set-key (kbd "\C-c i") 'jslint-current-buffer)))))
+     (add-hook 'js2-mode-hook (lambda ()
+                                (local-set-key "\C-x\C-e" 'js-send-last-sexp)
+                                (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
+                                (local-set-key "\C-cb" 'js-send-buffer)
+                                (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
+                                (local-set-key "\C-c\C-r" 'js-send-region-and-go)
+                                (local-set-key "\C-cl" 'js-load-file-and-go)
+                                (local-set-key "\C-c\C-z" 'run-js)
+                                ;; js2 ignores some commands
+                                (local-set-key (kbd "RET") 'newline-and-indent)
+                                (local-set-key "\C-a" 'back-to-indentation)
+                                (local-set-key (kbd "\C-c i") 'jslint-current-buffer)))))
 
 ;; -----------------------------------
 ;; php mode
@@ -108,9 +112,15 @@
 (use-package php-mode
   :ensure t
   :mode ("\\.php\\'" . php-mode))
-(use-package company-php :ensure t)
-(use-package ac-php :ensure t)
-(use-package php-eldoc :ensure t)
+;; (use-package company-php
+;;   :ensure t
+;;   :after php-mode)
+(use-package ac-php
+  :ensure t
+  :after php-mode)
+(use-package php-eldoc
+  :ensure t
+  :after php-mode)
 (eval-after-load 'php-mode
   '(progn
      (add-hook 'php-mode-hook 'smartparens-mode)
@@ -118,8 +128,12 @@
      (add-hook 'php-mode-hook
                (lambda ()
                  (company-mode t)
-                 (add-to-list 'company-backends 'company-ac-php-backend)))
-     ))
+                 (add-to-list 'company-backends 'company-ac-php-backend)))))
+
+;; php REPL
+(use-package psysh
+  :if (executable-find "psysh")
+  :ensure t)
 
 ;; -----------------------------------
 ;; jade
@@ -134,12 +148,16 @@
 ;; (eval-after-load 'js2-mode
 ;;   '(add-hook 'js2-mode-hook #'jade-interaction-mode))
 
-;; -----------------------------------
-;; php REPL
-;; -----------------------------------
-(use-package psysh
-  :if (executable-find "psysh")
-  :ensure t)
+(use-package emmet-mode
+  :ensure t
+  :init
+  (progn
+    (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+    (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+    (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2)))
+    (setq emmet-move-cursor-between-quotes t)
+    (setq emmet-move-cursor-after-expanding nil)
+    (setq emmet-self-closing-tag-style " /")))
 
 (provide 'config-web)
 ;;; config-web.el ends here

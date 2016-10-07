@@ -1,8 +1,5 @@
-;;; core-packages.el ---
 (require 'cl)
-;; (require 'package)
 (setq package-enable-at-startup nil)
-
 (when (>= emacs-major-version 24)
   (require 'package)
   (add-to-list
@@ -18,27 +15,40 @@
 
 (setq package-user-dir (local-file-name "elpa"))
 
-;; (package-initialize)
-
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; Requires
 (eval-when-compile
   (require 'use-package))
-(require 'diminish);; if you use :diminish
-(require 'bind-key);; if you use any :bind variant
+(require 'diminish)
+(require 'bind-key)
 
-;; set exec-path
 (use-package exec-path-from-shell
   :ensure t
+  :defer 5
   :init (exec-path-from-shell-initialize))
 
-(provide 'config-package.el)
+(use-package auto-package-update
+  :ensure t
+  :init
+  (progn
+    (setq auto-package-update-interval 14)
+    (setq auto-package-update-delete-old-versions t)
+    (add-hook 'auto-package-update-before-hook
+              (lambda () (message "I will update packages now.")))))
 
+(use-package paradox
+  :ensure t
+  :defer t
+  :config
+  (setq paradox-execute-asynchronously t
+        paradox-github-token t))
+
+(use-package esup :ensure t :defer 5)
+
+(provide 'config-core.el)
 ;;; config-package.el ends here

@@ -2,7 +2,7 @@
 ;; auto completion
 ;; -----------------------------------
 
-;;; code:
+;;; Code:
 (use-package company
   :ensure t
   :defer t

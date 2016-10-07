@@ -1,4 +1,6 @@
+
 ;;; java configuration
+
 (use-package eclim
   :ensure t
   :defer t

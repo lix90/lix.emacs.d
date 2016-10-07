@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; -----------------------------------
 ;;; Code:
+
+
 (use-package smartparens-config
   :ensure smartparens
   :diminish smartparens-mode

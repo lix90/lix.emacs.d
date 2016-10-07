@@ -7,27 +7,30 @@
   :mode ("\\.py\\'" . python-mode))
 
 (use-package anaconda-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package company-anaconda
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package py-autopep8
   :ensure t
+  :defer t
   :config (progn
             (setq py-autopep8-options '("--max-line-length=100"))
             ))
 
 (use-package elpy
   :ensure t
+  :defer t
   :diminish elpy-mode
-  :config (progn
-            (setq elpy-rpc-backend "jedi")
-            (elpy-enable)
-            (elpy-use-ipython)
-            (add-to-list 'company-backends 'elpy-company-backend)
-            )
-  )
+  :config
+  (progn
+    (setq elpy-rpc-backend "jedi")
+    (elpy-enable)
+    (elpy-use-ipython)
+    (add-to-list 'company-backends 'elpy-company-backend)))
 
 (eval-after-load 'python-mode
   '(progn

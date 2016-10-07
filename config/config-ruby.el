@@ -3,6 +3,7 @@
 ;; robe: Code navigation, documentation lookup and completion for Ruby
 ;; rbenv: use rbenv to manage your Ruby versions within Emacs
 
+
 (use-package enh-ruby-mode
   :interpreter "ruby"
   :mode (
@@ -21,13 +22,12 @@
          ))
 
 (use-package robe
-  :ensure t
-  )
+  :ensure t)
 ;; (use-package inf-ruby :ensure t :defer t)
-(use-package rvm
-  :ensure t
-  :config
-  (rvm-use-default))
+;; (use-package rvm
+;;   :ensure t
+;;   :config
+;;   (rvm-use-default))
 ;; (use-package rbenv
 ;;   :ensure t
 ;;   :config

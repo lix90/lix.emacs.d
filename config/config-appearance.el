@@ -28,39 +28,49 @@
 ;; theme
 ;; (load-theme 'misterioso)
 ;;----------- from markauskas, my-colors.el
-(use-package monokai-theme
-  :ensure t
-  :init
-  (load-theme 'monokai t))
-;; (load-theme 'deeper-blue)
-;; (use-package hc-zenburn-theme
+;; (use-package monokai-theme
 ;;   :ensure t
 ;;   :init
-;;   (progn
-;;     (load-theme 'hc-zenburn t)))
-
+;;   (load-theme 'monokai t))
 ;; (use-package color-theme-approximate
 ;;   :ensure t
 ;;   :init (progn
 ;;           (color-theme-approximate-on)))
-
-
-;; modeline
-;; (use-package spaceline
+;; (use-package emojify
 ;;   :ensure t
-;;   :init (progn
-;;           (require 'spaceline-config)
-;;           (setq powerline-default-separator 'arrow)
-;;           (setq powerline-height 18)
-;;           (setq powerline-raw " ")
-;;           (setq ns-use-srgb-colorspace nil)
-;;           ;; (setq spaceline-separator-dir-left '(left . left))
-;;           ;; (setq spaceline-separator-dir-right '(right . right))
-;;           (spaceline-spacemacs-theme)))
+;;   :init (add-hook 'after-init-hook #'global-emojify-mode))
+;; (use-package powerline
+;;   :ensure t
+;;   :init
+;;   (progn
+;;     (powerline-default-theme)
+;;     (setq powerline-default-separator 'arrow)
+;;     (setq powerline-height 18)
+;;     (setq powerline-raw " ")
+;;     (setq ns-use-srgb-colorspace nil)))
+;; modeline
+(use-package spaceline
+  :ensure t
+  :init (progn
+          (require 'spaceline-config)
+          (setq powerline-default-separator 'arrow)
+          (setq powerline-height 18)
+          (setq powerline-raw " ")
+          (setq ns-use-srgb-colorspace nil)
+          (spaceline-spacemacs-theme)))
 
-;; startup time
-;; (use-package esup
-;;   :ensure t)
+(use-package moe-theme
+  :ensure t)
+;; (set moe-theme-highlight-buffer-id t)
+(moe-theme-set-color 'blue)
+;; (Available colors: blue, orange, green ,magenta, yellow, purple, red, cyan, w/b.)
+(moe-dark)
+(powerline-moe-theme)
+(show-paren-mode t)
+(setq show-paren-style 'expression)
+
+;; (use-package rainbow-mode
+;; :ensure t)
 
 ;; auto-revert
 ;; (global-auto-revert-mode)
@@ -77,5 +87,5 @@
 (diminish 'visual-line-mode)
 
 ;;-------------------------------------------------------
-(provide 'config-looking)
-;;; config-looking.el ends here
+(provide 'config-appearance)
+;;; config-appearance.el ends here

@@ -1,3 +1,4 @@
+
 ;;; edit --- configuration for editing configuration:
 ;;; Commentary:
 ;;; as a newbie in Emacs world, I stolen a lot of codes from Emacs vaterans
@@ -57,10 +58,6 @@
 ;; -----------------------------------
 ;; switch buffer
 ;; -----------------------------------
-;; use shift + arrow keys to switch between visible buffers
-(require 'windmove)
-(windmove-default-keybindings)
-(setq windmove-wrap-around t)
 
 ;; ;; ediff - don't start another frame
 ;; (require 'ediff)
@@ -68,7 +65,6 @@
 
 ;; clean up obsolete buffers automatically
 (require 'midnight)
-
 
 ;; saner regex syntax
 (require 're-builder)
@@ -151,38 +147,31 @@
          ("M-c" . fix-word-capitalize))
   :diminish fix-word)
 
-(use-package  which-key
-  :ensure t
-  :init
-  (progn
-    (which-key-mode)
-    (which-key-setup-side-window-bottom))
-  :diminish which-key-mode)
-
-;; -----------------------------------
-;; benchmark
-;; -----------------------------------
-(use-package benchmark-init
-  :ensure t
-  :init
-  (benchmark-init/activate))
-
-;; -----------------------------------
 ;; text folding minor mode
-;; -----------------------------------
+(use-package dash
+  :ensure t)
+(use-package dash-functional
+  :ensure t)
+(eval-after-load 'dash '(dash-enable-font-lock))
+(use-package s
+  :ensure t)
 (use-package origami
   :ensure t
   :init (global-origami-mode))
 
-;; -----------------------------------
 ;; moving text
-;; -----------------------------------
 (use-package move-text
   :ensure t
   :bind (("M-n" . move-text-down)
          ("M-p" . move-text-up)))
 
+;; dash-at-point
+(use-package dash-at-point
+  :ensure t
+  :defer 3
+  :bind (("C-c d" . dash-at-point)
+         ("C-c e" . dash-at-point-with-docset)))
+
 (provide 'config-edit)
 
 ;;; config-edit.el ends here
-
