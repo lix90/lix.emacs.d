@@ -1,3 +1,10 @@
+;;; Google Search In Emacs
+(use-package google-this
+  :ensure t
+  :config
+  (google-this-mode 1))
+
+;;; Git in Emacs
 (use-package magit
   :ensure t
   :bind ("C-x g" . magit-status))
@@ -11,5 +18,4 @@
 ;;   :ensure t
 ;;   :after magit)
 
-
-(provide 'config-git)
+(provide 'config-tool)

@@ -11,12 +11,12 @@
 (setq dired-dwim-target t)
 
 ;; Reload dired after making changes
-(--each '(dired-do-rename
-          dired-do-copy
-          dired-create-directory
-          wdired-abort-changes)
-  (eval `(defadvice ,it (after revert-buffer activate)
-           (revert-buffer))))
+;; (--each '(dired-do-rename
+;;           dired-do-copy
+;;           dired-create-directory
+;;           wdired-abort-changes)
+;;   (eval `(defadvice ,it (after revert-buffer activate)
+;;            (revert-buffer))))
 
 (provide 'config-dired)
 ;;; config-dired.el ends here

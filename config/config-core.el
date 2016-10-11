@@ -29,7 +29,6 @@
 
 (use-package exec-path-from-shell
   :ensure t
-  :defer 5
   :init (exec-path-from-shell-initialize))
 
 (use-package auto-package-update

@@ -1,4 +1,3 @@
-
 ;; -----------------------------------
 ;; web-mode
 ;; -----------------------------------
@@ -19,7 +18,8 @@
    ("\\.hbs\\'"        . web-mode)
    ("\\.eco\\'"        . web-mode)
    ("\\.ejs\\'"        . web-mode)
-   ("\\.djhtml\\'"     . web-Mode)))
+   ("\\.djhtml\\'"     . web-Mode))
+  )
 
 (use-package company-web
   :ensure t
@@ -28,7 +28,9 @@
 (eval-after-load 'web-mode
   '(progn
      (add-to-list 'company-backends 'company-web-html)
-     (define-key web-mode-map (kbd "C-c b") 'web-beautify-html)))
+     (define-key web-mode-map (kbd "C-c b") 'web-beautify-html)
+     (add-hook 'web-mode-hook 'skewer-html-mode)
+     ))
 
 ;; -----------------------------------
 ;; javascript
@@ -59,8 +61,21 @@
 (use-package web-beautify
   :ensure t)
 
+;;; live development with skewer-mode
+(use-package skewer-mode
+  :ensure t
+  :config
+  (use-package simple-httpd
+    :ensure t
+    :config
+    (progn
+      (setq httpd-root "/var/www"))))
+
 (eval-after-load 'js2-mode
-  '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
+  '(progn
+     (define-key js2-mode-map (kbd "C-c b") 'web-beautify-js)
+     (add-hook 'js2-mode-hook 'skewer-mode)
+     ))
 ;; Or if you're using 'js-mode' (a.k.a 'javascript-mode')
 ;; (eval-after-load 'js
 ;;   '(define-key js-mode-map (kbd "C-c b") 'web-beautify-js))
@@ -73,7 +88,8 @@
 (eval-after-load 'css-mode
   '(progn
      (define-key css-mode-map (kbd "C-c b") 'web-beautify-css)
-     (add-to-list 'company-backends 'company-css)))
+     (add-to-list 'company-backends 'company-css)
+     (add-hook 'css-mode-hook 'skewer-css-mode)))
 
 ;; -----------------------------------
 ;; javascript REPL
@@ -158,6 +174,8 @@
     (setq emmet-move-cursor-between-quotes t)
     (setq emmet-move-cursor-after-expanding nil)
     (setq emmet-self-closing-tag-style " /")))
+
+
 
 (provide 'config-web)
 ;;; config-web.el ends here

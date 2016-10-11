@@ -172,6 +172,16 @@
   :bind (("C-c d" . dash-at-point)
          ("C-c e" . dash-at-point-with-docset)))
 
+;; crux
+(use-package crux
+  :ensure t
+  :bind (("C-c o" . crux-open-with)
+         ("C-S-RET" . crux-smart-open-line-above)
+         ("S-RET" . crux-smart-open-file)
+         ("C-c n" . crux-cleanup-buffer-or-region)
+         ("C-c f" . crux-recentf-find-file)
+         ("C-a" . crux-move-beginning-of-line)))
+
 (provide 'config-edit)
 
 ;;; config-edit.el ends here
