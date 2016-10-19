@@ -1,6 +1,7 @@
 ;;; swiper, flx, counsel, ivy
 (use-package flx :ensure t)
 (use-package swiper
+  :diminish ivy-mode
   :ensure counsel
   :bind (("C-s" . swiper)
          ("C-c C-r" . ivy-resume)

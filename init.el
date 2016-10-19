@@ -45,6 +45,7 @@
 (load (local-file-name "config/config-paren"))
 (load (local-file-name "config/config-swiper"))
 (load (local-file-name "config/config-whichkey"))
+(load (local-file-name "config/config-evil"))
 
 ;; Tools
 (load (local-file-name "config/config-tool"))
@@ -64,21 +65,3 @@
 ;; (load (local-file-name "config/config-cc"))
 
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (crux skewer-mode markdown-toc google-this hexo blog-admin dash-at-point yaml-mode whole-line-or-region whitespace-cleanup-mode which-key web-mode web-beautify use-package undo-tree spaceline smartparens shell-pop scss-mode rvm robe rainbow-delimiters py-autopep8 pug-mode psysh php-eldoc paradox origami neotree multiple-cursors move-text moe-theme matlab-mode markdown-mode magithub magit-gitflow latex-preview-pane json-mode js2-mode js-comint hungry-delete flycheck flx fix-word expand-region exec-path-from-shell esup ess emmet-mode elpy disaster dired-details dash-functional counsel company-web company-statistics company-php company-emoji company-emacs-eclim company-auctex company-anaconda clang-format better-defaults benchmark-init auto-package-update aggressive-indent ace-jump-mode ac-php)))
- '(safe-local-variable-values
-   (quote
-    ((whitespace-style face tabs spaces trailing lines space-before-tab::space newline indentation::space empty space-after-tab::space space-mark tab-mark newline-mark))))
- '(undo-tree-history-directory-alist (quote (("." . "~/.emacs.d/undo/")))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

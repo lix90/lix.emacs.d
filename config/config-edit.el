@@ -96,19 +96,19 @@
 ;;   )
 
 ;; sensible undo
+
+(defun dos2unix ()
+  "Not exactly but it's easier to remember"
+  (interactive)
+  (set-buffer-file-coding-system 'unix 't))
+
 (use-package undo-tree
-  :ensure t
-  :commands undo-tree-visualize
-  :init
+  :diminish undo-tree-mode
+  :config
   (progn
     (global-undo-tree-mode)
-    (setq undo-tree-visualizer-timestamps t
-          undo-tree-visualizer-diff t
-          undo-tree-auto-save-history t)
-    (custom-set-variables
-     '(undo-tree-history-directory-alist
-       (quote (("." . "~/.emacs.d/undo/"))))))
-  :diminish undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t)))
 
 ;; editing
 (use-package expand-region
@@ -149,10 +149,13 @@
 
 ;; text folding minor mode
 (use-package dash
-  :ensure t)
-(use-package dash-functional
-  :ensure t)
-(eval-after-load 'dash '(dash-enable-font-lock))
+  :ensure t
+  :config
+  (progn
+    (use-package dash-functional
+      :ensure t)
+    (dash-enable-font-lock)))
+
 (use-package s
   :ensure t)
 (use-package origami
@@ -181,6 +184,27 @@
          ("C-c n" . crux-cleanup-buffer-or-region)
          ("C-c f" . crux-recentf-find-file)
          ("C-a" . crux-move-beginning-of-line)))
+
+;; rectangle mark
+(use-package phi-rectangle
+  :ensure t
+  :bind (("C-x r C-r" . phi-rectangle-set-mark-command)))
+
+;; *scratch* buffer
+(defun create-scratch-buffer nil
+  "create a scratch buffer"
+  (interactive)
+  (switch-to-buffer (get-buffer-create "*scratch*"))
+  (lisp-interaction-mode))
+
+(defun unkillable-scratch-buffer ()
+  (if (equal (buffer-name (current-buffer)) "*scratch*")
+      (progn
+        (delete-region (point-min) (point-max))
+        nil)
+    t))
+
+(add-hook 'kill-buffer-query-functions 'unkillable-scratch-buffer)
 
 (provide 'config-edit)
 

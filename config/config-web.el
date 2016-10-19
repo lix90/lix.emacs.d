@@ -7,7 +7,7 @@
   (("\\.phtml\\'"      . web-mode)
    ("\\.tpl\\.php\\'"  . web-mode)
    ("\\.twig\\'"       . web-mode)
-   ("\\.html\\'"       . web-mode)
+   ;; ("\\.html\\'"       . web-mode)
    ("\\.htm\\'"        . web-mode)
    ("\\.[gj]sp\\'"     . web-mode)
    ("\\.as[cp]x?\\'"   . web-mode)
@@ -25,11 +25,18 @@
   :ensure t
   :after web-mode)
 
+;; (defun my-web-mode-indent-style
+;;     "Indent-style for web mode."
+;;   (setq web-mode-markup-indent-offset 2)
+;;   (setq web-mode-css-indent-offset 2)
+;;   (setq web-mode-code-indent-offset 2)
+;;   (setq web-mode-indent-style 2)
+;;   (setq-default indent-tabs-mode nil))
+
 (eval-after-load 'web-mode
   '(progn
      (add-to-list 'company-backends 'company-web-html)
      (define-key web-mode-map (kbd "C-c b") 'web-beautify-html)
-     (add-hook 'web-mode-hook 'skewer-html-mode)
      ))
 
 ;; -----------------------------------
@@ -65,16 +72,22 @@
 (use-package skewer-mode
   :ensure t
   :config
-  (use-package simple-httpd
-    :ensure t
-    :config
-    (progn
-      (setq httpd-root "/var/www"))))
+  (progn
+    (skewer-setup)
+    (add-hook 'js2-mode-hook 'skewer-mode)
+    (add-hook 'css-mode-hook 'skewer-css-mode)
+    (add-hook 'web-mode-hook 'skewer-html-mode)
+    (use-package simple-httpd
+      :ensure t
+      :config
+      (progn
+        (setq httpd-root "/var/www")
+        (httpd-start)))
+    ))
 
 (eval-after-load 'js2-mode
   '(progn
      (define-key js2-mode-map (kbd "C-c b") 'web-beautify-js)
-     (add-hook 'js2-mode-hook 'skewer-mode)
      ))
 ;; Or if you're using 'js-mode' (a.k.a 'javascript-mode')
 ;; (eval-after-load 'js
@@ -89,7 +102,7 @@
   '(progn
      (define-key css-mode-map (kbd "C-c b") 'web-beautify-css)
      (add-to-list 'company-backends 'company-css)
-     (add-hook 'css-mode-hook 'skewer-css-mode)))
+     ))
 
 ;; -----------------------------------
 ;; javascript REPL
@@ -171,6 +184,7 @@
     (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
     (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
     (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2)))
+    (add-hook 'web-mode-hook 'emmet-mode)
     (setq emmet-move-cursor-between-quotes t)
     (setq emmet-move-cursor-after-expanding nil)
     (setq emmet-self-closing-tag-style " /")))

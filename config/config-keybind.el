@@ -7,7 +7,7 @@
 (bind-key "C-h" #'delete-backward-char)
 (bind-key "M-h" #'backward-kill-word)
 (define-key isearch-mode-map "\C-h" 'isearch-delete-char)
-(global-set-key (kbd "C-c C-e")
+(global-set-key (kbd "C-c C-c C-e")
                 (lambda ()
                   (interactive)
                   (find-file "~/.emacs.d/init.el")))
