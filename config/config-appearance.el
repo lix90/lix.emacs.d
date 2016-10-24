@@ -84,9 +84,6 @@
 (show-paren-mode t)
 (setq show-paren-style 'expression)
 
-;; (use-package rainbow-mode
-;; :ensure t)
-
 ;; auto-revert
 ;; (global-auto-revert-mode)
 ;; (setq global-auto-revert-non-file-buffers t
@@ -100,6 +97,14 @@
 (global-visual-line-mode t)
 (diminish 'global-visual-line-mode)
 (diminish 'visual-line-mode)
+
+;; automatically resize buffer
+(use-package golden-ratio
+  :ensure t
+  :diminish golden-ratio-mode
+  :init (progn (golden-ratio-mode t)
+               (setq golden-ratio-adjust-factor .8
+                     golden-ratio-wide-adjust-factor .8)))
 
 ;;-------------------------------------------------------
 (provide 'config-appearance)

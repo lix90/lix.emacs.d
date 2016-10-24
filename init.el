@@ -65,3 +65,18 @@
 ;; (load (local-file-name "config/config-cc"))
 
 ;;; init.el ends here
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (youdao-dictionary osx-dictionary bing-dict golden-ratio lorem-ipsum yaml-mode whole-line-or-region whitespace-cleanup-mode which-key weibo web-mode web-beautify use-package spaceline smartparens simple-httpd shell-pop scss-mode rvm robe rainbow-mode rainbow-delimiters py-autopep8 pug-mode psysh php-eldoc phi-rectangle paradox origami neotree multiple-cursors move-text moe-theme matlab-mode markdown-toc magithub magit-gitflow latex-preview-pane json-mode js2-mode js-comint hungry-delete hexo flycheck flx fix-word expand-region exec-path-from-shell evil-nerd-commenter evil-magit evil-leader esup ess emmet-mode elpy disaster dired-details dash-functional dash-at-point crux counsel company-web company-statistics company-php company-emoji company-emacs-eclim company-auctex company-anaconda clang-format blog-admin better-defaults benchmark-init auto-package-update aggressive-indent ace-jump-mode ac-php))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

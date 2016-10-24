@@ -23,8 +23,9 @@
           (quote
            (company-elisp
             company-emoji
+            company-dabbrev
             company-keywords
-            ;; company-css
+            company-css
             company-semantic
             company-etags
             company-files
@@ -60,6 +61,11 @@
           ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
           ))
 
+;; turn on abbrev mode globally
+(setq-default abbrev-mode t)
+(setq save-abbrevs 'silently)
+(diminish 'abbrev-mode)
+;; (setq abbrev-file-name "~/emacs_abbre.el")
 
 (provide 'config-ac)
 ;;; config-ac.el ends here

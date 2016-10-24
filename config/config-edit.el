@@ -74,8 +74,7 @@
   :ensure t
   :diminish aggressive-indent-mode
   :init
-  (global-aggressive-indent-mode 1)
-  )
+  (global-aggressive-indent-mode 1))
 
 (use-package whitespace-cleanup-mode
   :ensure t
@@ -94,8 +93,6 @@
 ;;    ("C-c p" . evilnc-comment-or-uncomment-paragraphs)
 ;;    )
 ;;   )
-
-;; sensible undo
 
 (defun dos2unix ()
   "Not exactly but it's easier to remember"
@@ -147,7 +144,6 @@
          ("M-c" . fix-word-capitalize))
   :diminish fix-word)
 
-;; text folding minor mode
 (use-package dash
   :ensure t
   :config
@@ -160,7 +156,7 @@
   :ensure t)
 (use-package origami
   :ensure t
-  :init (global-origami-mode))
+  :init (global-origami-mode t))
 
 ;; moving text
 (use-package move-text

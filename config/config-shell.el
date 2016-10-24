@@ -3,7 +3,7 @@
   :ensure t
   :init
   (progn
-    (setq shell-pop-shell-type (quote ("eshell" "*eshell*" (lambda nil (eshell)))))
+    (setq shell-pop-shell-type (quote ("shell" "*shell*" (lambda nil (shell)))))
     (setq shell-pop-term-shell "/bin/bash")
     (setq shell-pop-universal-key "C-c z")
     (setq shell-pop-window-size 30)

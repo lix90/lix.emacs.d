@@ -18,5 +18,4 @@
   :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 (provide 'config-paren)
-
 ;;; config-paren.el ends here

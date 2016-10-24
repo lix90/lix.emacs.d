@@ -4,7 +4,11 @@
 
 (use-package python
   :ensure t
-  :mode ("\\.py\\'" . python-mode))
+  :mode ("\\.py\\'" . python-mode)
+  :config
+  (progn
+    (setq python-shell-interpreter "ipython")
+    (setq python-shell-interpreter-args "--pylab")))
 
 (use-package anaconda-mode
   :ensure t

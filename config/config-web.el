@@ -22,8 +22,7 @@
   )
 
 (use-package company-web
-  :ensure t
-  :after web-mode)
+  :ensure t)
 
 ;; (defun my-web-mode-indent-style
 ;;     "Indent-style for web mode."
@@ -33,12 +32,19 @@
 ;;   (setq web-mode-indent-style 2)
 ;;   (setq-default indent-tabs-mode nil))
 
-(eval-after-load 'web-mode
+;; (eval-after-load 'web-mode
+;;   '(progn
+;;      (add-to-list 'company-backends 'company-web-html)
+;;      (define-key web-mode-map (kbd "C-c b") 'web-beautify-html)
+;;      ))
+(eval-after-load 'html-mode
   '(progn
      (add-to-list 'company-backends 'company-web-html)
-     (define-key web-mode-map (kbd "C-c b") 'web-beautify-html)
-     ))
+     (define-key html-mode-map (kbd "C-c b" 'web-beautify-html))))
 
+(use-package lorem-ipsum
+  :ensure t
+  :defer t)
 ;; -----------------------------------
 ;; javascript
 ;; -----------------------------------
@@ -59,7 +65,17 @@
 
 (use-package scss-mode
   :ensure t
-  :mode ("\\.scss\\'" . scss-mode))
+  :mode (("\\.scss\\'" . scss-mode)
+         ("\\.sass\\'" . scss-mode)))
+
+(use-package rainbow-mode
+  :ensure t
+  :diminish rainbow-mode
+  :init
+  (add-hook 'css-mode-hook #'rainbow-mode)
+  (add-hook 'scss-mode-hook #'rainbow-mode)
+  (add-hook 'html-mode-hook #'rainbow-mode)
+  )
 
 (use-package yaml-mode
   :ensure t
@@ -69,21 +85,21 @@
   :ensure t)
 
 ;;; live development with skewer-mode
-(use-package skewer-mode
-  :ensure t
-  :config
-  (progn
-    (skewer-setup)
-    (add-hook 'js2-mode-hook 'skewer-mode)
-    (add-hook 'css-mode-hook 'skewer-css-mode)
-    (add-hook 'web-mode-hook 'skewer-html-mode)
-    (use-package simple-httpd
-      :ensure t
-      :config
-      (progn
-        (setq httpd-root "/var/www")
-        (httpd-start)))
-    ))
+;; (use-package skewer-mode
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (skewer-setup)
+;;     (add-hook 'js2-mode-hook 'skewer-mode)
+;;     (add-hook 'css-mode-hook 'skewer-css-mode)
+;;     (add-hook 'web-mode-hook 'skewer-html-mode)
+;;     (use-package simple-httpd
+;;       :ensure t
+;;       :config
+;;       (progn
+;;         (setq httpd-root "/var/www")
+;;         (httpd-start)))
+;;     ))
 
 (eval-after-load 'js2-mode
   '(progn
@@ -170,7 +186,9 @@
 (use-package pug-mode
   :ensure t
   :mode (("\\.pug\\'" . pug-mode)
-         ("\\.jade\\'" . pug-mode)))
+         ("\\.jade\\'" . pug-mode))
+  :config
+  (add-to-list 'company-backends 'company-web-jade))
 
 ;; (use-package jade
 ;;   :ensure t)
@@ -184,12 +202,10 @@
     (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
     (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
     (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2)))
-    (add-hook 'web-mode-hook 'emmet-mode)
+    (add-hook 'html-mode-hook 'emmet-mode)
     (setq emmet-move-cursor-between-quotes t)
     (setq emmet-move-cursor-after-expanding nil)
     (setq emmet-self-closing-tag-style " /")))
-
-
 
 (provide 'config-web)
 ;;; config-web.el ends here
