@@ -202,6 +202,12 @@
 
 (add-hook 'kill-buffer-query-functions 'unkillable-scratch-buffer)
 
+(setq initial-major-mode 'markdown-mode)
+(setq initial-scratch-message "\
+# This buffer is for notes you don't want to save, and for Markdown.
+# If you want to create a file, visit that file with C-x C-f,
+# then enter the text in that file's own buffer.")
+
 (provide 'config-edit)
 
 ;;; config-edit.el ends here

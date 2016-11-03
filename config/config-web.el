@@ -7,7 +7,7 @@
   (("\\.phtml\\'"      . web-mode)
    ("\\.tpl\\.php\\'"  . web-mode)
    ("\\.twig\\'"       . web-mode)
-   ;; ("\\.html\\'"       . web-mode)
+   ("\\.html\\'"       . web-mode)
    ("\\.htm\\'"        . web-mode)
    ("\\.[gj]sp\\'"     . web-mode)
    ("\\.as[cp]x?\\'"   . web-mode)
@@ -19,54 +19,68 @@
    ("\\.eco\\'"        . web-mode)
    ("\\.ejs\\'"        . web-mode)
    ("\\.djhtml\\'"     . web-Mode))
-  )
+  :config
+  (progn
+    (add-hook 'web-mode-hook 'lix/web-company-mode)
+    (add-hook 'web-mode-hook 'lix/web-mode-indent-style)
+    ))
 
 (use-package company-web
   :ensure t)
 
-;; (defun my-web-mode-indent-style
-;;     "Indent-style for web mode."
-;;   (setq web-mode-markup-indent-offset 2)
-;;   (setq web-mode-css-indent-offset 2)
-;;   (setq web-mode-code-indent-offset 2)
-;;   (setq web-mode-indent-style 2)
-;;   (setq-default indent-tabs-mode nil))
+(defun lix/web-company-mode ()
+  (set (make-local-variable 'company-backends) '(company-web-html
+                                                 company-files
+                                                 company-css
+                                                 company-web-jade
+                                                 company-web-slim))
+  (company-mode t))
 
-;; (eval-after-load 'web-mode
-;;   '(progn
-;;      (add-to-list 'company-backends 'company-web-html)
-;;      (define-key web-mode-map (kbd "C-c b") 'web-beautify-html)
-;;      ))
-(eval-after-load 'html-mode
-  '(progn
-     (add-to-list 'company-backends 'company-web-html)
-     (define-key html-mode-map (kbd "C-c b" 'web-beautify-html))))
+(defun lix/web-mode-indent-style ()
+  "Indent-style for web mode."
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-indent-style 2)
+  (setq-default indent-tabs-mode nil)
+  )
 
 (use-package lorem-ipsum
   :ensure t
   :defer t)
-;; -----------------------------------
-;; javascript
-;; -----------------------------------
+
 (use-package js2-mode
   :ensure t
   :defer t
-  :mode ("\\.js\\'" . js2-mode))
+  :mode ("\\.js\\'" . js2-mode)
+  )
 
 (use-package json-mode
   :ensure t
   :defer t
-  :mode ("\\.json\\'" . json-mode))
+  :mode ("\\.json\\'" . json-mode)
+  :config
+  )
 
 (use-package css-mode
   :ensure t
   :mode ("\\.css$" . css-mode)
-  :config (setq css-indent-offset 2))
+  :config
+  (progn (setq css-indent-offset 2)
+         (add-to-list 'company-backends 'company-css)
+         ))
 
 (use-package scss-mode
   :ensure t
   :mode (("\\.scss\\'" . scss-mode)
          ("\\.sass\\'" . scss-mode)))
+
+;; (use-package vue-mode
+;;   :ensure t
+;;   :mode ("\\.vue\\'" . vue-mode))
+
+;; (use-package mmm-mode
+;; :ensure t)
 
 (use-package rainbow-mode
   :ensure t
@@ -74,7 +88,7 @@
   :init
   (add-hook 'css-mode-hook #'rainbow-mode)
   (add-hook 'scss-mode-hook #'rainbow-mode)
-  (add-hook 'html-mode-hook #'rainbow-mode)
+  (add-hook 'web-mode-hook #'rainbow-mode)
   )
 
 (use-package yaml-mode
@@ -83,46 +97,6 @@
 
 (use-package web-beautify
   :ensure t)
-
-;;; live development with skewer-mode
-;; (use-package skewer-mode
-;;   :ensure t
-;;   :config
-;;   (progn
-;;     (skewer-setup)
-;;     (add-hook 'js2-mode-hook 'skewer-mode)
-;;     (add-hook 'css-mode-hook 'skewer-css-mode)
-;;     (add-hook 'web-mode-hook 'skewer-html-mode)
-;;     (use-package simple-httpd
-;;       :ensure t
-;;       :config
-;;       (progn
-;;         (setq httpd-root "/var/www")
-;;         (httpd-start)))
-;;     ))
-
-(eval-after-load 'js2-mode
-  '(progn
-     (define-key js2-mode-map (kbd "C-c b") 'web-beautify-js)
-     ))
-;; Or if you're using 'js-mode' (a.k.a 'javascript-mode')
-;; (eval-after-load 'js
-;;   '(define-key js-mode-map (kbd "C-c b") 'web-beautify-js))
-
-(eval-after-load 'json-mode
-  '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
-;; (eval-after-load 'sgml-mode
-;;   '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
-
-(eval-after-load 'css-mode
-  '(progn
-     (define-key css-mode-map (kbd "C-c b") 'web-beautify-css)
-     (add-to-list 'company-backends 'company-css)
-     ))
-
-;; -----------------------------------
-;; javascript REPL
-;; -----------------------------------
 
 ;; (use-package nodejs-repl
 ;;   :ensure t
@@ -151,9 +125,7 @@
                                 (local-set-key "\C-a" 'back-to-indentation)
                                 (local-set-key (kbd "\C-c i") 'jslint-current-buffer)))))
 
-;; -----------------------------------
 ;; php mode
-;; -----------------------------------
 (use-package php-mode
   :ensure t
   :mode ("\\.php\\'" . php-mode))
@@ -166,6 +138,7 @@
 (use-package php-eldoc
   :ensure t
   :after php-mode)
+
 (eval-after-load 'php-mode
   '(progn
      (add-hook 'php-mode-hook 'smartparens-mode)
@@ -175,14 +148,10 @@
                  (company-mode t)
                  (add-to-list 'company-backends 'company-ac-php-backend)))))
 
-;; php REPL
 (use-package psysh
   :if (executable-find "psysh")
   :ensure t)
 
-;; -----------------------------------
-;; jade
-;; -----------------------------------
 (use-package pug-mode
   :ensure t
   :mode (("\\.pug\\'" . pug-mode)
@@ -190,22 +159,18 @@
   :config
   (add-to-list 'company-backends 'company-web-jade))
 
-;; (use-package jade
-;;   :ensure t)
-;; (eval-after-load 'js2-mode
-;;   '(add-hook 'js2-mode-hook #'jade-interaction-mode))
-
 (use-package emmet-mode
   :ensure t
+  :diminish emmet-mode
   :init
   (progn
     (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
     (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
     (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2)))
-    (add-hook 'html-mode-hook 'emmet-mode)
-    (setq emmet-move-cursor-between-quotes t)
-    (setq emmet-move-cursor-after-expanding nil)
-    (setq emmet-self-closing-tag-style " /")))
+    (add-hook 'web-mode-hook 'emmet-mode)
+    (setq emmet-move-cursor-between-quotes t
+          emmet-move-cursor-after-expanding nil
+          emmet-self-closing-tag-style " /")))
 
 (provide 'config-web)
 ;;; config-web.el ends here

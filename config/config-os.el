@@ -8,8 +8,6 @@
   (set-frame-font "Monaco 12"))
 
 
-
-
 (provide 'config-os)
 
 ;;; config-os.el ends here

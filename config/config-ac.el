@@ -7,7 +7,7 @@
   :ensure t
   :defer t
   :diminish company-mode
-  :bind ("C-x M-c" . company-complete)
+  :bind ("C-c M-c" . company-complete)
   :init
   (progn
     (use-package company-emoji :ensure t :defer t)
@@ -23,9 +23,8 @@
           (quote
            (company-elisp
             company-emoji
-            company-dabbrev
+            company-abbrev
             company-keywords
-            company-css
             company-semantic
             company-etags
             company-files
@@ -58,7 +57,7 @@
   :init (progn
           ;; (yas-reload-all)
           (yas-global-mode t)
-          ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
+          (add-hook 'prog-mode-hook #'yas-minor-mode)
           ))
 
 ;; turn on abbrev mode globally

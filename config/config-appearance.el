@@ -43,10 +43,10 @@
 ;; theme
 ;; (load-theme 'misterioso)
 ;;----------- from markauskas, my-colors.el
-;; (use-package monokai-theme
-;;   :ensure t
-;;   :init
-;;   (load-theme 'monokai t))
+(use-package monokai-theme
+  :ensure t
+  :init
+  (load-theme 'monokai t))
 ;; (use-package color-theme-approximate
 ;;   :ensure t
 ;;   :init (progn
@@ -77,9 +77,9 @@
 (use-package moe-theme
   :ensure t)
 ;; (set moe-theme-highlight-buffer-id t)
-(moe-theme-set-color 'blue)
+(moe-theme-set-color 'cyan)
 ;; (Available colors: blue, orange, green ,magenta, yellow, purple, red, cyan, w/b.)
-(moe-dark)
+;; (moe-dark)
 (powerline-moe-theme)
 (show-paren-mode t)
 (setq show-paren-style 'expression)
@@ -104,7 +104,48 @@
   :diminish golden-ratio-mode
   :init (progn (golden-ratio-mode t)
                (setq golden-ratio-adjust-factor .8
-                     golden-ratio-wide-adjust-factor .8)))
+                     golden-ratio-wide-adjust-factor .8
+                     golden-ratio-exclude-modes '(list "projectile-mode" "project-explorer-mode")
+                     )
+               (golden-ratio-toggle-widescreen)))
+
+;; from: https://github.com/Henry/dot-emacs/blob/8cadffbc4d077aa64d08e2e1956994f9203de696/init/init-doremi.el
+;;; init-doremi.el --- Initialize DoReMi
+;;;  Incremental change using arrow keys or mouse wheel
+;; -----------------------------------------------------------------------------
+(use-package doremi
+  :ensure t
+  :config
+  (use-package doremi-frm :ensure t)  ;; Incrementally adjust frame properties
+  (use-package doremi-cmd :ensure t)  ;; Other Do Re Mi commands
+
+  ;; (defvar my-doremi-map (make-sparse-keymap "Do Re Mi"))
+  ;; (define-key my-map "d" my-doremi-map)
+  ;; (define-key my-doremi-map "b" 'doremi-buffers)
+  ;; (define-key my-doremi-map "g" 'doremi-global-marks)
+  ;; (define-key my-doremi-map "m" 'doremi-marks)
+  ;; (define-key my-doremi-map "r" 'doremi-bookmarks)
+  ;; (define-key my-doremi-map "f" 'doremi-frame-width) ;; Frame resize
+  ;; (define-key my-doremi-map "w" 'doremi-window-width) ;; Window resize
+  ;; (define-key my-doremi-map "p" 'doremi-frame-horizontally)
+  ;; (define-key my-doremi-map [return] 'my-doremi-menu)
+  ;; (define-key my-doremi-map [mouse-3] 'my-doremi-menu)
+  ;; (define-key my-doremi-map [C-tab] 'icicle-complete-keys)
+  ) ;; Show options
+
+;; (defun my-doremi-menu ()
+;;   (interactive)
+;;   (popup-menu
+;;    '("Do Re Mi"
+;;      ["Buffers" doremi-buffers]
+;;      ["Resize Window" doremi-window-width]
+;;      ["Resize Frame" doremi-frame-width]
+;;      ["Move Frame" doremi-frame-horizontally]
+;;      ["Global Marks" doremi-global-marks]
+;;      ["Marks in Buffer" doremi-marks]
+;;      ["Bookmarks" doremi-bookmarks]
+;;      )))
+
 
 ;;-------------------------------------------------------
 (provide 'config-appearance)

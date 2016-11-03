@@ -9,7 +9,7 @@
   :diminish smartparens-mode
   :init
   (progn
-    (show-smartparens-global-mode t)
+    ;; (show-smartparens-global-mode t)
     (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
     (sp-use-smartparens-bindings)))
 
