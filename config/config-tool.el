@@ -21,48 +21,6 @@
 ;;   :ensure t
 ;;   :after magit)
 
-;; open folders
-(defun lix/open-emacs-config ()
-  "Open emacs config directory."
-  (interactive)
-  (find-file "~/.emacs.d/config/"))
-(global-set-key (kbd "C-c u o c") 'lix/open-emacs-config)
-
-(defun lix/open-hexo-root ()
-  "Open hexo root directory."
-  (interactive)
-  (find-file "~/github/hexo-blog/"))
-(global-set-key (kbd "C-c u o h") 'lix/open-hexo-root)
-
-(defun lix/open-hexo-source-draft ()
-  "Open hexo draft directory."
-  (interactive)
-  (find-file "~/github/hexo-blog/source/_drafts/"))
-(global-set-key (kbd "C-c u o d") 'lix/open-hexo-source-draft)
-
-(defun lix/open-hexo-source-post ()
-  "Open hexo draft directory."
-  (interactive)
-  (find-file "~/github/hexo-blog/source/_posts/"))
-(global-set-key (kbd "C-c u o p") 'lix/open-hexo-source-post)
-
-(defun lix/open-jirengu-self ()
-  "Open jirengu repository."
-  (interactive)
-  (find-file "~/jirengu/jrg-renwu9/homework/李想/"))
-
-(defun lix/file-hexo-source-about ()
-  "Open hexo about."
-  (interactive)
-  (find-file "~/github/hexo-blog/source/about/index.md"))
-(global-set-key (kbd "C-c u o a") 'lix/file-hexo-source-about)
-
-(defun lix/file-note-temp ()
-  "Open note temp file."
-  (interactive)
-  (find-file "~/github/temp.md"))
-(global-set-key (kbd "C-c u o n") 'lix/file-note-temp)
-
 ;; dicts
 (use-package bing-dict
   :ensure t
@@ -97,7 +55,6 @@
          (setq google-translate-translation-directions-alist
                '(("en" . "zh") ("zh" . "zh"))))
   )
-
 
 ;; project management
 ;; (use-package projectile

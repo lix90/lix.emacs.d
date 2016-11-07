@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: knitr htmltools ionicons
+# key: knitr_ionicons
+# --
+htmltools::tagList(rmarkdown::html_dependency_ionicons())

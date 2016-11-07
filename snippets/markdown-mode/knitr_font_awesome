@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: knitr htmltools font_awesome
+# key: knitr_font_awesome
+# --
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())

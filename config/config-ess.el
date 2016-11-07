@@ -36,6 +36,55 @@
     )
   )
 
-(provide 'config-ess)
+;; Rmd in emacs
+;; reference: http://futurismo.biz/archives/2982
+(use-package polymode
+  :ensure t
+  :mode (("\\.[SR]nw\\'" . poly-noweb+r-mode)
+         ("\\.Rmd\\'" . Rmd-mode))
+  :init
+  (progn
+    (defun Rmd-mode ()
+      "ESS Markdown mode for Rmd files."
+      (interactive)
+      (require 'poly-R)
+      (require 'poly-markdown)
+      (R-mode)
+      (yaml-mode)
+      (poly-markdown+r-mode))))
 
+(defun ess-rmarkdown-to-html ()
+  (interactive)
+  "Run kintr::knit2html on the current file."
+  "https://gist.github.com/kohske/9128031"
+  (shell-command
+   (format "Rscript -e \"kintr::knit2html ('%s')\""
+           (shell-quote-argument (buffer-file-name)))))
+
+;; do this in R process
+;; library (rmarkdown); render ("file_name.Rmd")
+(defun ess-rmarkdown ()
+  (interactive)
+  "Compile R markdown (.Rmd). Should work for any output type."
+  "http://roughtheory.com/posts/ess-rmarkdown.html"
+                                        ; Check if attached R-session
+  (condition-case nil
+      (ess-get-process)
+    (error
+     (ess-switch-process)))
+  (save-excursion
+    (let* ((sprocess (ess-get-process ess-current-process-name))
+           (sbuffer (process-buffer sprocess))
+           (buf-coding (symbol-name buffer-file-coding-system))
+           (R-cmd
+            (format "library (rmarkdown); rmarkdown::render(\"%s\")"
+                    buffer-file-name))
+           (message "Running rmarkdown on %s" buffer-file-name)
+           (ess-execute R-cmd 'buffer nil nil)
+           (switch-to-buffer rmd-buf)
+           (ess-show-buffer (buffer-name-sbuffer) nil)))))
+
+;; (define-key polymode-mode-map "\M-ns" 'ess-rmarkdown)
+
+(provide 'config-ess)
 ;;; config-ess.el ends here

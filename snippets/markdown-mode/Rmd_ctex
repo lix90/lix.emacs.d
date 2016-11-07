@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: Rmarkdown ctex
+# key: Rmd_ctex
+# --
+---
+title: ${1:"在R Markdown文档中使用中文"}
+author:
+  - ${2:谢益辉}
+documentclass: ctexart
+output:
+  rticles::ctex:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+classoption: "hyperref,"
+---
+
+$3

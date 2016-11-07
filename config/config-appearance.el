@@ -99,15 +99,15 @@
 (diminish 'visual-line-mode)
 
 ;; automatically resize buffer
-(use-package golden-ratio
-  :ensure t
-  :diminish golden-ratio-mode
-  :init (progn (golden-ratio-mode t)
-               (setq golden-ratio-adjust-factor .8
-                     golden-ratio-wide-adjust-factor .8
-                     golden-ratio-exclude-modes '(list "projectile-mode" "project-explorer-mode")
-                     )
-               (golden-ratio-toggle-widescreen)))
+;; (use-package golden-ratio
+;;   :ensure t
+;;   :diminish golden-ratio-mode
+;;   :init (progn (golden-ratio-mode t)
+;;                (setq golden-ratio-adjust-factor .8
+;;                      golden-ratio-wide-adjust-factor .8
+;;                      golden-ratio-exclude-modes '(list "projectile-mode" "project-explorer-mode")
+;;                      )
+;;                (golden-ratio-toggle-widescreen)))
 
 ;; from: https://github.com/Henry/dot-emacs/blob/8cadffbc4d077aa64d08e2e1956994f9203de696/init/init-doremi.el
 ;;; init-doremi.el --- Initialize DoReMi
