@@ -1,6 +1,5 @@
-;; -----------------------------------
+
 ;; web-mode
-;; -----------------------------------
 (use-package web-mode
   :ensure t
   :mode
@@ -22,8 +21,7 @@
   :config
   (progn
     (add-hook 'web-mode-hook 'lix/web-company-mode)
-    (add-hook 'web-mode-hook 'lix/web-mode-indent-style)
-    ))
+    (add-hook 'web-mode-hook 'lix/web-mode-indent-style)))
 
 (use-package company-web
   :ensure t)
@@ -42,8 +40,7 @@
         web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2
         web-mode-indent-style 2)
-  (setq-default indent-tabs-mode nil)
-  )
+  (setq-default indent-tabs-mode nil))
 
 (use-package lorem-ipsum
   :ensure t
@@ -58,17 +55,14 @@
 (use-package json-mode
   :ensure t
   :defer t
-  :mode ("\\.json\\'" . json-mode)
-  :config
-  )
+  :mode ("\\.json\\'" . json-mode))
 
 (use-package css-mode
   :ensure t
   :mode ("\\.css$" . css-mode)
   :config
   (progn (setq css-indent-offset 2)
-         (add-to-list 'company-backends 'company-css)
-         ))
+         (add-to-list 'company-backends 'company-css)))
 
 (use-package scss-mode
   :ensure t
@@ -88,12 +82,11 @@
   :init
   (add-hook 'css-mode-hook #'rainbow-mode)
   (add-hook 'scss-mode-hook #'rainbow-mode)
-  (add-hook 'web-mode-hook #'rainbow-mode)
-  )
+  (add-hook 'web-mode-hook #'rainbow-mode))
 
 (use-package yaml-mode
   :ensure t
-  :mode ("\\.ya?ml$'" . yaml-mode))
+  :mode ("\\.ya?ml\\'" . yaml-mode))
 
 (use-package web-beautify
   :ensure t)

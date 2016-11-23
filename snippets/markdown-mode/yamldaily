@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: yaml daily
+# key: yamldaily
+# --
+---
+title: 每日总结 ${1:title}
+author: ${2:Li Xiang}
+date: $3
+layout: post
+tags: []
+categories: [Daily]
+---
+
+$4

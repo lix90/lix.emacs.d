@@ -4,12 +4,11 @@
 # --
 ---
 title: ${1:title}
-author: ${2:Li Xiang}
-date: $3
-layout: ${4:post}
-tags: [$5]
-categories: [$6]
-lang: ${7:zh-CN}
+author: Li Xiang
+date: $2
+layout: post
+tags: []
+categories: []
 ---
 
-$8
+$3

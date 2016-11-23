@@ -1,8 +1,6 @@
-;;;-----------------------------------
 ;;; Dired setup
-;;;-----------------------------------
 (require 'dired)
-(require 'dash)
+;; (require 'dash)
 (use-package dired-details
   :ensure t
   :init

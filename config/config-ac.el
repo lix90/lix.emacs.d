@@ -22,11 +22,11 @@
     (setq company-backends
           (quote
            (company-elisp
-            company-emoji
+            ;; company-emoji
             company-abbrev
             company-keywords
             company-semantic
-            company-etags
+            ;; company-etags
             company-files
             company-yasnippet)))))
 

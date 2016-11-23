@@ -2,9 +2,15 @@
 (setq package-enable-at-startup nil)
 (when (>= emacs-major-version 24)
   (require 'package)
+  ;;(setq package-archives '(("gnu" . "http://elpa.zilongshanren.com/gnu/")
+  ;;                         ("melpa" . "http://elpa.zilongshanren.com/melpa/"))
   (add-to-list
    'package-archives
+   ;;'(("gnu" . "https://elpa.zilongshanren.com/gnu/")
+   ;;   ("melpa" . "https://elpa.zilongshanren.com/melpa/"))
    '("melpa" . "http://melpa.org/packages/")
+   ;; '("popkit" . "https://elpa.popkit.org/packages/")
+   ;;'("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/")
    t)
   (package-initialize))
 

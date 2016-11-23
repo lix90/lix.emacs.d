@@ -152,11 +152,11 @@
       :ensure t)
     (dash-enable-font-lock)))
 
-(use-package s
-  :ensure t)
-(use-package origami
-  :ensure t
-  :init (global-origami-mode t))
+;; (use-package s
+;;   :ensure t)
+;; (use-package origami
+;;   :ensure t
+;;   :init (global-origami-mode t))
 
 ;; moving text
 (use-package move-text
@@ -207,6 +207,28 @@
 # This buffer is for notes you don't want to save, and for Markdown.
 # If you want to create a file, visit that file with C-x C-f,
 # then enter the text in that file's own buffer.")
+
+;; code folding
+;; (use-package yafolding
+;;   :ensure t
+;;   :init
+;;   (progn
+;;     (add-hook 'prog-mode-hook
+;;               (lambda () (yafolding-mode)))
+;;     (defvar yafolding-mode-map
+;;       (let ((map (make-sparse-keymap)))
+;;         (define-key map (kbd "C-c <C-S-return>") #'yafolding-hide-parent-element)
+;;         (define-key map (kbd "C-c <C-M-return>") #'yafolding-toggle-all)
+;;         (define-key map (kbd "C-c <C-return>") #'yafolding-toggle-element)
+;;         map))
+;;     ;; (define-key yafolding-mode-map (kbd "<C-S-return>") nil)
+;;     ;; (define-key yafolding-mode-map (kbd "<C-M-return>") nil)
+;;     ;; (define-key yafolding-mode-map (kbd "<C-return>") nil)
+;;     ;; (define-key yafolding-mode-map (kbd "C-c <C-M-return>") 'yafolding-toggle-all)
+;;     ;; (define-key yafolding-mode-map (kbd "C-c <C-S-return>") 'yafolding-hide-parent-element)
+;;     ;; (define-key yafolding-mode-map (kbd "C-c <C-return>") 'yafolding-toggle-element)
+;;     )
+;;   )
 
 (provide 'config-edit)
 

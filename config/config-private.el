@@ -47,7 +47,16 @@
   (setq time (format-time-string "%Y-%m-%d" (current-time)))
   (find-file
    (format "~/github/hexo-blog/source/_posts/%s-%s.md" time fn))
-  (erase-buffer)
+  (yas-insert-snippet)
+  )
+
+(defun lix/open-hexo-create-draft ()
+  "Create and open draft file."
+  (interactive)
+  (setq fn (read-string "Enter file name:"))
+  (setq time (format-time-string "%Y-%m-%d" (current-time)))
+  (find-file
+   (format "~/github/hexo-blog/source/_drafts/%s-%s.md" time fn))
   (yas-insert-snippet)
   )
 
@@ -148,11 +157,8 @@
 (defun lix/open-r-package ()
   (interactive)
   "Open r site-package."
-  (find-file "/usr/local/Cellar/r/3.3.1_3/R.framework/Resources/site-library/"))
+  (find-file "/usr/local/lib/R/3.3/site-library/"))
 (global-set-key (kbd "C-c u o R") 'lix/open-r-package)
-
-
-
 
 (provide 'config-private)
 ;; config-private.el ends here
