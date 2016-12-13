@@ -10,41 +10,38 @@
     (setq python-shell-interpreter "ipython")
     (setq python-shell-interpreter-args "--pylab")))
 
-(use-package anaconda-mode
-  :ensure t
-  :defer t)
+;; (use-package anaconda-mode
+;;   :ensure t
+;;   :defer t)
 
-(use-package company-anaconda
-  :ensure t
-  :defer t)
+;; (use-package company-anaconda
+;;   :ensure t
+;;   :defer t)
 
 (use-package py-autopep8
   :ensure t
   :defer t
-  :config (progn
-            (setq py-autopep8-options '("--max-line-length=100"))
-            ))
+  :config
+  (setq py-autopep8-options '("--max-line-length=100")))
 
 (use-package elpy
   :ensure t
   :defer t
   :diminish elpy-mode
   :config
-  (progn
-    (setq elpy-rpc-backend "jedi")
-    (elpy-enable)
-    (elpy-use-ipython)
-    (add-to-list 'company-backends 'elpy-company-backend)))
+  (setq elpy-rpc-backend "jedi")
+  (elpy-enable)
+  (elpy-use-ipython)
+  (add-to-list 'company-backends 'elpy-company-backend))
 
 (eval-after-load 'python-mode
   '(progn
      (setq python-indent-offset 4)
-     (add-hook 'python-mode-hook 'anaconda-mode)
+     ;; (add-hook 'python-mode-hook 'anaconda-mode)
      (add-hook 'python-mode-hook 'eldoc-mode)
      (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
-     (add-to-list 'company-backends 'company-anaconda)
-     )
-  )
+     (add-to-list 'company-backends 'company-anaconda)))
+(setenv "IPY_TEST_SIMPLE_PROMPT" "1")
 
 ;; (use-package ein
 ;;   :ensure t

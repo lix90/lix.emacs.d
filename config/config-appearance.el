@@ -1,11 +1,9 @@
 ;;; looking --- looking configuration:
 ;;; Commentary:
 ;;; Code:
-
 (use-package better-defaults
   :ensure t
   :defer t)
-
 ;; disable startup screen and *scratch* message
 (setq inhibit-startup-screen t
       initial-scratch-message nil)
@@ -16,7 +14,6 @@
 (setq ring-bell-function 'ignore)
 (setq cursor-in-non-selected-windows nil
       use-dialog-box nil)
-
 ;; stop prompting me, allright?
 ;; a) y is yes and n is no
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -24,10 +21,8 @@
 (setq kill-buffer-query-functions
       (remq 'process-kill-buffer-query-function
             kill-buffer-query-functions))
-
-
 ;; transparency
-(defun toggle-transparency ()
+(defun lix--toggle-transparency ()
   (interactive)
   (let ((alpha (frame-parameter nil 'alpha)))
     (set-frame-parameter
@@ -38,15 +33,88 @@
                     ((numberp (cadr alpha)) (cadr alpha)))
               100)
          '(70 . 50) '(100 . 100)))))
-(global-set-key (kbd "C-c t") 'toggle-transparency)
+(global-set-key (kbd "C-c u t") 'lix--toggle-transparency)
 
-;; theme
-;; (load-theme 'misterioso)
-;;----------- from markauskas, my-colors.el
-(use-package monokai-theme
+;; paren
+(show-paren-mode t)
+(setq show-paren-style 'expression)
+;; display time
+(display-time-mode t)
+(setq display-time-24hr-format t)
+;; visual line
+(global-visual-line-mode t)
+(diminish 'global-visual-line-mode)
+(diminish 'visual-line-mode)
+
+(use-package solarized-theme
   :ensure t
   :init
-  (load-theme 'monokai t))
+  (defun lix--solarized-config ()
+    (setq solarized-high-contrast-mode-line t
+          solarized-distinct-fringe-background t
+          solarized-use-variable-pitch nil
+          solarized-use-more-italic t))
+  ;; load theme
+  (load-theme 'solarized-dark t))
+
+(use-package smart-mode-line
+  :ensure t
+  ;;:init
+  ;; (defun lix--sml-config ()
+  ;;   (sml/setup t)
+  ;;   (setq sml/theme 'light
+  ;;         sml/shorten-directory t
+  ;;         sml/shorten-modes t))
+  )
+
+(defun lix--dark-theme ()
+  "Change to dark theme."
+  (interactive)
+  (load-theme 'solarized-dark t)
+  (lix--solarized-config)
+  ;;(lix--sml-config)
+  (indent-guide-global-mode)
+  (set-face-background 'indent-guide-face "#002b36"))
+
+(defun lix--light-theme ()
+  "Change to light theme."
+  (interactive)
+  (load-theme 'solarized-light t)
+  (lix--solarized-config)
+  ;;(lix--sml-config)
+  (indent-guide-global-mode)
+  (set-face-background 'indent-guide-face "#fdf6e3"))
+
+(lix--dark-theme)
+(sml/setup)
+
+(use-package indent-guide
+  :ensure t
+  :init
+  (indent-guide-global-mode)
+  ;; #fdf6e3 for light theme
+  (set-face-foreground 'indent-guide-face (face-foreground 'default))
+  (setq indent-guide-delay 0.1
+        indent-guide-recursive t
+        indent-guide-char "|"))
+
+;; (use-package monokai-theme
+;;   :ensure t
+;;   :init
+;;   (load-theme 'monokai t))
+
+
+
+;; (use-package golden-ratio
+;;   :ensure t
+;;   :diminish golden-ratio-mode
+;;   :init
+;;   (golden-ratio-mode t)
+;;   (setq golden-ratio-adjust-factor .8
+;;         golden-ratio-wide-adjust-factor .8
+;;         golden-ratio-exclude-modes '("projectile-mode" "project-explorer-mode"))
+;;   (golden-ratio-toggle-widescreen))
+
 ;; (use-package color-theme-approximate
 ;;   :ensure t
 ;;   :init (progn
@@ -63,7 +131,6 @@
 ;;     (setq powerline-height 18)
 ;;     (setq powerline-raw " ")
 ;;     (setq ns-use-srgb-colorspace nil)))
-;; modeline
 ;; (use-package spaceline
 ;;   :ensure t
 ;;   :init (progn
@@ -73,83 +140,18 @@
 ;;           (setq powerline-raw " ")
 ;;           (setq ns-use-srgb-colorspace nil)
 ;;           (spaceline-spacemacs-theme)))
-
 ;; (use-package moe-theme
 ;;   :ensure t
 ;;   :init
 ;;   (progn (moe-theme-set-color 'red)
 ;;          (powerline-moe-theme)))
 ;; (set moe-theme-highlight-buffer-id t)
-
 ;; (Available colors: blue, orange, green ,magenta, yellow, purple, red, cyan, w/b.)
 ;; (moe-dark)
-
-(show-paren-mode t)
-(setq show-paren-style 'expression)
-
 ;; auto-revert
 ;; (global-auto-revert-mode)
 ;; (setq global-auto-revert-non-file-buffers t
 ;;       auto-revert-verbose t)
-
-;; display time
-(display-time-mode t)
-(setq display-time-24hr-format t)
-
-;; visual line
-(global-visual-line-mode t)
-(diminish 'global-visual-line-mode)
-(diminish 'visual-line-mode)
-
-;; automatically resize buffer
-;; (use-package golden-ratio
-;;   :ensure t
-;;   :diminish golden-ratio-mode
-;;   :init (progn (golden-ratio-mode t)
-;;                (setq golden-ratio-adjust-factor .8
-;;                      golden-ratio-wide-adjust-factor .8
-;;                      golden-ratio-exclude-modes '(list "projectile-mode" "project-explorer-mode")
-;;                      )
-;;                (golden-ratio-toggle-widescreen)))
-
-;; from: https://github.com/Henry/dot-emacs/blob/8cadffbc4d077aa64d08e2e1956994f9203de696/init/init-doremi.el
-;;; init-doremi.el --- Initialize DoReMi
-;;;  Incremental change using arrow keys or mouse wheel
-;; -----------------------------------------------------------------------------
-;; (use-package doremi
-;;   :ensure t
-;;   :config
-;;   (use-package doremi-frm :ensure t)  ;; Incrementally adjust frame properties
-;;   (use-package doremi-cmd :ensure t)  ;; Other Do Re Mi commands
-
-;;   ;; (defvar my-doremi-map (make-sparse-keymap "Do Re Mi"))
-;;   ;; (define-key my-map "d" my-doremi-map)
-;;   ;; (define-key my-doremi-map "b" 'doremi-buffers)
-;;   ;; (define-key my-doremi-map "g" 'doremi-global-marks)
-;;   ;; (define-key my-doremi-map "m" 'doremi-marks)
-;;   ;; (define-key my-doremi-map "r" 'doremi-bookmarks)
-;;   ;; (define-key my-doremi-map "f" 'doremi-frame-width) ;; Frame resize
-;;   ;; (define-key my-doremi-map "w" 'doremi-window-width) ;; Window resize
-;;   ;; (define-key my-doremi-map "p" 'doremi-frame-horizontally)
-;;   ;; (define-key my-doremi-map [return] 'my-doremi-menu)
-;;   ;; (define-key my-doremi-map [mouse-3] 'my-doremi-menu)
-;;   ;; (define-key my-doremi-map [C-tab] 'icicle-complete-keys)
-;;   )
-;; Show options
-
-;; (defun my-doremi-menu ()
-;;   (interactive)
-;;   (popup-menu
-;;    '("Do Re Mi"
-;;      ["Buffers" doremi-buffers]
-;;      ["Resize Window" doremi-window-width]
-;;      ["Resize Frame" doremi-frame-width]
-;;      ["Move Frame" doremi-frame-horizontally]
-;;      ["Global Marks" doremi-global-marks]
-;;      ["Marks in Buffer" doremi-marks]
-;;      ["Bookmarks" doremi-bookmarks]
-;;      )))
-
 
 ;;-------------------------------------------------------
 (provide 'config-appearance)

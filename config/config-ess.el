@@ -18,22 +18,22 @@
          ("\\.[Jj][Mm][Dd]\\'" . ess-jags-mode))
   :commands R
   :config
-  (progn
-    (setq ess-first-continued-statement-offset 2
-          ess-continued-statement-offset 0
-          ess-expression-offset 2
-          ess-nuke-trailing-whitespace-p t
-          ess-default-style 'DEFAULT
-          ess-ask-for-ess-directory nil
-          ess-eval-visibly nil
-          ;; Keep global .Rhistory file.
-          ess-history-directory "~/.R/")
-    (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
-    (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
-    (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
-    ;; (add-hook 'inferior-ess-mode-hook 'company-mode)
-    ;; (add-hook 'inferior-ess-mode-hook 'smartparens-mode)
-    )
+  (setq ess-first-continued-statement-offset 2
+        ess-continued-statement-offset 0
+        ess-expression-offset 2
+        ess-nuke-trailing-whitespace-p t
+        ess-default-style 'DEFAULT
+        ess-ask-for-ess-directory nil
+        ess-eval-visibly nil
+        ;; Keep global .Rhistory file.
+        ess-history-directory "~/.R/"
+        inferior-R-args "-q" ; I donnot want to print startup message
+        )
+  (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
+  (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
+  (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
+  ;; (add-hook 'inferior-ess-mode-hook 'company-mode)
+  (add-hook 'inferior-ess-mode-hook 'smartparens-mode)
   )
 
 ;; Rmd in emacs
@@ -43,15 +43,14 @@
   :mode (("\\.[SR]nw\\'" . poly-noweb+r-mode)
          ("\\.Rmd\\'" . Rmd-mode))
   :init
-  (progn
-    (defun Rmd-mode ()
-      "ESS Markdown mode for Rmd files."
-      (interactive)
-      (require 'poly-R)
-      (require 'poly-markdown)
-      (R-mode)
-      (yaml-mode)
-      (poly-markdown+r-mode))))
+  (defun Rmd-mode ()
+    "ESS Markdown mode for Rmd files."
+    (interactive)
+    (require 'poly-R)
+    (require 'poly-markdown)
+    (R-mode)
+    (yaml-mode)
+    (poly-markdown+r-mode)))
 
 (defun ess-rmarkdown-to-html ()
   (interactive)

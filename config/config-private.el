@@ -1,4 +1,7 @@
 ;;; private configuration el file
+;; alias
+(defalias 'clc 'comint-clear-buffer)
+(defalias 'closeall 'lix/util-close-all-buffers)
 
 ;; open folders
 (defun lix/open-emacs-config ()
@@ -71,8 +74,6 @@
 (defun lix/util-close-all-buffers ()
   (interactive)
   (mapc 'kill-buffer (buffer-list)))
-(global-set-key (kbd "C-c u k") 'lix/util-close-all-buffers)
-
 
 (global-set-key (kbd "C-h") nil)
 (bind-key "<f1>" #'help-command)

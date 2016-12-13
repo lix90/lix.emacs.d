@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: create opml
+# key: opml
+# --
+
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>${1:title}</title>
+    </head>
+    <body>
+        <outline text="${2:text}" title="${3:text}">
+            <outline type="rss" text="" title="" xmlUrl="" htmlUrl=""/>
+        </outline>
+    </body>
+</opml>

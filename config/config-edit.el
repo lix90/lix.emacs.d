@@ -179,7 +179,11 @@
          ("S-RET" . crux-smart-open-file)
          ("C-c n" . crux-cleanup-buffer-or-region)
          ("C-c f" . crux-recentf-find-file)
-         ("C-a" . crux-move-beginning-of-line)))
+         ("C-a" . crux-move-beginning-of-line))
+  :init
+  (progn
+    (setq crux-shell "/bin/zsh")
+    (defalias 'zsh 'crux-visit-term-buffer)))
 
 ;; rectangle mark
 (use-package phi-rectangle

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: opml outline 
+# key: opmlotl
+# --
+<outline type="rss" text="" title="" xmlUrl="" htmlUrl=""/>

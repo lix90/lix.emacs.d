@@ -4,11 +4,12 @@
 # --
 ---
 title: 每日总结 ${1:title}
-author: ${2:Li Xiang}
-date: $3
+author: Li Xiang
+date: $2
 layout: post
 tags: []
 categories: [Daily]
+description: ""
 ---
 
-$4
+$3

@@ -84,6 +84,23 @@
   ;;                                         (unbind-key "M-o" project-explorer-mode-map)))
   )
 
+(use-package help-fns+
+  :ensure t)
+
+(use-package elfeed
+  :ensure t
+  :defer t
+  :bind
+  (("C-c u f" . elfeed))
+  :init
+  (setq elfeed-feeds
+        '(;;("https://news.ycombinator.com/rss" prog news)
+          ("http://wanqu.co/feed/" prog news)))
+  (setf url-queue-timeout 30))
+;; (use-package el-pocket
+;;   :ensure t
+;;   :init (el-pocket-load-auth))
+
 ;; (use-package project-explorer
 ;;   :ensure t)
 ;; (add-to-list 'load-path (concat user-emacs-directory "config/plug/project-explorer"))
@@ -97,8 +114,13 @@
 ;; (use-package symon
 ;;   :ensure t
 ;;   :defer t
-;;   :config (progn (setq symon-sparkline-type 'plain
-;;                        symon-sparkline-thickness 1)))
+;;   :init
+;;   (symon-mode)
+;;   (apply 'concat (mapcar 'funcall (car symon--display-fns)))
+;;   :config
+;;   (setq symon-sparkline-type 'bounded
+;;         symon-sparkline-thickness 1))
+
 
 ;; eww browser
 ;; (use-package eww
