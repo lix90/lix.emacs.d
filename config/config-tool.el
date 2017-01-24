@@ -87,16 +87,32 @@
 (use-package help-fns+
   :ensure t)
 
-(use-package elfeed
-  :ensure t
-  :defer t
-  :bind
-  (("C-c u f" . elfeed))
-  :init
-  (setq elfeed-feeds
-        '(;;("https://news.ycombinator.com/rss" prog news)
-          ("http://wanqu.co/feed/" prog news)))
-  (setf url-queue-timeout 30))
+
+;; (use-package emms
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (emms-standard)
+;;     (emms-default-players)
+;;     (setq emms-directory "~/Music/网易云音乐/"))
+;;   :bind (("C-<f5>" . emms-shuffle)
+;;          ("C-<f6>" . emms-pause)
+;;          ("C-<f7>" . emms-previous)
+;;          ("C-<f8>" . emms-next)
+;;          ("C-<f9>" . emms-volume-lower)
+;;          ("C-<f10>" . emms-volume-raise)))
+
+;; (use-package elfeed
+;;   :ensure t
+;;   :defer t
+;;   :bind
+;;   (("C-c u f" . elfeed))
+;;   :init
+;;   (setq elfeed-feeds
+;;         '(;;("https://news.ycombinator.com/rss" prog news)
+;;           ("http://wanqu.co/feed/" prog news)))
+;;   (setf url-queue-timeout 30))
+
 ;; (use-package el-pocket
 ;;   :ensure t
 ;;   :init (el-pocket-load-auth))
@@ -120,7 +136,6 @@
 ;;   :config
 ;;   (setq symon-sparkline-type 'bounded
 ;;         symon-sparkline-thickness 1))
-
 
 ;; eww browser
 ;; (use-package eww

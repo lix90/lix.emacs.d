@@ -10,6 +10,7 @@
          ("\\.markdown\\'" . markdown-mode)
          ("\\.text\\'" . markdown-mode))
   :config (progn
+            (setq-local line-spacing 0.1)
             (add-hook 'markdown-mode-hook 'visual-line-mode)
             (add-hook 'markdown-mode-hook 'company-mode)
             (add-hook 'markdown-mode-hook 'smartparens-mode)

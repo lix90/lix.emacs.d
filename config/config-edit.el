@@ -1,4 +1,3 @@
-
 ;;; edit --- configuration for editing configuration:
 ;;; Commentary:
 ;;; as a newbie in Emacs world, I stolen a lot of codes from Emacs vaterans
@@ -17,11 +16,16 @@
               fill-column 80)
 
 ;; take care of the whitespace
-(require 'whitespace)
-(setq whitespace-style '(face trailing lines-tail
-                              space-before-tab
-                              indentation space-after-tab)
-      whitespace-line-column 80)
+(use-package whitespace
+  :defer t
+  :init
+  (setq whitespace-style '(face
+                           trailing
+                           lines-tail
+                           space-before-tab
+                           indentation
+                           space-after-tab)
+        whitespace-line-column 80))
 
 ;; nice things
 (setq next-line-add-newlines nil  ;; don't add new lines when scrolling down
@@ -41,34 +45,33 @@
 (global-auto-revert-mode t)
 
 ;; meaningful names for buffers with the same name
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward
-      uniquify-separator ":"
-      uniquify-after-kill-buffer-p t     ;; rename after killing uniquified
-      uniquify-ignore-buffers-re "^\\*") ;; don't muck with special buffers
+(use-package uniquify
+  :defer t
+  :init
+  (setq uniquify-buffer-name-style 'forward
+        uniquify-separator ":"
+        uniquify-after-kill-buffer-p t     ;; rename after killing uniquified
+        uniquify-ignore-buffers-re "^\\*") ;; don't muck with special buffers
+  )
 
-;; -----------------------------------
-;; saveplace
-;; -----------------------------------
-(require 'saveplace)
-(setq-default save-place t)
-;; saveplace remembers your location in a file when saving files
-(setq save-place-file (local-file-name "cache/saveplace"))
+(use-package saveplace
+  :defer t
+  :init
+  (progn
+    (setq-default save-place t)
+    ;; saveplace remembers your location in a file when saving files
+    (setq save-place-file (local-file-name "cache/saveplace"))))
 
-;; -----------------------------------
-;; switch buffer
-;; -----------------------------------
-
-;; ;; ediff - don't start another frame
-;; (require 'ediff)
-;; (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; clean up obsolete buffers automatically
-(require 'midnight)
+(use-package midnight
+  :defer t)
 
 ;; saner regex syntax
-(require 're-builder)
-(setq reb-re-syntax 'string)
+(use-package re-builder
+  :defer t
+  :init
+  (setq reb-re-syntax 'string))
 
 (use-package aggressive-indent
   :ensure t
@@ -78,9 +81,99 @@
 
 (use-package whitespace-cleanup-mode
   :ensure t
-  :init (progn
-          (global-whitespace-cleanup-mode))
-  :diminish whitespace-cleanup-mode)
+  :diminish whitespace-cleanup-mode
+  :init
+  (global-whitespace-cleanup-mode))
+
+(use-package semantic
+  :defer t
+  :config
+  (progn
+    (add-to-list 'semantic-default-submodes
+                 'global-semantic-stickyfunc-mode)
+    (add-to-list 'semantic-default-submodes
+                 'global-semantic-idle-summary-mode)))
+
+(defun lix--dos2unix ()
+  "Not exactly but it's easier to remember"
+  (interactive)
+  (set-buffer-file-coding-system 'unix 't))
+
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode
+  :init
+  (global-undo-tree-mode)
+  :config
+  (setq undo-tree-visualizer-timestamps t)
+  (setq undo-tree-visualizer-diff t))
+
+;; editing
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region))
+
+(use-package whole-line-or-region
+  :ensure t
+  :diminish whole-line-or-region-mode
+  :init
+  (whole-line-or-region-mode t))
+
+(use-package multiple-cursors
+  :ensure t
+  :init (require 'multiple-cursors)
+  :diminish multiple-cursors-mode
+  :bind
+  ("C-<" . mc/mark-previous-like-this)
+  ("C->" .  mc/mark-next-like-this)
+  ("C-c C-<" . mc/mark-all-like-this)
+  ;; From active region to multiple cursors:
+  ("C-c C-r" . set-rectangular-region-anchor)
+  ("C-c C-l" . mc/edit-lines)
+  ("C-c C-e" . mc/edit-ends-of-lines)
+  ("C-c C-a" . mc/edit-beginnings-of-lines))
+(use-package phi-search
+  :ensure t)
+(define-key mc/keymap (kbd "C-s") 'phi-search)
+(define-key mc/keymap (kbd "C-r") 'phi-search-backward)
+
+(use-package hungry-delete
+  :ensure t
+  :init (global-hungry-delete-mode)
+  :diminish hungry-delete-mode)
+
+(use-package fix-word
+  :ensure t
+  :diminish fix-word
+  :bind
+  ("M-u" . fix-word-upcase)
+  ("M-l" . fix-word-downcase)
+  ("M-c" . fix-word-capitalize))
+
+(use-package move-text
+  :ensure t
+  :bind
+  ("M-n" . move-text-down)
+  ("M-p" . move-text-up))
+
+;; (use-package dash
+;;   :ensure t
+;;   :config
+;;   (use-package dash-functional
+;;     :ensure t)
+;;   (dash-enable-font-lock))
+;; (use-package s
+;;   :ensure t)
+;; (use-package origami
+;;   :ensure t
+;;   :init (global-origami-mode t))
+
+;; dash-at-point
+;; (use-package dash-at-point
+;;   :ensure t
+;;   :defer 3
+;;   :bind (("C-c d" . dash-at-point)
+;;          ("C-c e" . dash-at-point-with-docset)))
 
 ;; (use-package evil-nerd-commenter
 ;;   :ensure t
@@ -94,101 +187,20 @@
 ;;    )
 ;;   )
 
-(defun dos2unix ()
-  "Not exactly but it's easier to remember"
-  (interactive)
-  (set-buffer-file-coding-system 'unix 't))
-
-(use-package undo-tree
-  :diminish undo-tree-mode
-  :config
-  (progn
-    (global-undo-tree-mode)
-    (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t)))
-
-;; editing
-(use-package expand-region
-  :ensure t
-  :bind ("C-=" . er/expand-region))
-
-(use-package whole-line-or-region
-  :ensure t
-  :defer t
-  :diminish whole-line-or-region-mode
-  :config
-  (whole-line-or-region-mode t))
-
-(use-package multiple-cursors
-  :ensure t
-  :init (require 'multiple-cursors)
-  :diminish multiple-cursors-mode
-  :bind (("C-<" . mc/mark-previous-like-this)
-         ("C->" .  mc/mark-next-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)
-         ;; From active region to multiple cursors:
-         ("C-c C-r" . set-rectangular-region-anchor)
-         ("C-c C-l" . mc/edit-lines)
-         ("C-c C-e" . mc/edit-ends-of-lines)
-         ("C-c C-a" . mc/edit-beginnings-of-lines)))
-
-(use-package hungry-delete
-  :ensure t
-  :init (global-hungry-delete-mode)
-  :diminish hungry-delete-mode)
-
-(use-package fix-word
-  :ensure t
-  :bind (("M-u" . fix-word-upcase)
-         ("M-l" . fix-word-downcase)
-         ("M-c" . fix-word-capitalize))
-  :diminish fix-word)
-
-(use-package dash
-  :ensure t
-  :config
-  (progn
-    (use-package dash-functional
-      :ensure t)
-    (dash-enable-font-lock)))
-
-;; (use-package s
-;;   :ensure t)
-;; (use-package origami
-;;   :ensure t
-;;   :init (global-origami-mode t))
-
-;; moving text
-(use-package move-text
-  :ensure t
-  :bind (("M-n" . move-text-down)
-         ("M-p" . move-text-up)))
-
-;; dash-at-point
-(use-package dash-at-point
-  :ensure t
-  :defer 3
-  :bind (("C-c d" . dash-at-point)
-         ("C-c e" . dash-at-point-with-docset)))
-
-;; crux
 (use-package crux
   :ensure t
-  :bind (("C-c o" . crux-open-with)
-         ("C-S-RET" . crux-smart-open-line-above)
-         ("S-RET" . crux-smart-open-file)
-         ("C-c n" . crux-cleanup-buffer-or-region)
-         ("C-c f" . crux-recentf-find-file)
-         ("C-a" . crux-move-beginning-of-line))
+  :bind
+  ("C-c o" . crux-open-with)
+  ("C-c f" . crux-recentf-find-file)
+  ("C-a" . crux-move-beginning-of-line)
   :init
-  (progn
-    (setq crux-shell "/bin/zsh")
-    (defalias 'zsh 'crux-visit-term-buffer)))
+  (setq crux-shell "/bin/zsh")
+  (defalias 'zsh 'crux-visit-term-buffer))
 
-;; rectangle mark
 (use-package phi-rectangle
   :ensure t
-  :bind (("C-x r C-r" . phi-rectangle-set-mark-command)))
+  :bind
+  ("C-c u C-r" . phi-rectangle-set-mark-command))
 
 ;; *scratch* buffer
 (defun create-scratch-buffer nil
@@ -203,7 +215,6 @@
         (delete-region (point-min) (point-max))
         nil)
     t))
-
 (add-hook 'kill-buffer-query-functions 'unkillable-scratch-buffer)
 
 (setq initial-major-mode 'markdown-mode)
@@ -212,28 +223,7 @@
 # If you want to create a file, visit that file with C-x C-f,
 # then enter the text in that file's own buffer.")
 
-;; code folding
-;; (use-package yafolding
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (add-hook 'prog-mode-hook
-;;               (lambda () (yafolding-mode)))
-;;     (defvar yafolding-mode-map
-;;       (let ((map (make-sparse-keymap)))
-;;         (define-key map (kbd "C-c <C-S-return>") #'yafolding-hide-parent-element)
-;;         (define-key map (kbd "C-c <C-M-return>") #'yafolding-toggle-all)
-;;         (define-key map (kbd "C-c <C-return>") #'yafolding-toggle-element)
-;;         map))
-;;     ;; (define-key yafolding-mode-map (kbd "<C-S-return>") nil)
-;;     ;; (define-key yafolding-mode-map (kbd "<C-M-return>") nil)
-;;     ;; (define-key yafolding-mode-map (kbd "<C-return>") nil)
-;;     ;; (define-key yafolding-mode-map (kbd "C-c <C-M-return>") 'yafolding-toggle-all)
-;;     ;; (define-key yafolding-mode-map (kbd "C-c <C-S-return>") 'yafolding-hide-parent-element)
-;;     ;; (define-key yafolding-mode-map (kbd "C-c <C-return>") 'yafolding-toggle-element)
-;;     )
-;;   )
+
 
 (provide 'config-edit)
-
 ;;; config-edit.el ends here

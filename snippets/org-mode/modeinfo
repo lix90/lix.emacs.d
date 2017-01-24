@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: mode info
+# key: modeinfo
+# --
+#-*- mode: ${1:org} -*-

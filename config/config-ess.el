@@ -4,37 +4,86 @@
 
 (use-package ess-site
   :ensure ess
-  :mode (("/R/.*\\.q\\'"       . R-mode)
-         ("\\.[rR]\\'"         . R-mode)
-         ("\\.[rR]profile\\'"  . R-mode)
-         ("NAMESPACE\\'"       . R-mode)
-         ("CITATION\\'"        . R-mode)
-         ("\\.Rd\\'"           . Rd-mode)
-         ("\\.[Bb][Uu][Gg]\\'" . ess-bugs-mode)
-         ("\\.[Bb][Oo][Gg]\\'" . ess-bugs-mode)
-         ("\\.[Bb][Mm][Dd]\\'" . ess-bugs-mode)
-         ("\\.[Jj][Aa][Gg]\\'" . ess-jags-mode)
-         ("\\.[Jj][Oo][Gg]\\'" . ess-jags-mode)
-         ("\\.[Jj][Mm][Dd]\\'" . ess-jags-mode))
+  :mode
+  (("\\.sp\\'"           . S-mode)
+   ("/R/.*\\.q\\'"       . R-mode)
+   ("\\.[qsS]\\'"        . S-mode)
+   ("\\.ssc\\'"          . S-mode)
+   ("\\.SSC\\'"          . S-mode)
+   ("\\.[rR]\\'"         . R-mode)
+   ("\\.[rR]nw\\'"       . Rnw-mode)
+   ("\\.[sS]nw\\'"       . Snw-mode)
+   ("\\.[rR]profile\\'"  . R-mode)
+   ("NAMESPACE\\'"       . R-mode)
+   ("CITATION\\'"        . R-mode)
+   ("\\.omg\\'"          . omegahat-mode)
+   ("\\.hat\\'"          . omegahat-mode)
+   ("\\.lsp\\'"          . XLS-mode)
+   ("\\.do\\'"           . STA-mode)
+   ("\\.ado\\'"          . STA-mode)
+   ("\\.[Ss][Aa][Ss]\\'" . SAS-mode)
+   ("\\.jl\\'"           . ess-julia-mode)
+   ("\\.[Ss]t\\'"        . S-transcript-mode)
+   ("\\.Sout"            . S-transcript-mode)
+   ("\\.[Rr]out"         . R-transcript-mode)
+   ("\\.Rd\\'"           . Rd-mode)
+   ("\\.[Bb][Uu][Gg]\\'" . ess-bugs-mode)
+   ("\\.[Bb][Oo][Gg]\\'" . ess-bugs-mode)
+   ("\\.[Bb][Mm][Dd]\\'" . ess-bugs-mode)
+   ("\\.[Jj][Aa][Gg]\\'" . ess-jags-mode)
+   ("\\.[Jj][Oo][Gg]\\'" . ess-jags-mode)
+   ("\\.[Jj][Mm][Dd]\\'" . ess-jags-mode))
   :commands R
   :config
-  (setq ess-first-continued-statement-offset 2
-        ess-continued-statement-offset 0
-        ess-expression-offset 2
-        ess-nuke-trailing-whitespace-p t
-        ess-default-style 'DEFAULT
-        ess-ask-for-ess-directory nil
-        ess-eval-visibly nil
-        ;; Keep global .Rhistory file.
-        ess-history-directory "~/.R/"
-        inferior-R-args "-q" ; I donnot want to print startup message
-        )
-  (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
-  (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
-  (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
-  ;; (add-hook 'inferior-ess-mode-hook 'company-mode)
-  (add-hook 'inferior-ess-mode-hook 'smartparens-mode)
-  )
+  (progn
+    (setq ess-first-continued-statement-offset 2
+          ess-continued-statement-offset 0
+          ess-expression-offset 2
+          ess-nuke-trailing-whitespace-p t
+          ess-default-style 'DEFAULT
+          ess-ask-for-ess-directory nil
+          ess-eval-visibly nil
+          ;; Keep global .Rhistory file.
+          ess-history-directory "~/.R/"
+          inferior-R-args "-q" ; I donnot want to print startup message
+          )
+    (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
+    (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
+    (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
+    (add-hook 'ess-mode-hook 'company-mode)
+    (add-hook 'ess-mode-hook 'smartparens-mode)))
+
+(use-package key-combo
+  :ensure t
+  :init
+  (progn
+    (key-combo-mode 1)
+    (add-hook 'ess-mode-hook
+              '(lambda()
+                 (key-combo-mode t)))
+    (add-hook 'inferior-ess-mode-hook
+              '(lambda()
+                 (key-combo-mode t)))
+    (defvar key-combo-ess-default
+      '((">"  . (" > " " %>% "))
+        ("$"  . ("$" " %$% "))
+        ("<>" . " %<>% ")
+        ("*"  . ("*" " * " "%*%"))
+        ("%" . ("%" "%in%" "%%"))
+        ("^"  . ("^" " ^ "))
+        ("/"  . ("/" " / "))
+        ("=" . ("=" " = " " == "))
+        ("!=" . (" != "))
+        ("," . ("," ", "))
+        ("~" . " ~ ")
+        (":" . (":" "::" ":::"))
+        (":="  . " := ") ; data.table
+        ("->"  . " -> ")))
+    (key-combo-define-hook '(ess-mode-hook inferior-ess-mode-hook)
+                           'ess-key-combo-load-default
+                           key-combo-ess-default)))
+
+
 
 ;; Rmd in emacs
 ;; reference: http://futurismo.biz/archives/2982
