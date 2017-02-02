@@ -5,21 +5,6 @@
 ;;   :config
 ;;   (google-this-mode 1))
 
-;;; Git in Emacs
-(use-package magit
-  :ensure t
-  :bind ("C-x g" . magit-status)
-  :config
-  (progn (use-package evil-magit :ensure t)))
-
-(use-package magit-gitflow
-  :ensure t
-  :after magit
-  :init (add-hook 'magit-mode-hook 'turn-on-magit-gitflow))
-
-;; (use-package magithub
-;;   :ensure t
-;;   :after magit)
 
 ;; dicts
 (use-package bing-dict
@@ -62,27 +47,19 @@
 ;;   :init
 ;;   (projectile-global-mode))
 
-(use-package sr-speedbar
-  :ensure t
-  :config
-  (setq sr-speedbar-right-side nil)
-  (setq sr-speedbar-auto-refresh nil)
-  (setq sr-speedbar-width 40)
-  (setq sr-speedbar-max-width 80)
-  (setq speedbar-smart-directory-expand-flag t)
-  (setq speedbar-use-images nil)
-  (speedbar-add-supported-extension ".el")
-  (add-hook 'speedbar-mode-hook #'(lambda () (visual-line-mode -1))))
+;; (use-package sr-speedbar
+;;   :ensure t
+;;   :config
+;;   (setq sr-speedbar-right-side nil)
+;;   (setq sr-speedbar-auto-refresh nil)
+;;   (setq sr-speedbar-width 40)
+;;   (setq sr-speedbar-max-width 80)
+;;   (setq speedbar-smart-directory-expand-flag t)
+;;   (setq speedbar-use-images nil)
+;;   (speedbar-add-supported-extension ".el")
+;;   (add-hook 'speedbar-mode-hook #'(lambda () (visual-line-mode -1))))
 
-(use-package project-explorer
-  :ensure t
-  :bind (("<f8>" . project-explorer-toggle)
-         :map project-explorer-mode-map
-         ("C-M-o" . pe/toggle-omit))
-  ;; :config
-  ;; (add-hook 'project-explorer-mode-hook (lambda ()
-  ;;                                         (unbind-key "M-o" project-explorer-mode-map)))
-  )
+
 
 (use-package help-fns+
   :ensure t)
@@ -100,7 +77,7 @@
 ;;          ("C-<f7>" . emms-previous)
 ;;          ("C-<f8>" . emms-next)
 ;;          ("C-<f9>" . emms-volume-lower)
-;;          ("C-<f10>" . emms-volume-raise)))
+;; ("C-<f10>" . emms-volume-raise)))
 
 ;; (use-package elfeed
 ;;   :ensure t

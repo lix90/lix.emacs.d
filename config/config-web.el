@@ -19,6 +19,10 @@
    ("\\.vue\\'"        . web-mode))
   :config
   (progn
+
+    (use-package company-web
+      :ensure t)
+
     (defun lix--web-company-mode ()
       (set (make-local-variable 'company-backends)
            '(company-web-html
@@ -39,8 +43,7 @@
     (add-hook 'web-mode-hook 'lix--web-company-mode)
     (add-hook 'web-mode-hook 'lix--web-mode-indent-style)))
 
-(use-package company-web
-  :ensure t)
+
 
 (use-package lorem-ipsum
   :ensure t
@@ -127,13 +130,7 @@
 ;; (use-package mmm-mode
 ;; :ensure t)
 
-(use-package rainbow-mode
-  :ensure t
-  :diminish rainbow-mode
-  :init
-  (add-hook 'css-mode-hook #'rainbow-mode)
-  (add-hook 'scss-mode-hook #'rainbow-mode)
-  (add-hook 'web-mode-hook #'rainbow-mode))
+
 
 (use-package yaml-mode
   :ensure t
@@ -142,8 +139,8 @@
 (use-package web-beautify
   :ensure t)
 
-(use-package nodejs-repl
-  :ensure t)
+;; (use-package nodejs-repl
+;;   :ensure t)
 
 (use-package js-comint
   :ensure t
@@ -157,16 +154,20 @@
 ;; php mode
 (use-package php-mode
   :ensure t
-  :mode ("\\.php\\'" . php-mode))
+  :mode ("\\.php\\'" . php-mode)
+  :config
+  (progn
+    (use-package ac-php
+      :ensure t
+      :after php-mode)
+    (use-package php-eldoc
+      :ensure t
+      :after php-mode)
+    ))
+
 ;; (use-package company-php
 ;;   :ensure t
 ;;   :after php-mode)
-(use-package ac-php
-  :ensure t
-  :after php-mode)
-(use-package php-eldoc
-  :ensure t
-  :after php-mode)
 
 (eval-after-load 'php-mode
   '(progn
@@ -188,21 +189,84 @@
   :config
   (add-to-list 'company-backends 'company-web-jade))
 
-(use-package emmet-mode
-  :ensure t
-  :diminish emmet-mode
-  :init
-  (progn
-    (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-    (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-    (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2)))
-    (add-hook 'web-mode-hook 'emmet-mode)
-    (add-hook 'html-mode-hook 'emmet-mode)
-    (add-hook 'sass-mode-hook 'emmet-mode)
-    (add-hook 'scss-mode-hook 'emmet-mode)
-    (setq emmet-move-cursor-between-quotes t
-          emmet-move-cursor-after-expanding nil
-          emmet-self-closing-tag-style " /")))
+
+
+;; (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+;; (add-hook 'html-mode-hook 'emmet-mode)
+
+(eval-after-load 'css-mode
+  '(progn
+     (use-package emmet-mode
+       :ensure t
+       :diminish emmet-mode
+       :config
+       (progn
+         (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2)))
+         (setq emmet-move-cursor-between-quotes t
+               emmet-move-cursor-after-expanding nil
+               emmet-self-closing-tag-style " /")))
+
+     (use-package rainbow-mode
+       :ensure t
+       :diminish rainbow-mode)
+     (add-hook 'css-mode-hook #'rainbow-mode)
+     (add-hook 'css-mode-hook  #'emmet-mode)))
+
+(eval-after-load 'scss-mode
+  '(progn
+     (use-package emmet-mode
+       :ensure t
+       :diminish emmet-mode
+       :config
+       (progn
+         (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2)))
+         (setq emmet-move-cursor-between-quotes t
+               emmet-move-cursor-after-expanding nil
+               emmet-self-closing-tag-style " /")))
+
+     (use-package rainbow-mode
+       :ensure t
+       :diminish rainbow-mode)
+     (add-hook 'scss-mode-hook #'rainbow-mode)
+     (add-hook 'scss-mode-hook #'emmet-mode)))
+
+(eval-after-load 'sass-mode
+  '(progn
+
+     (use-package emmet-mode
+       :ensure t
+       :diminish emmet-mode
+       :config
+       (progn
+         (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2)))
+         (setq emmet-move-cursor-between-quotes t
+               emmet-move-cursor-after-expanding nil
+               emmet-self-closing-tag-style " /")))
+
+     (use-package rainbow-mode
+       :ensure t
+       :diminish rainbow-mode)
+
+     (add-hook 'sass-mode-hook #'rainbow-mode)
+     (add-hook 'sass-mode-hook #'emmet-mode)))
+
+(eval-after-load 'web-mode
+  '(progn
+     (use-package emmet-mode
+       :ensure t
+       :diminish emmet-mode
+       :config
+       (progn
+         (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2)))
+         (setq emmet-move-cursor-between-quotes t
+               emmet-move-cursor-after-expanding nil
+               emmet-self-closing-tag-style " /")))
+
+     (use-package rainbow-mode
+       :ensure t
+       :diminish rainbow-mode)
+     (add-hook 'web-mode-hook #'rainbow-mode)
+     (add-hook 'web-mode-hook #'emmet-mode)))
 
 (provide 'config-web)
 ;;; config-web.el ends here

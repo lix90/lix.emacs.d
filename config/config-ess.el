@@ -50,39 +50,44 @@
     (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
     (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
-    (add-hook 'ess-mode-hook 'company-mode)
-    (add-hook 'ess-mode-hook 'smartparens-mode)))
 
-(use-package key-combo
-  :ensure t
-  :init
-  (progn
-    (key-combo-mode 1)
-    (add-hook 'ess-mode-hook
-              '(lambda()
-                 (key-combo-mode t)))
-    (add-hook 'inferior-ess-mode-hook
-              '(lambda()
-                 (key-combo-mode t)))
-    (defvar key-combo-ess-default
-      '((">"  . (" > " " %>% "))
-        ("$"  . ("$" " %$% "))
-        ("<>" . " %<>% ")
-        ("*"  . ("*" " * " "%*%"))
-        ("%" . ("%" "%in%" "%%"))
-        ("^"  . ("^" " ^ "))
-        ("/"  . ("/" " / "))
-        ("=" . ("=" " = " " == "))
-        ("!=" . (" != "))
-        ("," . ("," ", "))
-        ("~" . " ~ ")
-        (":" . (":" "::" ":::"))
-        (":="  . " := ") ; data.table
-        ("->"  . " -> ")))
-    (key-combo-define-hook '(ess-mode-hook inferior-ess-mode-hook)
-                           'ess-key-combo-load-default
-                           key-combo-ess-default)))
+    ))
 
+
+(eval-after-load 'ess-site
+  '(progn
+     (add-hook 'ess-mode-hook 'company-mode)
+     (add-hook 'ess-mode-hook 'smartparens-mode)
+
+     (use-package key-combo
+       :ensure t
+       :init
+       (progn
+         (key-combo-mode 1)
+         (add-hook 'ess-mode-hook
+                   '(lambda()
+                      (key-combo-mode t)))
+         (add-hook 'inferior-ess-mode-hook
+                   '(lambda()
+                      (key-combo-mode t)))
+         (defvar key-combo-ess-default
+           '((">"  . (" > " " %>% "))
+             ("$"  . ("$" " %$% "))
+             ("<>" . " %<>% ")
+             ("*"  . ("*" " * " "%*%"))
+             ("%" . ("%" "%in%" "%%"))
+             ("^"  . ("^" " ^ "))
+             ("/"  . ("/" " / "))
+             ("=" . ("=" " = " " == "))
+             ("!=" . (" != "))
+             ("," . ("," ", "))
+             ("~" . " ~ ")
+             (":" . (":" "::" ":::"))
+             (":="  . " := ") ; data.table
+             ("->"  . " -> ")))
+         (key-combo-define-hook '(ess-mode-hook inferior-ess-mode-hook)
+                                'ess-key-combo-load-default
+                                key-combo-ess-default)))))
 
 
 ;; Rmd in emacs

@@ -44,16 +44,6 @@
 ;; content to reflect what's on-disk.
 (global-auto-revert-mode t)
 
-;; meaningful names for buffers with the same name
-(use-package uniquify
-  :defer t
-  :init
-  (setq uniquify-buffer-name-style 'forward
-        uniquify-separator ":"
-        uniquify-after-kill-buffer-p t     ;; rename after killing uniquified
-        uniquify-ignore-buffers-re "^\\*") ;; don't muck with special buffers
-  )
-
 (use-package saveplace
   :defer t
   :init
@@ -62,37 +52,6 @@
     ;; saveplace remembers your location in a file when saving files
     (setq save-place-file (local-file-name "cache/saveplace"))))
 
-
-;; clean up obsolete buffers automatically
-(use-package midnight
-  :defer t)
-
-;; saner regex syntax
-(use-package re-builder
-  :defer t
-  :init
-  (setq reb-re-syntax 'string))
-
-(use-package aggressive-indent
-  :ensure t
-  :diminish aggressive-indent-mode
-  :init
-  (global-aggressive-indent-mode 1))
-
-(use-package whitespace-cleanup-mode
-  :ensure t
-  :diminish whitespace-cleanup-mode
-  :init
-  (global-whitespace-cleanup-mode))
-
-(use-package semantic
-  :defer t
-  :config
-  (progn
-    (add-to-list 'semantic-default-submodes
-                 'global-semantic-stickyfunc-mode)
-    (add-to-list 'semantic-default-submodes
-                 'global-semantic-idle-summary-mode)))
 
 (defun lix--dos2unix ()
   "Not exactly but it's easier to remember"

@@ -31,26 +31,24 @@
 
 (load (local-file-name "config/config-core"))
 (load (local-file-name "config/config-os"))
-(load (local-file-name "config/config-edit"))
 (load (local-file-name "config/config-appearance"))
 (load (local-file-name "config/config-shell"))
 (load (local-file-name "config/config-private"))
-
-;; Productivity
-(load (local-file-name "config/config-ac"))
-(load (local-file-name "config/config-dired"))
-(load (local-file-name "config/config-histfile"))
 (load (local-file-name "config/config-navigation"))
+(load (local-file-name "config/config-prog"))
+(load (local-file-name "config/config-histfile"))
 (load (local-file-name "config/config-paren"))
 (load (local-file-name "config/config-swiper"))
 (load (local-file-name "config/config-whichkey"))
-;; (load (local-file-name "config/config-evil"))
+(load (local-file-name "config/config-evil"))
+(load (local-file-name "config/config-keybindings"))
 
 ;; Tools
 (load (local-file-name "config/config-tool"))
+(load (local-file-name "config/config-org"))
+(load (local-file-name "config/config-git"))
 ;; (load (local-file-name "config/config-flycheck"))
 ;; (load (local-file-name "config/config-blog"))
-(load (local-file-name "config/config-org"))
 
 ;; Languages
 (load (local-file-name "config/config-ess"))
@@ -58,29 +56,10 @@
 (load (local-file-name "config/config-matlab"))
 (load (local-file-name "config/config-tex"))
 (load (local-file-name "config/config-web"))
-;; (load (local-file-name "config/config-sql"))
 (load (local-file-name "config/config-markdown"))
+;; (load (local-file-name "config/config-sql"))
 ;; (load (local-file-name "config/config-java"))
 ;; (load (local-file-name "config/config-ruby"))
 ;; (load (local-file-name "config/config-cc"))
 
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(custom-safe-themes
-   (quote
-    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "c7a9a68bd07e38620a5508fef62ec079d274475c8f92d75ed0c33c45fbe306bc" default)))
- '(package-selected-packages
-   (quote
-    (monokai rainbow-identifiers ein emms org-bullets ob-ipython key-combo nodejs-repl phi-search color-theme-approximate transpose-frame elfeed youdao-dictionary yaml-mode yafolding whole-line-or-region whitespace-cleanup-mode which-key weibo web-mode web-beautify web w3m use-package symon sr-speedbar spaceline solarized-theme smartparens smart-mode-line simple-httpd shell-pop scss-mode rvm robe rainbow-mode rainbow-delimiters py-autopep8 pug-mode psysh projectile project-explorer polymode php-eldoc phi-rectangle paradox osx-dictionary origami multiple-cursors move-text monokai-theme moe-theme mmm-mode matlab-mode markdown-toc magithub magit-gitflow lorem-ipsum latex-preview-pane json-mode js2-mode js-comint indent-guide hungry-delete hexo help-fns+ google-translate golden-ratio flycheck flx fix-word expand-region exec-path-from-shell evil-nerd-commenter evil-magit evil-leader esup ess emmet-mode elpy doremi-frm doremi-cmd disaster dired-details dash-functional dash-at-point crux counsel company-web company-statistics company-php company-emoji company-emacs-eclim company-auctex company-anaconda color-theme clang-format blog-admin bing-dict better-defaults benchmark-init auto-package-update aggressive-indent ace-jump-mode ac-php))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
