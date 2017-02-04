@@ -2429,7 +2429,7 @@ Pandoc mode for markdown conversion
 [[http://orgmode.org][Org-mode]] is really why most people use emacs. Here are some basic settings and packages.
 *** Base settings
 #+BEGIN_SRC emacs-lisp
-  (use-package org 
+   (use-package org 
     :defer t
     :config
     ;; Allow's electric-pair-mode to surround things with = and ~ in org-mode

@@ -1,7 +1,6 @@
-(cpm-leader1
+(leader-key
  "A" 'apropos
  "?" 'counsel-descbinds
- ;; "<SPC>" 'helm-M-x
  "<SPC>" 'counsel-M-x
  ;; "d" 'deer
  ;; "D" 'deer-jump-other-window
@@ -9,28 +8,39 @@
  "h" 'ivy-resume
  ;; "N" 'research-notes
  ;; "n" 'big-notes
+ "d" 'my-desktop
  "M" 'woman
  "'" 'shell
  "." 'quick-commit
  ";" 'evil-commentary-line
  "[" 'spacemacs/previous-useful-buffer
  "]" 'spacemacs/next-useful-buffer
- "TAB" 'switch-to-previous-buffer)
-
-
-(cpm-leader1
- "a"  '(:ignore t :which-key "Applications")
- ;; "ac" '(:ignore t :which-key "Cmus")
- ;; "ad" 'deer
- "ae" 'eshell
- ;; "am" 'multi-term
- ;; "ar" 'ranger
- ;; "as" 'sane-term
- ;; "aw" 'wttrin
+ "TAB" 'switch-to-previous-buffer
  )
 
+(leader-key
+ "I" '(:ignore t :which-key "IDE")
+ "Ir" 'R
+ "Ip" 'run-python
+ "Ie" 'eshell
+ "Is" 'shell
+ "Ij" 'run-js
+ "Ii" 'ielm
+ "Im" 'matlab-shell)
 
-(cpm-leader1
+;; (leader-key
+;;  "a"  '(:ignore t :which-key "Applications")
+;;  ;; "ac" '(:ignore t :which-key "Cmus")
+;;  ;; "ad" 'deer
+;;  "ae" 'eshell
+;;  ;; "am" 'multi-term
+;;  ;; "ar" 'ranger
+;;  ;; "as" 'sane-term
+;;  ;; "aw" 'wttrin
+;;  )
+
+
+(leader-key
  "b"  '(:ignore t :which-key "Buffers")
  "bc" 'spacemacs/new-empty-buffer
  "bD" 'kill-buffer-and-window
@@ -47,7 +57,7 @@
  )
 
 
-(cpm-leader1
+(leader-key
  "c"  '(:ignore t :which-key "Commenting")
  "cb" 'org-block-wrap
  "cc" 'evil-commentary
@@ -56,7 +66,7 @@
  )
 
 
-(cpm-leader1
+(leader-key
  "C"  '(:ignore t :which-key "Config")
  "Cc" 'lix--open-config
  "Ci" 'lix--open-init.el
@@ -64,9 +74,9 @@
  )
 
 
-(cpm-leader1
+(leader-key
  "f"  '(:ignore t :which-key "Files")
- "ff" 'counsel-find-files
+ "ff" 'counsel-find-file
  "fl" 'counsel-locate
  "fo" 'crux-open-with
  "fs" 'save-buffer
@@ -77,7 +87,7 @@
 
 (defun my-markdown-config ()
   "Modify keymaps in markdown mode"
-  (cpm-leader1
+  (leader-key
    "m"   '(:ignore t :which-key "Markdown")
    "mc"  '(:ignore t :which-key "command")
    "mh"  '(:ignore t :which-key "insert")
@@ -150,7 +160,7 @@
 
 
 (defun my-org-config()
-  (cpm-leader1
+  (leader-key
    "o"  '(:ignore t :which-key "Org")
    "oh" '(:ignore t :which-key "headers")
    "oi" '(:ignore t :which-key "insert")
@@ -240,17 +250,18 @@
    "oil" 'org-insert-link
    "oif" 'org-footnote-new
    ))
-(eval-after-load 'org 'my-org-config)
+
+(eval-after-load 'org '(my-org-config))
 
 
-(cpm-leader1
+(leader-key
  "P" '(:ignore t :which-key "Packages")
  "Pl" 'paradox-list-packages
  "Pu" 'paradox-upgrade-packages
  )
 
 
-(cpm-leader1
+(leader-key
  "p" '(:ignore t :which-key "Projects")
  ;; "p!"  'projectile-run-shell-command-in-root
  ;; "p&"  'projectile-run-async-shell-command-in-root
@@ -277,7 +288,7 @@
  )
 
 
-(cpm-leader1
+(leader-key
  "q"  '(:ignore t :which-key "Quit")
  "qq" 'save-desktop-save-buffers-kill-emacs
  "qQ" 'evil-quit-all
@@ -285,7 +296,7 @@
  )
 
 
-(cpm-leader1
+(leader-key
  "s" '(:ignore t :which-key "Search")
  "sj" 'forward-or-backward-sexp
  ;;"sl" 'last-search-buffer
@@ -293,10 +304,14 @@
  "sw" 'ace-jump-word-mode
  "sl" 'ace-jump-line-mode
  "sc" 'ace-jump-char-mode
+ "sa" 'mc/mark-all-like-this
+ "sA" 'mc/mark-all-words-like-this
+ "sn" 'mc/mark-next-like-this
+ "sN" 'mc/mark-previous-like-this
  )
 
 
-(cpm-leader1
+(leader-key
  "t"  '(:ignore t :which-key "Toggles")
  "ta" 'company-mode
  "tb" 'fancy-battery-mode
@@ -312,6 +327,7 @@
  "tm" 'hidden-mode-line-mode
  "tM" 'spaceline-toggle-minor-modes
  "tn" 'linum-mode
+ "tN" 'neotree-toggle
  "to" 'org-toggle-link-display
  "tp" 'smartparens-mode
  "tr" 'rainbow-identifiers-mode
@@ -321,7 +337,7 @@
  "tT" 'lix--toggle-transparency
  )
 
-(cpm-leader1
+(leader-key
  "u"  '(:ignore t :which-key "User")
  "um" 'cpm/org-to-markdown
  "uc" 'pandoc-convert-to-pdf
@@ -337,7 +353,7 @@
  )
 
 
-(cpm-leader1
+(leader-key
  "g"  '(:ignore t :which-key "Git")
  "gb" 'magit-blame
  "gc" 'magit-commit
@@ -348,7 +364,7 @@
  )
 
 
-(cpm-leader1
+(leader-key
  "w"  '(:ignore t :which-key "Windows")
  "wc" 'delete-window
  "wC" 'delete-other-windows

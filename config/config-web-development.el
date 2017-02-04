@@ -145,11 +145,20 @@
 (use-package js-comint
   :ensure t
   :config
-  (setq inferior-js-program-command "node")
-  (setq inferior-js-program-arguments '("--interactive")))
-;; (defun inferior-js-mode-hook-setup ()
-;;   (add-hook 'comint-output-filter-functions 'js-comint-process-output))
-;; (add-hook 'inferior-js-mode-hook 'inferior-js-mode-hook-setup t)
+  (progn
+    (setq inferior-js-program-command "node")
+    (setq inferior-js-program-arguments '("--interactive"))
+
+    (add-hook 'inferior-js-mode-hook
+              (lambda ()
+                (ansi-color-for-comint-mode-on)))
+
+    (defun inferior-js-mode-hook-setup ()
+      (add-hook 'comint-output-filter-functions 'js-comint-process-output))
+    (add-hook 'inferior-js-mode-hook 'inferior-js-mode-hook-setup t)
+    )
+  )
+
 
 ;; php mode
 (use-package php-mode
@@ -268,5 +277,5 @@
      (add-hook 'web-mode-hook #'rainbow-mode)
      (add-hook 'web-mode-hook #'emmet-mode)))
 
-(provide 'config-web)
+(provide 'config-web-development)
 ;;; config-web.el ends here

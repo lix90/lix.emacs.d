@@ -1,6 +1,7 @@
 ;;;
 (use-package evil
   :ensure t
+  :defer t
   :config
   (progn
     ;; Cursor shape and color
@@ -44,6 +45,7 @@
 
     (use-package evil-numbers
       :ensure t
+      :disabled t
       :defer t
       :init
       (general-define-key
@@ -77,11 +79,11 @@
 
     (use-package evil-commentary
       :ensure t
+      :defer t
       :commands (evil-commentary evil-commentary-line)
       :diminish evil-commentary-mode
       :config
-      (evil-commentary-mode))
-    )
+      (evil-commentary-mode)))
   :init
   (evil-mode 1))
 
@@ -98,6 +100,42 @@
 
 (add-hook 'after-make-frame-functions (lambda (frame) (my-evil-terminal-cursor-change)))
 (my-evil-terminal-cursor-change)
+
+;; to save the buffer when we exit the insert mode
+(defun my-save-if-bufferfilename ()
+  (if (buffer-file-name)
+      (progn
+        (save-buffer)
+        )
+    (message "no file is associated to this buffer: do nothing")
+    )
+  )
+(add-hook 'evil-insert-state-exit-hook #'my-save-if-bufferfilename)
+
+;; Enter an emacs mode in a given state
+(loop for (mode . state)
+      in '((inferior-emacs-lisp-mode . emacs)
+           ;;(nrepl-mode . insert)
+           ;;(pylookup-mode . emacs)
+           (comint-mode . emacs)
+           (shell-mode . emacs)
+           (git-commit-mode . insert)
+           (git-rebase-mode . emacs)
+           (term-mode . emacs)
+           (help-mode . emacs)
+           ;;(helm-grep-mode . emacs)
+           ;;(grep-mode . emacs)
+           ;;(bc-menu-mode . emacs)
+           (magit-branch-manager-mode . emacs)
+           ;;(rdictcc-buffer-mode . emacs)
+           (dired-mode . emacs)
+           ;;(wdired-mode . normal)
+           (inferior-ess-mode . emacs)
+           (inferior-python-mode . emacs)
+           (matlab-shell-mode . emacs)
+           (inferior-js-mode . emacs)
+           )
+      do (evil-set-initial-state mode state))
 
 (provide 'config-evil)
 ;;; Config-evil.el ends here

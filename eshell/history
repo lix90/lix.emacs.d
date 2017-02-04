@@ -1,0 +1,70 @@
+ls
+cd jrg-renwu9
+ls
+cd homework
+ls
+cd 李想
+ls
+pwd
+cd ..
+ls
+cd 
+cd jirengu/jrg-renwu9
+ls
+cd ..
+ls
+cd jirengu
+ls
+cd jrg-renwu9
+ls
+cd homework
+ls
+cd 李想
+ls
+rm -rf task003_html1
+ls
+mkdir task004_html1
+cd task004_html1
+touch task004_html1.md
+ls
+cd
+brew search canary
+brew cask install google-chrome-canary
+brew install google-chrome-canary
+brew install Caskroom/versions/google-chrome-canary
+matlab
+which matlab
+~/.bashrc
+source ~/.bashrc
+cd ../..
+hexodeploy
+hxd
+ln -s ~/.dotfiles/.bash_profile ~/.bashrc
+rm .bashrc
+cd
+rm .bashrc
+ln -s ~/.dotfiles/.bash_profile ~/.bashrc
+yd u
+ls
+ls -l
+ls -a
+mkdir --help
+m
+man ssh
+ls
+m
+/Users/lix/.bash_profile
+source ~/.bash_profile
+source 
+cd
+source .bash_profile
+m
+m ssh
+tldr ssh
+m ssh
+tldr --list ssh
+tldr ssh --list
+m ssh
+yd
+download
+?mv

@@ -1,9 +1,7 @@
 ;;; looking --- looking configuration:
 ;;; Commentary:
 ;;; Code:
-(use-package better-defaults
-  :ensure t
-  :defer t)
+
 
 ;; disable startup screen and *scratch* message
 (setq inhibit-startup-screen t
@@ -16,28 +14,29 @@
       use-dialog-box nil
       ring-bell-function 'ignore)
 
-;; stop prompting me, allright?
-;; a) y is yes and n is no
 (fset 'yes-or-no-p 'y-or-n-p)
-;; b) i don't care if the process is running
 (setq kill-buffer-query-functions
       (remq 'process-kill-buffer-query-function
             kill-buffer-query-functions))
 
-
-
-
 ;; visual line
-(global-visual-line-mode t)
+(global-visual-line-mode 1)
 (diminish 'global-visual-line-mode)
 (diminish 'visual-line-mode)
 
+(setq display-time-format "%a %b %d | %H:%M |")
+(display-time-mode)
+
+(use-package better-defaults :ensure t :defer t)
+
 ;; Centered Cursor Mode
 (use-package centered-cursor-mode
-  :defer t
+  :ensure t
+  :defer 10
   :diminish centered-cursor-mode
-  ;; :commands (centered-cursor-mode
-  ;;            global-centered-cursor-mode)
+  :init (global-centered-cursor-mode)
+  :commands (centered-cursor-mode
+             global-centered-cursor-mode)
   :config
   (progn
     (setq ccm-recenter-at-end-of-file t
@@ -50,7 +49,7 @@
 ;; --------------------
 ;; Diminish
 ;; --------------------
-(use-package diminish :defer 2)
+;; (use-package diminish :defer 2)
 (diminish 'visual-line-mode)
 (eval-after-load "company" '(diminish 'company-mode "Ⓒ"))
 (eval-after-load "aggressive-indent" '(diminish 'aggressive-indent-mode "Ⓘ"))
@@ -79,6 +78,7 @@
 
 (use-package cyphejor
   :ensure t
+  :defer t
   :init
   (progn
     (setq
@@ -96,12 +96,12 @@
        ("interactive" "i" :prefix)
        ("lisp" "λ" :postfix)
        ("menu" "▤" :postfix)
-       ("mode"        "")
-       ("package"     "↓")
-       ("python"      "π")
-       ("shell"       "sh" :postfix)
-       ("text"        "ξ")
-       ("wdired"      "↯δ")
+       ("mode" "" :postfix)
+       ("package" "↓")
+       ("python" "π")
+       ("shell" "sh" :postfix)
+       ("text" "ξ")
+       ("wdired" "↯δ")
        ("ess" "𝓔")
        ("Markdown" "𝓜")
        ("markdown" "𝓜")))
@@ -126,6 +126,7 @@
 ;; Highlight current line number
 (use-package hlinum
   :ensure t
+  :defer t
   :commands hlinum-mode
   :init
   (add-hook 'linum-mode-hook 'hlinum-activate)
@@ -156,6 +157,7 @@
     (setq powerline-default-separator 'nil)
     (setq powerline-height 18)
     (setq powerline-raw " ")
+    ;; nil - don't use srgb & get proper powerline faces
     (setq ns-use-srgb-colorspace nil)
     ;; fancy git icon for the modeline
     (defadvice vc-mode-line (after strip-backend () activate)
@@ -170,7 +172,6 @@
           spaceline-line-column-p nil
           spaceline-buffer-id-p nil
           spaceline-minor-modes-separator nil)
-
     ))
 
 ;; (use-package fancy-battery
@@ -182,15 +183,9 @@
 ;;   (setq display-time-format "%a %b %d | %H:%M |")
 ;;   (display-time-mode))
 
-(setq display-time-format "%a %b %d | %H:%M |")
-(display-time-mode)
-
-;; nil - don't use srgb & get proper powerline faces
-;; (setq ns-use-srgb-colorspace t)
-
 (use-package smooth-scrolling
   :disabled t
-  :defer 2
+  :defer 5
   :config
   (progn
     (setq smooth-scroll-margin 2)
@@ -228,23 +223,17 @@
                                         :slant 'normal))))
     (load-theme 'solarized-dark t)
     :config
-    ;; Theme toggle
-    (setq active-theme 'solarized-dark)
-    (defun toggle-dark-light-theme ()
-      (interactive)
-      (if (eq active-theme 'solarized-light)
-          (setq active-theme 'solarized-dark)
-        (setq active-theme 'solarized-light))
-      (load-theme active-theme)
-      (powerline-reset))
-    ))
-
-;; Avoid all font-size changes
-;; (setq solarized-height-minus-1 1)
-;; (setq solarized-height-plus-1 1)
-;; (setq solarized-height-plus-2 1)
-;; (setq solarized-height-plus-3 1)
-;; (setq solarized-height-plus-4 1))
+    (progn
+      ;; Theme toggle
+      (setq active-theme 'solarized-dark)
+      (defun toggle-dark-light-theme ()
+        (interactive)
+        (if (eq active-theme 'solarized-light)
+            (setq active-theme 'solarized-dark)
+          (setq active-theme 'solarized-light))
+        (load-theme active-theme)
+        (powerline-reset))
+      )))
 
 
 ;; An alternative solarized theme
@@ -256,7 +245,8 @@
 ;;     (load-theme 'sanityinc-solarized-dark t)))
 
 (use-package gruvbox-theme
-  :ensure t 
+  :ensure t
+  :defer t
   :if (not (display-graphic-p))
   :config
   (load-theme 'gruvbox t))
@@ -271,16 +261,16 @@
         uniquify-ignore-buffers-re "^\\*"))
 
 (use-package which-key
-  :defer 2
-  :diminish ""
+  :defer 5
+  :diminish which-key-mode
   :config
-  (setq which-key-special-keys nil)
-  ;; Set the time delay (in seconds) for the which-key popup to appear.
-  (setq which-key-idle-delay .2)
-  (which-key-mode))
+  (progn
+    (setq which-key-special-keys nil)
+    ;; Set the time delay (in seconds) for the which-key popup to appear.
+    (setq which-key-idle-delay 0.2)
+    (which-key-mode)
+    ))
 
-;; (display-time-mode t)
-;; (setq display-time-24hr-format t)
 ;; (use-package smart-mode-line
 ;;   :ensure t
 ;;   :init
@@ -289,27 +279,6 @@
 ;;     (setq sml/theme 'light
 ;;           sml/shorten-directory t
 ;;           sml/shorten-modes t)))
-
-;; (use-package solarized-theme
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (setq solarized-high-contrast-mode-line t
-;;           solarized-distinct-fringe-background t
-;;           solarized-use-variable-pitch nil
-;;           solarized-use-more-italic t)))
-
-;; (defun lix--light-theme()
-;;   (interactive) 
-;;   (load-theme 'solarized-light t)
-;;   (sml/setup))
-
-;; (defun lix--dark-theme()
-;;   (interactive)
-;;   (load-theme 'solarized-dark t)
-;;   (sml/setup))
-
-;; (lix--dark-theme)
 
 ;; (use-package transpose-frame
 ;;   :ensure t

@@ -17,8 +17,51 @@
       mouse-yank-at-point t       ;; yank at cursor, NOT at mouse position
       kill-whole-line t)
 
+;;; swiper, flx, counsel, ivy
+(use-package flx :ensure t :defer t)
+(use-package swiper
+  :ensure t
+  :defer t
+  :commands (swiper ivy-resume counsel-M-x counsel-find-file)
+  :ensure counsel
+  :bind (("H-s" . swiper)
+         ("M-x" . counsel-M-x)
+         ("H-i" . ivy-immediate-done))
+  :config
+  (ivy-mode 1)
+  (setq ivy-re-builders-alist
+        '((ivy-switch-buffer . ivy--regex-plus)
+          (t . ivy--regex-fuzzy)))
+  (setq ivy-fixed-height-minibuffer t
+        ivy-height 20
+        ivy-use-virtual-buffers t))
+
+(use-package which-key
+  :ensure t
+  :defer t
+  :diminish which-key-mode
+  :init
+  (progn
+    (which-key-mode))
+  :config
+  (progn
+    (which-key-setup-minibuffer)
+    (setq which-key-popup-type 'side-window
+          which-key-side-window-location 'bottom
+          which-key-side-window-max-height 0.35
+          which-key-side-window-max-width 0.25
+          which-key-max-description-length 25
+          which-key-allow-evil-operators t
+          which-key-sort-order 'which-key-key-order
+          )
+    (add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
+    (add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
+    (add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
+    (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil)))))
+
 ;; take care of the whitespace
 (use-package whitespace
+  :ensure t
   :defer t
   :init
   (setq whitespace-style '(face
@@ -32,18 +75,18 @@
 (use-package general
   :ensure t
   :init
-  (general-create-definer cpm-leader1
+  (general-create-definer leader-key
                           :states '(normal insert visual motion emacs)
                           :keymaps 'global
                           :prefix "SPC"
                           :non-normal-prefix "H-SPC"))
 
-;;; search
 ;; (use-package avy
 ;;   :ensure t
 ;;   :commands (avy-goto-char))
 (use-package ace-jump-mode
   :ensure t
+  :defer t
   :commands (ace-jump-word-mode
              ace-jump-char-mode
              ace-jump-line-mode))
@@ -51,6 +94,7 @@
 ;;; navigate text
 (use-package move-text
   :ensure t
+  :defer t
   :bind
   ("H-n" . move-text-down)
   ("H-p" . move-text-up))
@@ -63,29 +107,24 @@
     (defun window-numbering-install-mode-line (&optional position)
       "Do nothing, the display is handled by the powerline.")
     (setq window-numbering-auto-assign-0-to-minibuffer nil)
-    (cpm-leader1
+    (leader-key
      "0" 'select-window-0
      "1" 'select-window-1
      "2" 'select-window-2
      "3" 'select-window-3
      "4" 'select-window-4
      "5" 'select-window-5)
-    ;; "6" 'select-window-6
-    ;; "7" 'select-window-7
-    ;; "8" 'select-window-8
-    ;; "9" 'select-window-9)
-    (window-numbering-mode 1)
+    (window-numbering-mode 1))
 
-    (defun spacemacs//window-numbering-assign (windows)
-      "Custom number assignment for special buffers."
-      (mapc (lambda (w)
-              (when (and (boundp 'neo-global--window)
-                         (eq w neo-global--window))
-                (window-numbering-assign w 0)))
-            windows))
-    (add-hook 'window-numbering-before-hook 'spacemacs//window-numbering-assign)
-    (add-hook 'neo-after-create-hook '(lambda (w) (window-numbering-update))))
-  )
+  (defun spacemacs//window-numbering-assign (windows)
+    "Custom number assignment for special buffers."
+    (mapc (lambda (w)
+            (when (and (boundp 'neo-global--window)
+                       (eq w neo-global--window))
+              (window-numbering-assign w 0)))
+          windows))
+  (add-hook 'window-numbering-before-hook 'spacemacs//window-numbering-assign)
+  (add-hook 'neo-after-create-hook '(lambda (w) (window-numbering-update))))
 
 ;; (use-package windmove
 ;;   :defer t
@@ -109,6 +148,7 @@
 
 (use-package dired-details
   :ensure t
+  :defer t
   :config
   (progn
     (require 'dired)
@@ -123,13 +163,24 @@
                (revert-buffer))))
     ))
 
-;;; project
-(use-package project-explorer
-  :ensure t
-  :defer t)
+;;;-----------------------------------------------------------------------------
+;;; Project management
+;;;-----------------------------------------------------------------------------
+;; (use-package project-explorer
+;;   :ensure t
+;;   :defer t)
 ;; (add-hook 'project-explorer-mode-hook (lambda ()
 ;;                                         (unbind-key "M-o" project-explorer-mode-map)))
+(use-package neotree
+  :ensure t
+  :commands (neotree-toggle)
+  :config
+  (progn
+    (setq neo-theme 'nerd
+          neo-window-width 30
+          neo-window-fixed-size 1)))
 
+;;;-----------------------------------------------------------------------------
 (use-package aggressive-indent
   :ensure t
   :defer t
@@ -138,10 +189,12 @@
 
 (use-package whitespace-cleanup-mode
   :ensure t
+  :defer t
   :init
-  (global-whitespace-cleanup-mode))
+  (global-whitespace-cleanup-mode 1))
 
 (use-package semantic
+  :ensure t
   :defer t
   :config
   (progn
@@ -152,6 +205,7 @@
 
 (use-package undo-tree
   :ensure t
+  :defer t
   :commands (undo-tree-undo undo-tree-visualize)
   :config
   (progn
@@ -159,21 +213,26 @@
     (setq undo-tree-visualizer-timestamps t)
     (setq undo-tree-visualizer-diff t)
     (let ((undo-dir (concat user-cache-directory "undo")))
-      (setq undo-tree-history-directory-alist '((".*" . ,undo-dir))))))
+      (make-directory undo-dir t)
+      (setq undo-tree-history-directory-alist '((".*" . ,undo-dir))))
+    ))
 
 ;; editing
 (use-package expand-region
   :ensure t
+  :defer t
   :bind ("C-=" . er/expand-region))
 
 (use-package whole-line-or-region
   :ensure t
+  :defer t
   :diminish whole-line-or-region-mode
   :init
   (whole-line-or-region-mode t))
 
 (use-package multiple-cursors
   :ensure t
+  :defer t
   :diminish multiple-cursors-mode
   :config
   (progn
@@ -184,6 +243,7 @@
 
 (use-package hungry-delete
   :ensure t
+  :defer t
   :init (global-hungry-delete-mode)
   :diminish hungry-delete-mode)
 
@@ -192,23 +252,20 @@
   :defer t
   :diminish fix-word
   :bind
-  ("M-u" . fix-word-upcase)
-  ("M-l" . fix-word-downcase)
-  ("M-c" . fix-word-capitalize))
+  ("H-u" . fix-word-upcase)
+  ("H-l" . fix-word-downcase)
+  ("H-c" . fix-word-capitalize))
 
 (use-package crux
   :ensure t
-  :bind ("C-a" . crux-move-beginning-of-line)
-  :config
-  (setq crux-shell "/bin/zsh")
-  (defalias 'zsh 'crux-visit-term-buffer))
+  :bind ("C-a" . crux-move-beginning-of-line))
 
-(use-package phi-rectangle :ensure t)
+(use-package phi-rectangle :ensure t :defer t)
 
 (use-package reveal-in-osx-finder
   :ensure t
   :defer t
-  :bind ("C-c C-f" . reveal-in-osx-finder))
+  :commands (reveal-in-osx-finder))
 
 (provide 'config-navigation)
 ;;; config-navigation.el ends here

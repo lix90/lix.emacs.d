@@ -1,0 +1,40 @@
+alias rf (helm-recentf)
+alias s eshell/magit
+alias d deer $1
+alias g git $*
+alias la ls -lah
+alias gl2 git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+alias gl git log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+alias grh git reset --hard
+alias grb git rebase $*
+alias gst git status
+alias gco git checkout $*
+alias gbr git branch $*
+alias gs git stash
+alias gsp git stash pop
+alias gsc git svn dcommit
+alias gsr git svn rebase
+alias gd git diff --color $*
+alias gcn git clone --depth=1 $*
+alias sudo *sudo $*
+alias ll ls -lh $*
+alias ex exit
+alias x exit
+alias ec find-file $1
+alias e find-file $1
+alias vim find-file $1
+alias ff find-file $1
+alias fl (ivy-locate)
+alias FF find-file-other-window $1
+alias emacs find-file $1
+alias ed (eshell/cd "~/.emacs.d")
+alias pd (eshell/cd "~/projects")
+alias cc (find-file "~/.emacs.d/config.org")
+alias qq (evil-quit-all)
+alias qr restart-emacs
+alias m tldr $*
+alias therm rm
+alias rm trash $*
+alias yd ~/app/ydcv/ydcv.py $*
+alias fq /usr/local/Cellar/proxychains-ng/4.11/bin/proxychains4 $*
+alias download youtube-dl

@@ -11,6 +11,7 @@
 /srecode-map.el
 /places
 /cache/
+/.cache/
 /undo/
 /ac-comphist.dat
 *.elc
@@ -18,7 +19,8 @@
 .#*
 .DS_Store
 /#ido.last#
-/eshell/
 .mc-lists.el
 projectile-bookmarks.eld
 /url/
+/tramp
+.persistent-scratch

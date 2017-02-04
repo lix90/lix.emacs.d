@@ -1,55 +1,24 @@
-(require 'cl)
+;; tells emacs not to load any packages before starting up
 (setq package-enable-at-startup nil)
-
-;; debug
-(setq debug-on-error t)
-(setq debug-on-quit t)
-;; Increase the garbage collection threshold to decrease startup time
-(setq gc-cons-threshold 100000000)
-
-;; Show elapsed start-up time in mini-buffer
-;; (let ((emacs-start-time (current-time)))
-;;   (add-hook 'emacs-startup-hook
-;;             (lambda ()
-;;               (let ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
-;;                 (message "[Emacs initialized in %.3fs]" elapsed)))))
-
-;; List package archives and initialize them
-;; (setq package-enable-at-startup nil) ; tells emacs not to load any packages before starting up
 (setq load-prefer-newer t)
 
 (require 'package)
-(setq package-archives '(
-                         ;;("org"       . "http://orgmode.org/elpa/")
-                         ("org" . "http://elpa.emacs-china.org/org/")
-                         ;;("gnu"       . "http://elpa.gnu.org/packages/")
-                         ("gnu" . "http://elpa.emacs-china.org/gnu/")
-                         ;;("melpa"     . "https://melpa.org/packages/")
-                         ("melpa" . "http://elpa.emacs-china.org/melpa/")
-                         ))
+(setq package-archives
+      '(
+        ;;("org"       . "http://orgmode.org/elpa/")
+        ("org" . "http://elpa.emacs-china.org/org/")
+        ;;("gnu"       . "http://elpa.gnu.org/packages/")
+        ("gnu" . "http://elpa.emacs-china.org/gnu/")
+        ;;("melpa"     . "https://melpa.org/packages/")
+        ("melpa" . "http://elpa.emacs-china.org/melpa/")
+        ))
 (package-initialize)
 
+(setq package-user-dir (expand-file-name "elpa" user-emacs-directory))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file) (load custom-file))
 
-
-
-;; (when (>= emacs-major-version 24)
-;;   (require 'package)
-;;   ;;(setq package-archives '(("gnu" . "http://elpa.zilongshanren.com/gnu/")
-;;   ;;                         ("melpa" . "http://elpa.zilongshanren.com/melpa/"))
-;;   (add-to-list
-;;    'package-archives
-;;    ;;'(("gnu" . "https://elpa.zilongshanren.com/gnu/")
-;;    ;;   ("melpa" . "https://elpa.zilongshanren.com/melpa/"))
-;;    '("melpa" . "http://melpa.org/packages/")
-;;    ;; '("popkit" . "https://elpa.popkit.org/packages/")
-;;    ;;'("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/")
-;;    t)
-;;   (package-initialize))
-
-(setq package-user-dir (local-file-name "elpa"))
-
-(when (not package-archive-contents)
-  (package-refresh-contents))
+(when (not package-archive-contents) (package-refresh-contents))
 
 (unless (package-installed-p 'org)
   (package-refresh-contents)
@@ -59,49 +28,21 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(eval-when-compile
-  (require 'use-package))
+(defvar use-package-verbose t)
+
+(eval-when-compile (require 'use-package))
 (require 'diminish)
 (require 'bind-key)
 
-;; (use-package exec-path-from-shell
-;;   :ensure t
-;;   :init (exec-path-from-shell-initialize))
-
-;; (use-package auto-package-update
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (setq auto-package-update-interval 14)
-;;     (setq auto-package-update-delete-old-versions t)
-;;     (add-hook 'auto-package-update-before-hook
-;;               (lambda () (message "I will update packages now.")))))
-
-(use-package paradox
-  :ensure t
-  :defer t
-  :config
-  (setq paradox-execute-asynchronously t
-        paradox-github-token t))
-
-(use-package esup :ensure t :defer 5)
-
-;; turn debug off
-(setq debug-on-error nil)
-(setq debug-on-quit nil)
-
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
-
-
 (defconst user-cache-directory
-    (file-name-as-directory (concat user-emacs-directory ".cache"))
-    "My emacs storage area for persistent files.")
-  ;; create the `user-cache-directory' if it doesn't exist
+  (file-name-as-directory (concat user-emacs-directory ".cache"))
+  "My emacs storage area for persistent files.")
+;; create the `user-cache-directory' if it doesn't exist
 (make-directory user-cache-directory t)
 
-;;; backup
+;;;-----------------------------------------------------------------------------
+;;; Back-up and Histroy
+;;;-----------------------------------------------------------------------------
 (let ((auto-save-dir (concat user-cache-directory "auto-save")))
   ;; Move backup file to `~/.emacs.d/.cache/auto-save
   (setq auto-save-file-name-transforms
@@ -120,7 +61,69 @@
           (basic-save-buffer)))))
 (add-hook 'auto-save-hook 'full-auto-save)
 
+;; savehist keeps track of some history
+(use-package savehist
+  :ensure t
+  :defer t
+  :init (savehist-mode t)
+  :config
+  (setq savehist-additional-variables
+        '(search ring regexp-search-ring)
+        savehist-autosave-interval 60
+        savehist-file (concat user-cache-directory "savehist")))
+
+(use-package desktop
+  :ensure t
+  :defer t
+  :init (desktop-save-mode 0)
+  :config
+  (progn
+    ;; Automatically save and restore sessions
+    (make-directory (concat user-cache-directory "desktop") t)
+
+    (setq desktop-dirname (concat user-cache-directory "desktop")
+          desktop-base-file-name "emacs.desktop"
+          desktop-base-lock-name "lock"
+          desktop-path (list desktop-dirname)
+          desktop-save t
+          desktop-files-not-to-save "^$" ;reload tramp paths
+          desktop-load-locked-desktop nil)
+
+    (setq desktop-globals-to-save
+          (append '((extended-command-history . 30)
+                    (file-name-history        . 100)
+                    (grep-history             . 30)
+                    (minibuffer-history       . 50)
+                    (query-replace-history    . 30)
+                    (shell-command-history    . 50)
+                    tags-file-name
+                    register-alist))
+          desktop-locals-to-save nil)
+
+    (defun my-desktop ()
+      "Load the desktop and enable autosaving"
+      (interactive)
+      (let ((desktop-load-locked-desktop "ask"))
+        (desktop-read)
+        (desktop-save-mode 1)))
+    )
+  )
+
+;; save recent files
+(use-package recentf
+  :ensure t
+  :defer t
+  :init (recentf-mode t)
+  :config
+  (progn
+    (setq recentf-save-file (concat user-cache-directory "recentf")
+          recentf-max-saved-items 100
+          recentf-max-menu-items 25)))
+
+
 ;; garbage collection
+;; Increase the garbage collection threshold to decrease startup time
+(setq gc-cons-threshold 100000000)
 (eval-after-load 'minibuffer
   '(progn
      (lexical-let ((default-threshold gc-cons-threshold))
@@ -141,6 +144,52 @@
 (add-hook 'write-file-hooks 'time-stamp)
 
 
+;;; os setting
+(let ((is-mac (string-equal system-type "darwin")))
+  (when is-mac
+    ;; make fonts look better with anti-aliasing
+    (setq mac-allow-anti-aliasing t)
+    ;; delete files by moving them to the trash
+    (setq delete-by-moving-to-trash t)
+    (setq trash-directory "~/.Trash")
+
+    ;; Don't make new frames when opening a new file with Emacs
+    (setq ns-pop-up-frames nil)
+
+    ;; non-lion fullscreen
+    (setq ns-use-native-fullscreen nil)
+
+    ;; Set modifier keys
+    (setq mac-option-modifier 'meta) ;; Bind meta to ALT
+    (setq mac-command-modifier 'super) ;; Bind apple/command to super if you want
+    (setq mac-function-modifier 'hyper) ;; Bind function key to hyper if you want
+    (setq mac-right-option-modifier 'none) ;; unbind right key for accented input
+
+    ;; Make forward delete work
+    (global-set-key (kbd "<H-backspace>") 'delete-forward-char)
+
+    ;; Keybindings
+    (global-set-key (kbd "s-=") 'scale-up-font)
+    (global-set-key (kbd "s--") 'scale-down-font)
+    (global-set-key (kbd "s-0") 'reset-font-size)
+    (global-set-key (kbd "s-q") 'save-buffers-kill-terminal)
+    (global-set-key (kbd "s-v") 'yank)
+    (global-set-key (kbd "s-c") 'evil-yank)
+    (global-set-key (kbd "s-a") 'mark-whole-buffer)
+    (global-set-key (kbd "s-x") 'kill-region)
+    (global-set-key (kbd "s-w") 'delete-window)
+    (global-set-key (kbd "s-W") 'delete-frame)
+    (global-set-key (kbd "s-n") 'make-frame)
+    (global-set-key (kbd "s-z") 'undo-tree-undo)
+    (global-set-key (kbd "s-Z") 'undo-tree-redo)
+    (global-set-key (kbd "s-s")
+                    (lambda ()
+                      (interactive)
+                      (call-interactively (key-binding "\C-x\C-s"))))
+    (global-set-key (kbd "C-s-f") 'toggle-frame-fullscreen)
+    ;; Emacs sometimes registers C-s-f as this weird keycode
+    (global-set-key (kbd "<C-s-268632070>") 'toggle-frame-fullscreen)
+    ))
 
 (provide 'config-core.el)
 ;;; config-package.el ends here

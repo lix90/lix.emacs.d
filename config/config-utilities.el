@@ -1,45 +1,51 @@
-;;; Google Search In Emacs
-;; (use-package google-this
-;;   :ensure t
-;;   :diminish google-this-mode
-;;   :config
-;;   (google-this-mode 1))
+;;; upgrade-packages
+(use-package paradox
+  :ensure t
+  :commands (paradox-list-packages
+             paradox-upgrade-packages)
+  :defer 30
+  :config
+  (setq paradox-execute-asynchronously t
+        paradox-github-token t))
 
+(use-package esup
+  :ensure t
+  :commands (esup)
+  :defer 30)
+
+(use-package restart-emacs
+  :ensure t
+  :defer 20
+  :commands restart-emacs)
+
+(use-package help-fns+ :ensure t :defer 5)
 
 ;; dicts
 (use-package bing-dict
   :ensure t
-  :defer t
-  :bind ("C-c u d b" . bing-dict-brief))
-
-(use-package osx-dictionary
-  :ensure t
-  :defer t
-  :bind (("C-c u d a" . osx-dictionary-search-pointer)
-         ("C-c u d i" . osx-dictionary-search-input))
-  :config (progn (setq osx-dictionary-use-chinese-text-segmentation t
-                       osx-dictionary-dictionary-choice (list "Apple" "longman" "oxford"))))
+  :commands (bing-dict-brief)
+  :defer 20)
 
 (use-package youdao-dictionary
   :ensure t
-  :defer t
-  :bind ("C-c u d y" . youdao-dictionary-search-at-point))
+  :defer 20
+  :commands (youdao-dictionary-search-at-point))
 
-(use-package google-translate
-  :ensure t
-  :defer t
-  :bind (("C-c u d g" . google-translate-at-point)
-         ("C-c u d G" . google-translate-smooth-translate)
-         ("C-c u d r" . google-translate-at-point-reverse)
-         ("C-c u d R" . google-translate-query-translate-reverse))
-  :config
-  (progn (require 'google-translate-smooth-ui)
-         (setq google-translate-default-source-language "en"
-               google-translate-default-target-language "zh"
-               max-mini-window-height 0.5)
-         (setq google-translate-translation-directions-alist
-               '(("en" . "zh") ("zh" . "zh"))))
-  )
+;; (use-package google-translate
+;;   :ensure t
+;;   :defer t
+;;   :bind (("C-c u d g" . google-translate-at-point)
+;;          ("C-c u d G" . google-translate-smooth-translate)
+;;          ("C-c u d r" . google-translate-at-point-reverse)
+;;          ("C-c u d R" . google-translate-query-translate-reverse))
+;;   :config
+;;   (progn (require 'google-translate-smooth-ui)
+;;          (setq google-translate-default-source-language "en"
+;;                google-translate-default-target-language "zh"
+;;                max-mini-window-height 0.5)
+;;          (setq google-translate-translation-directions-alist
+;;                '(("en" . "zh") ("zh" . "zh"))))
+;;   )
 
 ;; project management
 ;; (use-package projectile
@@ -58,12 +64,6 @@
 ;;   (setq speedbar-use-images nil)
 ;;   (speedbar-add-supported-extension ".el")
 ;;   (add-hook 'speedbar-mode-hook #'(lambda () (visual-line-mode -1))))
-
-
-
-(use-package help-fns+
-  :ensure t)
-
 
 ;; (use-package emms
 ;;   :ensure t
@@ -129,4 +129,4 @@
 ;;                        w3m-use-cookies t
 ;;                        w3m-home-page "https://segmentfault.com")))
 
-(provide 'config-tool)
+(provide 'config-utilities)
