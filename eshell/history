@@ -1,32 +1,19 @@
-ls
 cd jrg-renwu9
-ls
 cd homework
-ls
 cd 李想
-ls
 pwd
 cd ..
-ls
 cd 
 cd jirengu/jrg-renwu9
-ls
 cd ..
-ls
 cd jirengu
-ls
 cd jrg-renwu9
-ls
 cd homework
-ls
 cd 李想
-ls
 rm -rf task003_html1
-ls
 mkdir task004_html1
 cd task004_html1
 touch task004_html1.md
-ls
 cd
 brew search canary
 brew cask install google-chrome-canary
@@ -45,13 +32,11 @@ cd
 rm .bashrc
 ln -s ~/.dotfiles/.bash_profile ~/.bashrc
 yd u
-ls
 ls -l
 ls -a
 mkdir --help
 m
 man ssh
-ls
 m
 /Users/lix/.bash_profile
 source ~/.bash_profile
@@ -68,3 +53,232 @@ m ssh
 yd
 download
 ?mv
+cd ~
+cd github
+fq gcn https://github.com/hlissner/.emacs.d hlissner.emacs.d
+f/Users/lix/.bash_profile 
+find-file /Users/lix/.bash_profile 
+find-file user-emacs-directory
+find-file ~/.emacs.d/eshell/alias
+fq
+cd ~/github
+fq gcn https://github.com/hlissner/.emacs.d hlissner.emacs.d
+gcn
+gcn https://github.com/hlissner/.emacs.d hlissner.emacs.d
+ls ~/.emacs.d/elpa/all-the-icons*
+ls ~/.emacs.d/elpa/all-the-icons-2*/
+ls ~/.emacs.d/elpa/all-the-icons-2*/data
+cd hlissner.emacs.d/
+cd core
+find-file ~/.emacs.d/eshell/alias
+e core-modeline.el 
+m zip
+m upzip
+m tar
+m gzip
+ls ~/Downloads/tmp/
+unzip ~/Downloads/tmp/modeline-hlissner.zip -d ./tmp_mode/
+cd ..
+cd core
+cd tmp_mode
+cd f80647f7a390bfe78a805a40b9c28e9b-6762b05dda42689d494ecd73d29f12bb8407c7f7/
+mv modeline.el ../../
+cd ../..
+rm tmp_mode/
+mv modeline.el tmp-modeline.el
+ff tmp-modeline.el 
+cp tmp-modeline.el ~/.emacs.d/config/config-modeline.el
+ff ~/.emacs.d/config/config-modeline.el
+/Users/lix/.emacs.d/
+ff init.el
+cd ~/.emacs.d/elpa
+cd all-the-icons-2*
+find-file ./.emacs.d/eshell/alias
+proxychains4 
+find-file ./.emacs.d/eshell/alias
+meshell/source
+m eshell/source
+eshell/source
+eshell/source "~/.emacs.d/eshell/alias"
+source-alias
+find-file ./.emacs.d/eshell/alias
+eshell/*
+source/alias
+eshell/alias
+cd .emacs.d
+s
+cd ..
+cd github
+gcnfq https://github.com/rakanalh/dotemacs/ rakanalh.emacs.d
+cd ../..
+cd github
+gcnfq
+gcnfq https://github.com/rakanalh/dotemacs/ rakanalh.emacs.d 
+gcn https://github.com/rakanalh/dotemacs/ rakanalh.emacs.d 
+eshell/clear
+
+cd
+cd github
+ll
+ls emacs
+ls hlissner.emacs.d/
+mv hlissner.emacs.d/ julienfantin.emacs.d/ lunaryorn.emacs.d/ magnars.emacs.d/ rakanalh.emacs.d/ emacs/
+ll
+ls emacs
+cd emacs
+cd rakanalh.emacs.d/
+f init.el
+ff init.el
+cd core
+help
+help spaceline-ml-main
+clear
+
+help active
+eshell/. ~/.emacs.d/eshell/alias
+cd ~/github/emacs
+cd hlissner.emacs.d/
+ls core
+cd core/
+ff core-ui.el 
+cd ..
+..
+cd ~/toolbox
+cd eeglab
+cd functions/
+cd miscfunc/
+ff eeg_regepochs
+ff eeg_regepochs.m
+...
+..
+cd ~
+cd projects/eeglab_pipeline/
+cp pip_yu_resting/ dependencies/ ~/Desktop/
+m cp
+/Users/lix/Desktop/pip_yu_resting
+mkdir /Users/lix/Desktop/pip_yu_resting
+cp pip_yu_/Users/lix/Desktop/pip_yu_resting/
+cp pip_yu_resting /Users/lix/Desktop/pip_yu_resting/
+cp ./pip_yu_resting/ /Users/lix/Desktop/pip_yu_resting/
+cp -r ./pip_yu_resting/ /Users/lix/Desktop/pip_yu_resting/
+cp -r ./dependencies/ /Users/lix/Desktop/pip_yu_resting/
+ls ~/Desktop/pip_yu_resting/
+m zip
+zip -r pip_yu_resting.zip ~/Desktop/pip_yu_resting/ -x \*.DS_Store\$
+ls ~/Desktop/
+mv pip_yu_resting.zip ~/Desktop
+brew fonts install github-octicons
+brew install fonts/github-octicons
+..
+cd github
+mv emacs/ ~/projects/
+cd ..
+cd projects/
+cd emacs
+gcnfq https://github.com/domtronn/emacs domtronn.emacs.d
+gcnfq https://github.com/domtronn/emacs.git domtronn.emacs.d
+cd
+ls -a
+ls *proxy*
+ls .config
+sudo ff /etc/proxyconf
+sudo emacs /etc/proxychains.conf
+ls dotfiles/
+ls /usr/local/bin/etc/proxychains.conf
+ls /usr/local/bin/etc/
+ls /usr/local/etc/proxychains.conf
+rm /usr/local/etc/proxychains.conf
+ln -s dotfiles/proxychains.conf /usr/local/etc/proxychains.conf
+cd projects/emacs/ && gcnfq https://github.com/domtronn/emacs.git domtronn.emacs.d
+gcnfq https://github.com/domtronn/emacs.git domtronn.emacs.d
+cd
+cd dotfiles
+ln -s proxychains.conf /usr/local/etc/proxychains.conf
+rm /usr/local/etc/proxychains.conf
+rm -f /usr/local/etc/proxychains.conf
+rm /usr/local/etc/proxychains.conf
+therm -rf /usr/local/etc/proxychains.conf 
+therm /usr/local/etc/proxychains.conf 
+ls /usr/local/etc/
+ff /usr/local/etc/proxychains.conf
+cd dotfiles/
+ff proxychains.conf
+rm
+therm
+m rm
+eshell/rm
+eshell/rm /usr/local/etc/proxychains.conf 
+ln -s proxychains.conf /usr/local/etc/proxychains.conf
+gcnfq https://github.com/domtronn/emacs.git ~/projects/emacs/domtronn.emacs.d
+~/dotfiles [master +0 ~3 -0] $
+cd
+ls config
+ls config*
+mv config* ~/.emacs.d/config/
+cd ~/.emacs.d/config/
+cd ~
+cd projects/emacs/
+cd domtronn.emacs.d/
+ff init.el 
+ls elisp
+cd elisp
+cd eslint-reader/
+ls
+yd "坚实"
+yd "陈述"
+yd "效度"
+yd "削弱"
+yd "丰富"
+yd "足够"
+brew 
+which bre
+brwe
+brwe
+echo
+echo $PATH
+brew
+brwe
+brew
+brew linkapps --help
+cd projects/emacs/rakanalh.emacs.d/
+sd
+m
+cl
+clear
+
+cp -r /usr/local/Cellar/emacs/24.2/Emacs.app /Applications/
+cp -r /usr/local/Cellar/emacs/25.*/Emacs.app /Applications/
+cp -r /usr/local/Cellar/emacs/25.1.91/Emacs.app /Applications/
+rm /Applications/Emacs.app/
+cp -r /usr/local/Cellar/emacs/25.1.91/Emacs.app /Applications/
+rm /Applications/Emacs.app/
+brew linkapps
+brew info emacs
+yd "诚实"
+yd "如实"
+yd "显眼"
+yd "描述"
+yd "啰嗦"
+sdcv
+sdcv --help
+srcalias 
+dweb
+fa
+d21 congruency
+brew install coreutils
+m gls
+gls
+gls -l
+brew cask search nerd-font
+fq
+fq brew cask install font-hack-nerd-font
+unlink /usr/local/etc/proxychains.conf 
+cp ~/dotfiles/proxychains.conf ~/.proxychains.conf
+fq brew cask install font-hack-nerd-font
+cp ~/dotfiles/proxychains.conf /usr/local/etc/proxychains.conf
+fq brew cask install font-hack-nerd-font
+brew cask install font-hack-nerd-font
+cd
+mv linum-highligth-current-line-number.el ./.emacs.d/elisp/
+mkdir ./.emacs.d/elisp
+mv linum-highligth-current-line-number.el ./.emacs.d/elisp/

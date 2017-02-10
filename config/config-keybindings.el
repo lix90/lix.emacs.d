@@ -6,6 +6,7 @@
  ;; "D" 'deer-jump-other-window
  ;; "e" 'server-edit
  "h" 'ivy-resume
+ "i" 'ivy-imenu-anywhere
  ;; "N" 'research-notes
  ;; "n" 'big-notes
  "d" 'my-desktop
@@ -23,10 +24,12 @@
  "Ir" 'R
  "Ip" 'run-python
  "Ie" 'eshell
+ "IE" 'lix--eshell-buffer
  "Is" 'shell
  "Ij" 'run-js
  "Ii" 'ielm
- "Im" 'matlab-shell)
+ "Im" 'matlab-shell
+ )
 
 ;; (leader-key
 ;;  "a"  '(:ignore t :which-key "Applications")
@@ -258,6 +261,7 @@
  "P" '(:ignore t :which-key "Packages")
  "Pl" 'paradox-list-packages
  "Pu" 'paradox-upgrade-packages
+ "Pn" 'package-utils-upgrade-by-name
  )
 
 
@@ -298,17 +302,22 @@
 
 (leader-key
  "s" '(:ignore t :which-key "Search")
+ "sb" 'bing-dict-brief
  "sj" 'forward-or-backward-sexp
- ;;"sl" 'last-search-buffer
  "ss" 'swiper
- "sw" 'ace-jump-word-mode
- "sl" 'ace-jump-line-mode
- "sc" 'ace-jump-char-mode
+ ;; avy
+ "sw" 'avy-goto-word-or-subword-1
+ "sl" 'avy-goto-line
+ "sc" 'avy-goto-char
+ ;; multi-cursor
  "sa" 'mc/mark-all-like-this
  "sA" 'mc/mark-all-words-like-this
  "sn" 'mc/mark-next-like-this
  "sN" 'mc/mark-previous-like-this
+ "sC" 'counsel-colors-emacs
  )
+
+
 
 
 (leader-key
@@ -331,7 +340,9 @@
  "to" 'org-toggle-link-display
  "tp" 'smartparens-mode
  "tr" 'rainbow-identifiers-mode
- "ts" 'toggle-dark-light-theme
+ "tR" 'rainbow-mode
+ ;;"ts" 'toggle-dark-light-theme
+ "ts" 'flyspell-mode
  "tw" 'writeroom-mode
  "tt" 'counsel-load-theme
  "tT" 'lix--toggle-transparency

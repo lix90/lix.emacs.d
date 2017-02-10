@@ -1,370 +1,166 @@
-;;; looking --- looking configuration:
+;; looking ---looking configuration:
 ;;; Commentary:
 ;;; Code:
 
-
-;; disable startup screen and *scratch* message
-(setq inhibit-startup-screen t
-      initial-scratch-message nil
-      ;; nice scrolling
-      scroll-margin 0
-      scroll-conservatively 100000
-      scroll-preserve-screen-position 1
-      cursor-in-non-selected-windows nil
-      use-dialog-box nil
-      ring-bell-function 'ignore)
-
-(fset 'yes-or-no-p 'y-or-n-p)
-(setq kill-buffer-query-functions
-      (remq 'process-kill-buffer-query-function
-            kill-buffer-query-functions))
-
-;; visual line
-(global-visual-line-mode 1)
-(diminish 'global-visual-line-mode)
-(diminish 'visual-line-mode)
-
-(setq display-time-format "%a %b %d | %H:%M |")
-(display-time-mode)
-
 (use-package better-defaults :ensure t :defer t)
 
-;; Centered Cursor Mode
-(use-package centered-cursor-mode
-  :ensure t
-  :defer 10
-  :diminish centered-cursor-mode
-  :init (global-centered-cursor-mode)
-  :commands (centered-cursor-mode
-             global-centered-cursor-mode)
-  :config
-  (progn
-    (setq ccm-recenter-at-end-of-file t
-          ccm-ignored-commands '(mouse-drag-region
-                                 mouse-set-point
-                                 widget-button-click
-                                 scroll-bar-toolkit-scroll
-                                 evil-mouse-drag-region))))
-
-;; --------------------
-;; Diminish
-;; --------------------
-;; (use-package diminish :defer 2)
-(diminish 'visual-line-mode)
-(eval-after-load "company" '(diminish 'company-mode "Ⓒ"))
-(eval-after-load "aggressive-indent" '(diminish 'aggressive-indent-mode "Ⓘ"))
-(eval-after-load "smartparens" '(diminish 'smartparens-mode "ⓟ"))
-(eval-after-load "yasnippet" '(diminish 'yas-minor-mode "ⓨ"))
-(eval-after-load "ivy" '(diminish 'ivy-mode "ⓘ"))
-(eval-after-load "compile" '(diminish 'compilation-shell-minor-mode ">"))
-(eval-after-load "flyspell" '(diminish 'flyspell-mode "Ⓢ")) 
-(eval-after-load "eldoc" '(diminish 'eldoc-mode "𝓓"))
-(eval-after-load "whitespace-cleanup-mode" '(diminish 'whitespace-cleanup-mode ""))
-(eval-after-load "lispy" '(diminish 'lispy-mode "")) 
-(eval-after-load "lispyville" '(diminish 'lispyville-mode "Ⓛ")) 
-(eval-after-load "centered-window-mode" '(diminish 'centered-window-mode "⦿"))
-(eval-after-load "org-indent" '(diminish 'org-indent-mode))
-(eval-after-load "simple" '(diminish 'auto-fill-function "Ⓕ")) 
-(eval-after-load "pandoc-mode" '(diminish 'pandoc-mode "Ⓟ"))
-(eval-after-load "git-gutter+" '(diminish 'git-gutter+-mode))
-(eval-after-load "reftex" '(diminish 'reftex-mode "ⓡ"))
-(eval-after-load "autorevert" '(diminish 'auto-revert-mode "Ⓡ"))
-(eval-after-load "simple" '(diminish 'auto-revert-mode "Ⓡ"))
-(eval-after-load "auto-indent-mode" '(diminish 'auto-indent-mode "ⓘ"))
-(eval-after-load "org-zotxt" '(diminish 'org-zotxt-mode ""))
-(eval-after-load "undo-tree" '(diminish 'undo-tree-mode "Ⓤ"))
-(eval-after-load "projectile" '(diminish 'projectile-mode ""))
-(eval-after-load "ess-site" '(diminish 'key-combo-mode ""))
-
-(use-package cyphejor
-  :ensure t
-  :defer t
-  :init
-  (progn
-    (setq
-     cyphejor-rules
-     '(;;:upcase
-       ("bookmark" "→")
-       ("buffer" "β")
-       ("diff" "Δ")
-       ("dired" "δ")
-       ("emacs" "ε")
-       ("Emacs" "ε")
-       ("fundamental" "Ⓕ")
-       ("inferior" "i" :prefix)
-       ("interaction" "i" :prefix)
-       ("interactive" "i" :prefix)
-       ("lisp" "λ" :postfix)
-       ("menu" "▤" :postfix)
-       ("mode" "" :postfix)
-       ("package" "↓")
-       ("python" "π")
-       ("shell" "sh" :postfix)
-       ("text" "ξ")
-       ("wdired" "↯δ")
-       ("ess" "𝓔")
-       ("Markdown" "𝓜")
-       ("markdown" "𝓜")))
-    (cyphejor-mode 1))
-  )
-
-;; ----------------
+;;
 ;; Font
-;; ----------------
-(set-face-attribute 'default nil
-                    :family "Source Code Pro"
-                    :height 120
-                    :weight 'normal
-                    :width 'normal)
+;;
 
-;; ----------------
-;; Highlight line numbers
-;; ----------------
-;; line number spacing
-(setq linum-format "%4d ")
+(add-hook 'after-init-hook
+          (lambda ()
+            (fringe-mode '(8 . 2)) ; Make fringe look good with git-gutter-fringe+
+            (set-face-attribute
+             'default nil
+             :family "Source Code Pro"
+             :height 120
+             :weight 'normal
+             :width 'normal)
+            ))
 
 ;; Highlight current line number
-(use-package hlinum
-  :ensure t
-  :defer t
+(use-package hlinum :ensure t :defer t :disabled t
   :commands hlinum-mode
   :init
   (add-hook 'linum-mode-hook 'hlinum-activate)
   (add-hook 'prog-mode-hook 'linum-mode))
 
-(use-package highlight-numbers
-  :ensure t
-  :defer t
+(add-hook 'package-menu-mode-hook 'hl-line-mode)
+(add-hook 'buffer-menu-mode-hook 'hl-line-mode)
+
+(use-package linum-hl-cl-number :load-path "elisp"
+  :init (setq linum-format 'linum-highlight-current-line))
+
+(use-package highlight-numbers :ensure t :defer t :disabled t
+  :init (add-hook 'prog-mode-hook #'highlight-numbers-mode))
+
+(use-package hl-todo :ensure t
+  :init (global-hl-todo-mode t)
+  :config
+  (define-key hl-todo-mode-map (kbd "C-c p") 'hl-todo-previous)
+  (define-key hl-todo-mode-map (kbd "C-c n") 'hl-todo-next)
+  (define-key hl-todo-mode-map (kbd "C-c o") 'hl-todo-occur)
+  (setq hl-todo-keyword-faces
+        '(("HOLD" . "#d0bf8f")
+          ("TODO" . "#cc9393")
+          ("NEXT" . "#dca3a3")
+          ("THEM" . "#dc8cc3")
+          ("PROG" . "#7cb8bb")
+          ("OKAY" . "#7cb8bb")
+          ("DONT" . "#5f7f5f")
+          ("FAIL" . "#8c5353")
+          ("DONE" . "#afd8af")
+          ("FIXME" . "#cc9393")
+          ("XXX"   . "#cc9393")
+          ("XXXX"  . "#cc9393")
+          ("???"   . "#cc9393")))
+;;; global-hl-todo-modeで有効にするメジャーモード(derived-mode)
+  (setq hl-todo-activate-in-modes
+        '(prog-mode markdown-mode))
+  ;;(global-hl-todo-mode 1)
+  )
+
+;;------------------------------------------------------------------------------
+;; UI
+;;------------------------------------------------------------------------------
+
+(use-package fancy-battery :ensure t :after spaceline
+  :defer 10 :config (fancy-battery-mode))
+(use-package powerline :ensure t :if window-system
+  :config (setq-default powerline-default-separator 'nil))
+(use-package spaceline :ensure t
+  :config (setq-default mode-line-format '("%e" (:eval (spaceline-ml-ati)))))
+(use-package spaceline-custom :after spaceline :load-path "config")
+(use-package spaceline-colors :after spaceline-custom  :load-path "config"
+  :init (add-hook 'after-init-hook 'spaceline-update-faces)
+  :config (advice-add 'load-theme :after 'spaceline-update-faces))
+
+;; Themed with Spaceline
+(use-package gruvbox-theme :ensure t :defer t)
+(use-package creamsody-theme :ensure t)
+(use-package suscolors-theme :ensure t :defer t)
+(use-package atom-one-dark-theme :ensure t :defer t)
+(use-package forest-blue-theme :ensure t :defer t)
+(use-package liso-theme :ensure t :defer t)
+(use-package peacock-theme :ensure t :defer t)
+(use-package solarized-theme :ensure t :defer t)
+(use-package darktooth-theme :ensure t :defer t)
+(use-package spacemacs-theme :ensure t :defer t)
+
+(defun remove-mode-line-box (&rest args)
+  (set-face-attribute 'mode-line nil :box nil :underline nil)
+  (set-face-attribute 'mode-line-inactive nil :box nil :underline nil))
+
+(when is-mac
+  (load-theme 'atom-one-dark t))
+
+(if (not (display-graphic-p))
+    (load-theme 'gruvbox t))
+
+;; (when window-system
+;;   (remove-mode-line-box)
+;;   (load-theme 'spacemacs-light))
+
+(use-package cyphejor :ensure t :defer t
+  :init 
+  (setq
+   cyphejor-rules
+   '(:upcase
+     ("bookmark" "→")
+     ("buffer" "β")
+     ("diff" "Δ")
+     ("dired" "δ")
+     ("emacs" "ε")
+     ("Emacs" "ε")
+     ("fundamental" "Ⓕ")
+     ("inferior" "i" :prefix)
+     ("interaction" "i" :prefix)
+     ("interactive" "i" :prefix)
+     ("lisp" "λ" :postfix)
+     ("menu" "▤" :postfix)
+     ("mode" "" :postfix)
+     ("package" "↓")
+     ("python" "π")
+     ("shell" "sh" :postfix)
+     ("text" "ξ")
+     ("wdired" "↯δ")
+     ("ess" "𝓔") 
+     ("markdown" "𝓜")
+     ))
+  (cyphejor-mode 1)
+  )
+
+(use-package git-gutter+ :ensure t :diminish (git-gutter+-mode)
   :init
-  (add-hook 'prog-mode-hook #'highlight-numbers-mode))
-
-(use-package hl-todo
-  :ensure t
-  :defer t
+  (add-hook 'markdown-mode-hook #'git-gutter+-mode)
+  (add-hook 'prog-mode-hook #'git-gutter+-mode)
   :config
-  (setq global-hl-todo-mode t))
+  (set-face-foreground 'git-gutter+-added    "royal blue")
+  (set-face-foreground 'git-gutter+-modified "orange")
+  (set-face-foreground 'git-gutter+-deleted  "hot pink")
+  )
 
-;; Mode line
-(use-package spaceline-config
-  :ensure spaceline
-  :commands (powerline-reset)
-  :defer t
+(use-package git-gutter-fringe+ :ensure t :after git-gutter+
+  :if (display-graphic-p)
+  :commands (git-gutter+-mode)
   :init
-  (progn
-    (powerline-reset))
-  :config
-  (progn
-    (setq powerline-default-separator 'nil)
-    (setq powerline-height 18)
-    (setq powerline-raw " ")
-    ;; nil - don't use srgb & get proper powerline faces
-    (setq ns-use-srgb-colorspace nil)
-    ;; fancy git icon for the modeline
-    (defadvice vc-mode-line (after strip-backend () activate)
-      (when (stringp vc-mode)
-        (let ((gitlogo (replace-regexp-in-string "^ Git." ":" vc-mode)))
-          (setq vc-mode gitlogo))))
-    ;; (require 'spaceline-config)
-    (spaceline-toggle-buffer-size-off)
-    (spaceline-spacemacs-theme)
-    (setq spaceline-buffer-encoding-abbrev-p nil
-          spaceline-window-numbers-unicode t
-          spaceline-line-column-p nil
-          spaceline-buffer-id-p nil
-          spaceline-minor-modes-separator nil)
-    ))
-
-;; (use-package fancy-battery
-;;   :ensure t
-;;   :after spaceline
-;;   :defer t
-;;   :init (fancy-battery-mode)
-;;   :config
-;;   (setq display-time-format "%a %b %d | %H:%M |")
-;;   (display-time-mode))
-
-(use-package smooth-scrolling
-  :disabled t
-  :defer 5
-  :config
-  (progn
-    (setq smooth-scroll-margin 2)
-    (setq mouse-wheel-scroll-amount '(1 ((shift) .1) ((control) . nil)))
-    (setq mouse-wheel-progressive-speed nil))
-  :init (smooth-scrolling-mode 1))
-
-(use-package solarized-theme
-  :ensure t
-  :if (display-graphic-p) 
-  :init
-  (progn
-    ;; don't make the fringe stand out from the background
-    (setq solarized-distinct-fringe-background nil)    
-    ;; change the font for some headings and titles
-    (setq solarized-use-variable-pitch t)
-    ;; make the modeline high contrast
-    (setq solarized-high-contrast-mode-line t)
-    ;; Use bolding
-    (setq solarized-use-less-bold nil)
-    ;; Use more italics
-    (setq solarized-use-more-italic t)
-    ;; Use colors for indicators such as git:gutter, flycheck and similar
-    (setq solarized-emphasize-indicators t)
-    ;; Don't change size of org-mode headlines (but keep other size-changes)
-    (setq solarized-scale-org-headlines t) 
-    ;; don't italicize line numbers
-    (add-hook 'after-make-frame-functions
-              (lambda (frame)
-                (select-frame frame)
-                (if (display-graphic-p)
-                    (set-face-attribute 'linum frame
-                                        :background (face-attribute 'default :background)
-                                        :foreground (face-attribute 'linum :foreground)
-                                        :slant 'normal))))
-    (load-theme 'solarized-dark t)
-    :config
-    (progn
-      ;; Theme toggle
-      (setq active-theme 'solarized-dark)
-      (defun toggle-dark-light-theme ()
-        (interactive)
-        (if (eq active-theme 'solarized-light)
-            (setq active-theme 'solarized-dark)
-          (setq active-theme 'solarized-light))
-        (load-theme active-theme)
-        (powerline-reset))
-      )))
-
-
-;; An alternative solarized theme
-;; (use-package color-theme-sanityinc-solarized
-;;   :ensure t
-;;   :disabled t
-;;   :config
-;;   (progn
-;;     (load-theme 'sanityinc-solarized-dark t)))
-
-(use-package gruvbox-theme
-  :ensure t
-  :defer t
-  :if (not (display-graphic-p))
-  :config
-  (load-theme 'gruvbox t))
-
-(use-package uniquify
-  :ensure nil
-  :defer t
-  :config
-  (setq uniquify-buffer-name-style 'forward
-        uniquify-separator "/"
-        uniquify-after-kill-buffer-p t
-        uniquify-ignore-buffers-re "^\\*"))
-
-(use-package which-key
-  :defer 5
-  :diminish which-key-mode
-  :config
-  (progn
-    (setq which-key-special-keys nil)
-    ;; Set the time delay (in seconds) for the which-key popup to appear.
-    (setq which-key-idle-delay 0.2)
-    (which-key-mode)
-    ))
-
-;; (use-package smart-mode-line
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (setq sml/no-confirm-load-theme t)
-;;     (setq sml/theme 'light
-;;           sml/shorten-directory t
-;;           sml/shorten-modes t)))
-
-;; (use-package transpose-frame
-;;   :ensure t
-;;   :defer t)
-
-;; (use-package color-theme-approximate
-;;   :ensure t
-;;   :defer t
-;;   :init
-;;   (color-theme-approximate-on))
-
-;; (use-package rainbow-identifiers
-;;   :ensure t
-;;   :commands (global-rainbow-identifiers-mode
-;;              rainbow-identifiers-mode)
-;;   :init
-;;   (progn
-;;     ;; copied from spacemacs
-;;     ;; (setq rainbow-identifiers-choose-face-function 'rainbow-identifiers-cie-l*a*b*-choose-face
-;;     ;;       rainbow-identifiers-cie-l*a*b*-saturation 100
-;;     ;;       rainbow-identifiers-cie-l*a*b*-lightness 40
-;;     ;;       ;; override theme faces
-;;     ;;       rainbow-identifiers-faces-to-override '(highlight-quoted-symbol
-;;     ;;                                               font-lock-keyword-face
-;;     ;;                                               font-lock-function-name-face
-;;     ;;                                               font-lock-variable-name-face))
-;;     (add-hook 'prog-mode-hook 'rainbow-identifiers-mode)))
-
-;; (use-package indent-guide
-;;   :ensure t
-;;   :init
-;;   (indent-guide-global-mode)
-;;   ;; #fdf6e3 for light theme
-;;   (set-face-foreground 'indent-guide-face (face-foreground 'default))
-;;   (setq indent-guide-delay 0.1
-;;         indent-guide-recursive t
-;;         indent-guide-char "|"))
-
-;; (use-package monokai-theme
-;;   :ensure t
-;;   :init
-;;   (load-theme 'monokai t))
-
-;; (use-package golden-ratio
-;;   :ensure t
-;;   :diminish golden-ratio-mode
-;;   :init
-;;   (golden-ratio-mode t)
-;;   (setq golden-ratio-adjust-factor .8
-;;         golden-ratio-wide-adjust-factor .8
-;;         golden-ratio-exclude-modes '("projectile-mode" "project-explorer-mode"))
-;;   (golden-ratio-toggle-widescreen))
-
-;; (use-package emojify
-;;   :ensure t
-;;   :init (add-hook 'after-init-hook #'global-emojify-mode))
-;; (use-package powerline
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (powerline-default-theme)
-;;     (setq powerline-default-separator 'arrow)
-;;     (setq powerline-height 18)
-;;     (setq powerline-raw " ")
-;;     (setq ns-use-srgb-colorspace nil)))
-;; (use-package spaceline
-;;   :ensure t
-;;   :init (progn
-;;           (require 'spaceline-config)
-;;           (setq powerline-default-separator 'arrow)
-;;           (setq powerline-height 18)
-;;           (setq powerline-raw " ")
-;;           (setq ns-use-srgb-colorspace nil)
-;;           (spaceline-spacemacs-theme)))
-;; (use-package moe-theme
-;;   :ensure t
-;;   :init
-;;   (progn (moe-theme-set-color 'red)
-;;          (powerline-moe-theme)))
-;; (set moe-theme-highlight-buffer-id t)
-;; (Available colors: blue, orange, green ,magenta, yellow, purple, red, cyan, w/b.)
-;; (moe-dark)
-;; auto-revert
-;; (global-auto-revert-mode)
-;; (setq global-auto-revert-non-file-buffers t
-;;       auto-revert-verbose t)
+  (require 'git-gutter-fringe+)
+  (setq git-gutter-fr+-side 'right-fringe) 
+  (define-fringe-bitmap 'git-gutter-fr+-added
+    ;;[224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
+    [248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248]
+    nil nil 'center)
+  (define-fringe-bitmap 'git-gutter-fr+-modified
+    ;;[224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
+    [248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248]
+    nil nil 'center)
+  (define-fringe-bitmap 'git-gutter-fr+-deleted
+    ;;[0 0 0 0 0 0 0 0 0 0 0 0 0 128 192 224 240 248] 
+    ;;[224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
+    [248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248]
+    nil nil 'center)
+  )
 
 (provide 'config-appearance)
 ;;; config-appearance.el ends here

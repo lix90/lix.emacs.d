@@ -136,13 +136,13 @@
        (add-hook 'minibuffer-exit-hook #'my/minibuffer-gc-exit-hook))))
 (setq garbage-collection-messages t)
 
+
 ;; Time stamps
 (setq
  time-stamp-active t          ; do enable time-stamps
  time-stamp-line-limit 10     ; check first 10 buffer lines for Time-stamp:
  time-stamp-format "Last modified on %04y-%02m-%02d %02H:%02M:%02S (%U)")
 (add-hook 'write-file-hooks 'time-stamp)
-
 
 ;;; os setting
 (let ((is-mac (string-equal system-type "darwin")))
@@ -190,6 +190,27 @@
     ;; Emacs sometimes registers C-s-f as this weird keycode
     (global-set-key (kbd "<C-s-268632070>") 'toggle-frame-fullscreen)
     ))
+
+
+(setq buffer-file-coding-system 'utf-8-unix)
+(setq abbrev-file-name (concat user-cache-directory "abbrev_defs"))
+
+
+;;; UI
+(use-package fancy-battery :ensure t
+  :after spaceline :defer 10 :config (fancy-battery-mode))
+(use-package powerline :ensure t
+  :if window-system
+  :config (setq-default powerline-default-separator 'nil))
+
+(use-package spaceline-custom :after spaceline :load-path "config/spaceline-custom")
+(use-package spaceline-colors :after spaceline-custom :load-path "config/spaceline-colors"
+  :init (add-hook 'after-init-hook 'spaceline-update-faces)
+  :config (advice-add 'load-theme :after 'spaceline-update-faces))
+
+(use-package spaceline :after powerline :ensure t
+  :config (setq-default mode-line-format '("%e" (:eval (spaceline-ml-ati)))))
+
 
 (provide 'config-core.el)
 ;;; config-package.el ends here

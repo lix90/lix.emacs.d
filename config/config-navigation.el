@@ -17,6 +17,10 @@
       mouse-yank-at-point t       ;; yank at cursor, NOT at mouse position
       kill-whole-line t)
 
+(use-package imenu-anywhere :ensure t :after ivy
+  :commands (imenu-anywhere
+             ivy-imenu-anywhere))
+
 ;;; swiper, flx, counsel, ivy
 (use-package flx :ensure t :defer t)
 (use-package swiper
@@ -36,16 +40,13 @@
         ivy-height 20
         ivy-use-virtual-buffers t))
 
-(use-package which-key
-  :ensure t
-  :defer t
+(use-package which-key :ensure t
   :diminish which-key-mode
   :init
-  (progn
-    (which-key-mode))
+  (which-key-mode)
+  (which-key-setup-minibuffer)
   :config
   (progn
-    (which-key-setup-minibuffer)
     (setq which-key-popup-type 'side-window
           which-key-side-window-location 'bottom
           which-key-side-window-max-height 0.35
@@ -72,6 +73,34 @@
                            space-after-tab)
         whitespace-line-column 80))
 
+(use-package smooth-scrolling
+  :disabled t
+  :defer 5
+  :config
+  (progn
+    (setq smooth-scroll-margin 2)
+    (setq mouse-wheel-scroll-amount '(1 ((shift) .1) ((control) . nil)))
+    (setq mouse-wheel-progressive-speed nil))
+  :init (smooth-scrolling-mode 1))
+
+;; Centered Cursor Mode
+;; (use-package centered-cursor-mode
+;;   :ensure t
+;;   :defer 10
+;;   :diminish centered-cursor-mode
+;;   :init (global-centered-cursor-mode)
+;;   :commands (centered-cursor-mode
+;;              global-centered-cursor-mode)
+;;   :config
+;;   (progn
+;;     (setq ccm-recenter-at-end-of-file t
+;;           ccm-ignored-commands '(mouse-drag-region
+;;                                  mouse-set-point
+;;                                  widget-button-click
+;;                                  scroll-bar-toolkit-scroll
+;;                                  evil-mouse-drag-region))))
+
+
 (use-package general
   :ensure t
   :init
@@ -81,15 +110,18 @@
                           :prefix "SPC"
                           :non-normal-prefix "H-SPC"))
 
-;; (use-package avy
+(use-package avy :ensure t
+  :commands (avy-goto-char)
+;  :init
+  ;(general-define-key
+   ;:state '(emacs))
+  )
+;; (use-package ace-jump-mode
 ;;   :ensure t
-;;   :commands (avy-goto-char))
-(use-package ace-jump-mode
-  :ensure t
-  :defer t
-  :commands (ace-jump-word-mode
-             ace-jump-char-mode
-             ace-jump-line-mode))
+;;   :defer t
+;;   :commands (ace-jump-word-mode
+;;              ace-jump-char-mode
+;;              ace-jump-line-mode))
 
 ;;; navigate text
 (use-package move-text
@@ -100,22 +132,19 @@
   ("H-p" . move-text-up))
 
 ;;; navigate window
-(use-package window-numbering
-  :ensure t
+(use-package window-numbering :ensure t
   :config
-  (progn
-    (defun window-numbering-install-mode-line (&optional position)
-      "Do nothing, the display is handled by the powerline.")
-    (setq window-numbering-auto-assign-0-to-minibuffer nil)
-    (leader-key
-     "0" 'select-window-0
-     "1" 'select-window-1
-     "2" 'select-window-2
-     "3" 'select-window-3
-     "4" 'select-window-4
-     "5" 'select-window-5)
-    (window-numbering-mode 1))
-
+  (defun window-numbering-install-mode-line (&optional position)
+    "Do nothing, the display is handled by the powerline.")
+  (setq window-numbering-auto-assign-0-to-minibuffer nil)
+  (leader-key
+   "0" 'select-window-0
+   "1" 'select-window-1
+   "2" 'select-window-2
+   "3" 'select-window-3
+   "4" 'select-window-4
+   "5" 'select-window-5)
+  (window-numbering-mode 1)
   (defun spacemacs//window-numbering-assign (windows)
     "Custom number assignment for special buffers."
     (mapc (lambda (w)
@@ -123,8 +152,7 @@
                        (eq w neo-global--window))
               (window-numbering-assign w 0)))
           windows))
-  (add-hook 'window-numbering-before-hook 'spacemacs//window-numbering-assign)
-  (add-hook 'neo-after-create-hook '(lambda (w) (window-numbering-update))))
+  (add-hook 'window-numbering-before-hook 'spacemacs//window-numbering-assign))
 
 ;; (use-package windmove
 ;;   :defer t
@@ -134,34 +162,41 @@
 ;;     (interactive)
 ;;     (split-window-right)
 ;;     (windmove-right))
-;;   (defun split-window-below-and-focus ()
+                                        ;   (defun split-window-below-and-focus ()
 ;;     "Split the window vertically and focus the new window."
 ;;     (interactive)
 ;;     (split-window-below)
 ;;     (windmove-down))
-;;   ;; add edit mode keybindings
 ;;   (global-set-key (kbd "<H-up>")     'windmove-up)
 ;;   (global-set-key (kbd "<H-down>")   'windmove-down)
 ;;   (global-set-key (kbd "<H-left>")   'windmove-left)
 ;;   (global-set-key (kbd "<H-right>")  'windmove-right)
 ;;   )
 
-(use-package dired-details
-  :ensure t
-  :defer t
+(use-package dired-details+ :ensure t :defer t
+  :ensure dired-details
   :config
-  (progn
-    (require 'dired)
-    (setq-default dired-details-hidden-string "--- ")
-    (setq dired-dwim-target t)
-    ;; Reload dired after making changes
-    (--each '(dired-do-rename
-              dired-do-copy
-              dired-create-directory
-              wdired-abort-changes)
-      (eval `(defadvice ,it (after revert-buffer activate)
-               (revert-buffer))))
-    ))
+  (require 'dired)
+  (add-hook 'dired-load-hook
+            (lambda ()
+              (dired-hide-details-mode +1)
+              ;; allow dired to delete or copy dir
+              (setq dired-recursive-copies 'always) ; “always” means no asking
+              (setq dired-recursive-deletes 'top) ; “top” means ask once
+              (setq insert-directory-program (executable-find "gls"))
+              (setq dired-details-hidden-string " ")
+              (setq dired-dwim-target t)
+              (define-key dired-mode-map (kbd "RET")
+                'dired-find-alternate-file) ; was dired-advertised-find-file
+              (define-key dired-mode-map (kbd "^")
+                (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+              ))
+  (add-hook 'dired-mode-hook 'hl-line-mode)
+  (use-package dired+ :ensure t)
+  (use-package dired-single :ensure t)
+  )
+
+
 
 ;;;-----------------------------------------------------------------------------
 ;;; Project management
@@ -185,7 +220,10 @@
   :ensure t
   :defer t
   :init
-  (global-aggressive-indent-mode 1))
+  (global-aggressive-indent-mode 1)
+  (add-to-list 'aggressive-indent-excluded-modes 'python-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'haml-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'html-mode))
 
 (use-package whitespace-cleanup-mode
   :ensure t

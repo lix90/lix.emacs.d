@@ -1,7 +1,7 @@
 ;;; private configuration el file
 ;; alias
 (defalias 'clc 'comint-clear-buffer)
-(defalias 'closeall 'lix--util-close-all-buffers)
+(defalias 'close-all 'lix--util-close-all-buffers)
 
 (defun lix--dos2unix ()
   "Not exactly but it's easier to remember"
@@ -78,8 +78,6 @@
   "Open note temp file."
   (interactive)
   (find-file "~/github/temp.md"))
-(global-set-key (kbd "C-c u o n") 'lix/file-note-temp)
-
 
 ;; kill all buffers
 (defun lix--util-close-all-buffers ()
@@ -92,15 +90,15 @@
 ;;(bind-key "M-h" #'backward-kill-word)
 ;;(define-key isearch-mode-map "\C-h" 'isearch-delete-char)
 
-(global-set-key [f9] 'set-mark-command)
+(global-set-key (kbd "H-m") 'set-mark-command)
 ;;(global-set-key (kbd "C-c u e b") 'eval-buffer)
 ;;(global-set-key (kbd "C-c u e r") 'eval-region)
 ;;(global-set-key (kbd "C-c u j") 'join-line)
 ;; resize window
-(global-set-key (kbd "C-S-l") 'shrink-window-horizontally)
-(global-set-key (kbd "C-S-h") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-S-p") 'shrink-window)
-(global-set-key (kbd "C-S-n") 'enlarge-window)
+(global-set-key (kbd "H-9") 'shrink-window-horizontally)
+(global-set-key (kbd "H-0") 'enlarge-window-horizontally)
+(global-set-key (kbd "H--") 'shrink-window)
+(global-set-key (kbd "H-=") 'enlarge-window)
 
 ;; insert data
 (defun lix--insert-date ()
@@ -109,8 +107,7 @@
   (insert (format-time-string "%Y-%m-%d" (current-time)))
   )
 ;;(global-set-key (kbd "C-c u u d") 'lix/util-insert-date)
-;; coding-system
-(setq buffer-file-coding-system 'utf-8-unix)
+
 
 ;;--------------------------------------------------------------------
 ;; set other window
@@ -177,7 +174,11 @@
               100)
          '(70 . 50) '(100 . 100)))))
 
-;; ----------------------
+
+
+;;------------------------------------------------------------------------------
+;; functions
+;;------------------------------------------------------------------------------
 (defun switch-to-previous-buffer ()
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))

@@ -1,28 +1,23 @@
 ;; configure shell
 
-(use-package eshell
-  :ensure t
-  :commands eshell
+(use-package eshell :ensure t :commands eshell
   :config
-
   (use-package em-cmpl)
   (use-package em-prompt)
   (use-package em-term)
-
   (setq
    eshell-highlight-prompt nil
    eshell-buffer-shorthand t
    eshell-cmpl-ignore-case t
    eshell-cmpl-cycle-completions nil
    eshell-history-size 500
-   ;; auto truncate after 12k lines
-   eshell-buffer-maximum-lines 12000
+   eshell-buffer-maximum-lines 12000 ; auto truncate after 12k lines
    eshell-hist-ignoredups t
    eshell-error-if-no-glob t
    eshell-glob-case-insensitive t
    eshell-scroll-to-bottom-on-input 'all
    eshell-list-files-after-cd t
-   ;;   eshell-aliases-file (concat user-emacs-directory "eshell/alias")
+   eshell-aliases-file (concat user-emacs-directory "eshell/alias")
    eshell-banner-message ""
    ;; eshell-banner-message "What would you like to do?\n\n"
    )
@@ -77,11 +72,6 @@
   (defmacro epe-colorize-with-face (str face)
     `(propertize ,str 'face ,face))
 
-  ;; (defface epe-venv-face
-  ;;   '((t (:inherit font-lock-comment-face)))
-  ;;   "Face of python virtual environment info in prompt."
-  ;;   :group 'epe)
-
   (setq eshell-prompt-function
         (lambda ()
           (concat (propertize (abbreviate-file-name (eshell/pwd)) 'face 'eshell-prompt)
@@ -106,14 +96,7 @@
                      (epe-colorize-with-face " [" 'epe-venv-face)
                      (propertize venv-current-name 'face `(:foreground "#2E8B57" :slant italic))
                      (epe-colorize-with-face "]" 'epe-venv-face)))
-                  (propertize " $ " 'face 'font-lock-constant-face))))
-  )
-
-
-
-
-
-
+                  (propertize " $ " 'face 'font-lock-constant-face)))))
 
 (use-package shell-switcher
   :ensure t
@@ -131,57 +114,6 @@
 (add-hook 'eshell-mode-hook
           '(lambda()
              (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
-
-(defun eshell/magit ()
-  "Function to open magit-status for the current directory"
-  (interactive)
-  (magit-status default-directory)
-  nil)
-
-(use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
-  :ensure t
-  :defer 10
-  :init
-  (progn
-    (exec-path-from-shell-initialize)
-    ;; (exec-path-from-shell-copy-env "PATH")
-    ;; Solve warning of setting locale in ESS
-    ;; from: https://stat.ethz.ch/pipermail/r-sig-mac/2015-October/011701.html
-    (exec-path-from-shell-copy-env "LC_ALL")
-    (exec-path-from-shell-copy-env "LANG")))
-
-(use-package shell-pop
-  :ensure t
-  :disabled t
-  :commands shell-pop
-  :config
-  (setq
-   shell-pop-term-shell "/usr/local/bin/bash"
-   shell-pop-window-size 20
-   shell-pop-full-span t
-   ;;shell-pop-default-directory "/Users/lix/"
-   shell-pop-window-position "bottom"))
-
-;; (defun ansi-term-handle-close ()
-;;   "Close current term buffer when `exit' from term buffer."
-;;   (when (ignore-errors (get-buffer-process (current-buffer)))
-;;     (set-process-sentinel (get-buffer-process (current-buffer))
-;;                           (lambda (proc change)
-;;                             (when (string-match "\\(finished\\|exited\\)" change)
-;;                               (kill-buffer (when (buffer-live-p (process-buffer proc)))
-;;                                            (delete-window))))))
-;;   (add-hook 'shell-pop-out-hook 'kill-this-buffer)
-;;   (add-hook 'term-mode-hook (lambda () (linum-mode -1) (ansi-term-handle-close))))
-
-(setq shell-file-name "/usr/local/bin/bash")
-(setq explicit-bash-args '("--login" "--init-file" "$HOME/.bash_profile" "-i"))
-(defalias 'sh 'shell)
-
-;; set coding system
-;; (setenv "LANG" "zh_CN.UTF-8")
-
-
 
 (provide 'config-shell)
 ;;; config-shell.el ends here

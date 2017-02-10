@@ -30,42 +30,11 @@
 
     ))
 
-;; (use-package magit
-;;   :ensure t
-;;   :bind ("C-x g" . magit-status)
-;;   :config
-;;   (progn (use-package evil-magit :ensure t)))
-
-
 (use-package git-timemachine            ; Go back in Git time
   :ensure t
   :defer t
   :commands git-timemachine
   )
-
-(use-package git-gutter+
-  :ensure t
-  :defer t
-  :init
-  (progn
-    (add-hook 'markdown-mode-hook #'git-gutter+-mode)
-    (add-hook 'prog-mode-hook #'git-gutter+-mode))
-  :config
-  (progn
-    (set-face-foreground 'git-gutter+-modified "yellow")
-    (set-face-foreground 'git-gutter+-added    "blue")
-    (set-face-foreground 'git-gutter+-deleted  "white")))
-
-(use-package git-gutter-fringe+
-  :ensure t
-  :defer t
-  :commands git-gutter+-mode
-  :init
-  (progn
-    (when (display-graphic-p)
-      (with-eval-after-load 'git-gutter+
-        (require 'git-gutter-fringe+)))
-    (setq git-gutter-fr+-side 'left-fringe)))
 
 (defun quick-commit ()
   "make a quick commit from the mini-buffer"

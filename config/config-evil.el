@@ -1,7 +1,9 @@
 ;;;
-(use-package evil
-  :ensure t
-  :defer t
+;;------------------------------------------------------------------------------
+;; Evil Settings
+;;------------------------------------------------------------------------------
+
+(use-package evil :ensure t :defer t
   :config
   (progn
     ;; Cursor shape and color
@@ -25,7 +27,7 @@
     (setq evil-insert-state-cursor '("chartreuse3" (bar . 2)))
     (setq evil-replace-state-cursor '("red" hbar))
     (setq evil-operator-state-cursor '("red" hollow))
-    (run-with-idle-timer 20 t 'evil-normal-state)
+    ;;(run-with-idle-timer 20 t 'evil-normal-state)
 
     (general-define-key
      :states '(normal visual)
@@ -41,22 +43,9 @@
       (setq-default evil-escape-key-sequence "fd"
                     evil-escape-delay 0.2))
 
-    ;; (use-package evil-indent-textobject :ensure t)
-
-    (use-package evil-numbers
-      :ensure t
-      :disabled t
-      :defer t
-      :init
-      (general-define-key
-       :states '(normal visual insert emacs)
-       "H-s" 'evil-numbers/inc-at-pt
-       "H-a" 'evil-numbers/dec-at-pt))
-
     (use-package evil-terminal-cursor-changer
       :ensure t
       :if (display-graphic-p)
-      :disabled nil
       :defer t
       :config
       ;;(require 'evil-terminal-cursor-changer)
@@ -123,19 +112,19 @@
            (git-rebase-mode . emacs)
            (term-mode . emacs)
            (help-mode . emacs)
-           ;;(helm-grep-mode . emacs)
            ;;(grep-mode . emacs)
            ;;(bc-menu-mode . emacs)
            (magit-branch-manager-mode . emacs)
-           ;;(rdictcc-buffer-mode . emacs)
            (dired-mode . emacs)
-           ;;(wdired-mode . normal)
+           (wdired-mode . normal)
            (inferior-ess-mode . emacs)
            (inferior-python-mode . emacs)
            (matlab-shell-mode . emacs)
            (inferior-js-mode . emacs)
+           (eshell-mode . emacs)
            )
       do (evil-set-initial-state mode state))
+
 
 (provide 'config-evil)
 ;;; Config-evil.el ends here
