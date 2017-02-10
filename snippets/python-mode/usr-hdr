@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: Input Header
+# key: usr-hdr
+# --
+#!/usr/bin/env ${1:python2}
+# -*- coding: utf-8 -*-
+"""
+Created on `(format-time-string "%Y-%m-%d %H:%M:%S")`
+@author: ${2:Xiang, Li}
+@email: ${3:alexiangli@outlook.com}
+"""
+
+
+$0

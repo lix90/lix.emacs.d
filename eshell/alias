@@ -29,7 +29,6 @@ alias m tldr $*
 alias qr restart-emacs
 alias qq (evil-quit-all)
 
-
 alias emacs find-file $1
 alias FF find-file-other-window $1
 alias fl (ivy-locate)
@@ -51,3 +50,7 @@ alias dwn sdcv -c --use-dict="WordNet® 3.0 (En-En)" $1
 alias dwbt sdcv -c --use-dict="Merriam-Webster's Collegiate Thesaurus (En-En)" $1
 alias d21 sdcv -c --use-dict="21世纪英汉汉英双向词典" $1
 alias dam sdcv -c --use-dict="American Heritage Dictionary 4th Ed. (En-En)" $1
+
+alias ... ../../
+alias .... ../../../
+alias ~ cd ~

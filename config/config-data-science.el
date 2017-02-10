@@ -135,56 +135,52 @@
                (switch-to-buffer rmd-buf)
                (ess-show-buffer (buffer-name-sbuffer) nil)))))
     ))
-
-
 ;; (define-key polymode-mode-map "\M-ns" 'ess-rmarkdown)
 
-(use-package python
-  :ensure t
-  :commands (run-python)
+(use-package python :ensure t :commands (run-python)
   :mode ("\\.py\\'" . python-mode)
   :config
-  (progn
-    (use-package elpy :ensure t)
-    (use-package anaconda-mode :ensure t :diminish anaconda-mode)
-    (use-package company-anaconda :ensure t)
-    (remove-hook 'python-mode-hook #'python-setup-shell)
-    (setq mode-name "Python"
-          tab-width 4
-          python-shell-interpreter "ipython2"
-          python-shell-interpreter-args "--pylab")
+  (use-package elpy :ensure t)
+  (use-package anaconda-mode :ensure t :diminish anaconda-mode)
+  (use-package company-anaconda :ensure t)
+  (remove-hook 'python-mode-hook #'python-setup-shell)
+
+  (defun python-default ()
+    (setq-default mode-name "Python"
+                  tab-width 4
+                  indent-tabs-mode t
+                  py-indent-tabs-mode t
+                  python-shell-interpreter "ipython2"
+                  python-shell-interpreter-args "--pylab")
+    (setq-local comment-inline-offset 2)
     (when (version< emacs-version "24.5")
       ;; auto-indent on colon doesn't work well with if statement
       ;; should be fixed in 24.5 and above
       (setq electric-indent-chars (delq ?: electric-indent-chars)))
-    (setq-local comment-inline-offset 2)
-    ;; make C-j work the same way as RET
+    (add-to-list 'write-file-functions 'delete-trailing-whitespace)
     (local-set-key (kbd "C-j") 'newline-and-indent)
     (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
+    (eldoc-mode)
+    (anaconda-eldoc-mode))
 
-    (defun inferior-python-setup-hook ()
-      (setq indent-tabs-mode t))
+  (defun inferior-python-setup-hook ()
+    (setq indent-tabs-mode t))
 
-    (defun eldoc-python-mode ()
-      (eldoc-mode)
-      (anaconda-eldoc-mode))
+  (defun elpy-default()
+    (setq elpy-rpc-backend "jedi")
+    (elpy-enable)
+    (elpy-use-ipython)
+    (add-to-list 'company-backends 'elpy-company-backend)
+    (local-set-key (kbd "C-c C-u") 'elpy-flymake-show-error))
 
-    (defun elpy-default()
-      (setq elpy-rpc-backend "jedi")
-      (elpy-enable)
-      (elpy-use-ipython)
-      (add-to-list 'company-backends 'elpy-company-backend)
-      (local-set-key (kbd "C-c C-u") 'elpy-flymake-show-error))
-
-    (add-hook 'inferior-python-mode-hook #'inferior-python-setup-hook)
-    ;;(add-hook 'inferior-python-mode-hook #'python-default)
-    ;;(add-hook 'python-mode-hook #'python-default)
-    (add-hook 'python-mode-hook #'eldoc-python-mode)
-    (add-hook 'python-mode-hook 'eldoc-mode)
-    (add-hook 'python-mode-hook #'elpy-default)
-    (add-hook 'python-mode-hook 'anaconda-mode)
-    (add-to-list 'company-backends 'company-anaconda)
-    ))
+  (add-hook 'inferior-python-mode-hook #'inferior-python-setup-hook)
+  (add-hook 'python-mode-hook #'python-default)
+  (add-hook 'python-mode-hook 'eldoc-mode)
+  (add-hook 'python-mode-hook #'elpy-default)
+  (add-hook 'python-mode-hook 'anaconda-mode)
+  (add-hook 'python-mode-hook 'electric-indent-mode)
+  (add-to-list 'company-backends 'company-anaconda)
+  )
 
 ;; (use-package py-autopep8
 ;;   :ensure t
@@ -219,7 +215,6 @@
 ;;   (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 ;;   ;;; ----------------------------------------
 ;;   )
-
 
 (provide 'config-data-science)
 ;;; config-ess.el ends here
