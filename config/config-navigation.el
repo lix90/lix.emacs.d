@@ -1,4 +1,43 @@
 ;; General
+
+;;; IMPORTANT
+(use-package general :ensure t
+  :init
+  (general-create-definer leader-key
+                          :states '(normal insert visual motion emacs)
+                          :keymaps 'global
+                          :prefix "SPC"
+                          :non-normal-prefix "H-SPC"))
+
+(use-package which-key :ensure t :diminish which-key-mode
+  :init
+  (which-key-mode)
+  (which-key-setup-minibuffer)
+  :config
+  (setq
+   which-key-popup-type 'side-window
+   which-key-side-window-location 'bottom
+   which-key-side-window-max-height 0.30
+   which-key-side-window-max-width 0.20
+   which-key-max-description-length 25
+   which-key-allow-evil-operators t
+   which-key-sort-order 'which-key-key-order
+   which-key-unicode-correction 3
+   which-key-prefix-prefix "+"
+   which-key-idle-delay 0.3
+   )
+  (add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil))))
+
+(use-package avy :ensure t
+  :commands (avy-goto-char)
+  ;;  :init
+  ;;(general-define-key
+  ;;:state '(emacs))
+  )
+
 ;; enable subword-mode
 (global-subword-mode t)
 (diminish 'subword-mode)
@@ -9,13 +48,12 @@
               tab-width 4           ;; but maintain correct appearance
               case-fold-search t    ;; case INsensitive search
               default-directory "~"
-              fill-column 80)
+              fill-column 80
 
-;; nice things
-(setq next-line-add-newlines nil  ;; don't add new lines when scrolling down
-      require-final-newline t     ;; end files with a newline
-      mouse-yank-at-point t       ;; yank at cursor, NOT at mouse position
-      kill-whole-line t)
+              next-line-add-newlines nil  ;; don't add new lines when scrolling down
+              require-final-newline t     ;; end files with a newline
+              mouse-yank-at-point t       ;; yank at cursor, NOT at mouse position
+              kill-whole-line t)
 
 (use-package imenu-anywhere :ensure t :after ivy
   :commands (imenu-anywhere
@@ -40,30 +78,8 @@
         ivy-height 20
         ivy-use-virtual-buffers t))
 
-(use-package which-key :ensure t
-  :diminish which-key-mode
-  :init
-  (which-key-mode)
-  (which-key-setup-minibuffer)
-  :config
-  (progn
-    (setq which-key-popup-type 'side-window
-          which-key-side-window-location 'bottom
-          which-key-side-window-max-height 0.35
-          which-key-side-window-max-width 0.25
-          which-key-max-description-length 25
-          which-key-allow-evil-operators t
-          which-key-sort-order 'which-key-key-order
-          )
-    (add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
-    (add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
-    (add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
-    (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil)))))
-
 ;; take care of the whitespace
-(use-package whitespace
-  :ensure t
-  :defer t
+(use-package whitespace :ensure t :defer t
   :init
   (setq whitespace-style '(face
                            trailing
@@ -73,9 +89,7 @@
                            space-after-tab)
         whitespace-line-column 80))
 
-(use-package smooth-scrolling
-  :disabled t
-  :defer 5
+(use-package smooth-scrolling :ensure t :defer 5
   :config
   (progn
     (setq smooth-scroll-margin 2)
@@ -83,39 +97,18 @@
     (setq mouse-wheel-progressive-speed nil))
   :init (smooth-scrolling-mode 1))
 
-;; Centered Cursor Mode
-;; (use-package centered-cursor-mode
-;;   :ensure t
-;;   :defer 10
-;;   :diminish centered-cursor-mode
-;;   :init (global-centered-cursor-mode)
-;;   :commands (centered-cursor-mode
-;;              global-centered-cursor-mode)
-;;   :config
-;;   (progn
-;;     (setq ccm-recenter-at-end-of-file t
-;;           ccm-ignored-commands '(mouse-drag-region
-;;                                  mouse-set-point
-;;                                  widget-button-click
-;;                                  scroll-bar-toolkit-scroll
-;;                                  evil-mouse-drag-region))))
+(use-package centered-cursor-mode :ensure t :defer 10
+  :config
+  (setq ccm-recenter-at-end-of-file t
+        ccm-ignored-commands '(mouse-drag-region
+                               mouse-set-point
+                               widget-button-click
+                               scroll-bar-toolkit-scroll
+                               evil-mouse-drag-region)))
 
 
-(use-package general
-  :ensure t
-  :init
-  (general-create-definer leader-key
-                          :states '(normal insert visual motion emacs)
-                          :keymaps 'global
-                          :prefix "SPC"
-                          :non-normal-prefix "H-SPC"))
 
-(use-package avy :ensure t
-  :commands (avy-goto-char)
-;  :init
-  ;(general-define-key
-   ;:state '(emacs))
-  )
+
 ;; (use-package ace-jump-mode
 ;;   :ensure t
 ;;   :defer t
@@ -173,11 +166,9 @@
 ;;   (global-set-key (kbd "<H-right>")  'windmove-right)
 ;;   )
 
-(use-package dired-details+ :ensure t :defer t
-  :ensure dired-details
-  :config
-  (require 'dired)
-  (add-hook 'dired-load-hook
+(use-package dired-details+ :defer t :ensure dired-details
+  :init
+  (add-hook 'dired-mode-hook
             (lambda ()
               (dired-hide-details-mode +1)
               ;; allow dired to delete or copy dir
@@ -192,6 +183,8 @@
                 (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
               ))
   (add-hook 'dired-mode-hook 'hl-line-mode)
+  :config
+  (require 'dired)
   (use-package dired+ :ensure t)
   (use-package dired-single :ensure t)
   )
@@ -241,29 +234,22 @@
     (add-to-list 'semantic-default-submodes
                  'global-semantic-idle-summary-mode)))
 
-(use-package undo-tree
-  :ensure t
-  :defer t
+(use-package undo-tree :ensure t :defer t
   :commands (undo-tree-undo undo-tree-visualize)
   :config
-  (progn
-    (global-undo-tree-mode)
-    (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t)
-    (let ((undo-dir (concat user-cache-directory "undo")))
-      (make-directory undo-dir t)
-      (setq undo-tree-history-directory-alist '((".*" . ,undo-dir))))
-    ))
+  (global-undo-tree-mode 1)
+  (setq undo-tree-visualizer-timestamps t)
+  (setq undo-tree-visualizer-diff t)
+  (let ((undo-dir (concat user-cache-directory "undo")))
+    (make-directory undo-dir t)
+    (setq undo-tree-history-directory-alist '((".*" . ,undo-dir))))
+  )
 
 ;; editing
-(use-package expand-region
-  :ensure t
-  :defer t
+(use-package expand-region :ensure t :defer t
   :bind ("C-=" . er/expand-region))
 
-(use-package whole-line-or-region
-  :ensure t
-  :defer t
+(use-package whole-line-or-region :ensure t :defer t
   :diminish whole-line-or-region-mode
   :init
   (whole-line-or-region-mode t))
@@ -279,23 +265,17 @@
     (define-key mc/keymap (kbd "C-s") 'phi-search)
     (define-key mc/keymap (kbd "C-r") 'phi-search-backward)))
 
-(use-package hungry-delete
-  :ensure t
-  :defer t
-  :init (global-hungry-delete-mode)
+(use-package hungry-delete :ensure t :defer t
+  :init (global-hungry-delete-mode 1)
   :diminish hungry-delete-mode)
 
-(use-package fix-word
-  :ensure t
-  :defer t
-  :diminish fix-word
+(use-package fix-word :ensure t :defer t :diminish fix-word
   :bind
   ("H-u" . fix-word-upcase)
   ("H-l" . fix-word-downcase)
   ("H-c" . fix-word-capitalize))
 
-(use-package crux
-  :ensure t
+(use-package crux :ensure t
   :bind ("C-a" . crux-move-beginning-of-line))
 
 (use-package phi-rectangle :ensure t :defer t)

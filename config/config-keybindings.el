@@ -1,14 +1,7 @@
 (leader-key
- "A" 'apropos
- "?" 'counsel-descbinds
  "<SPC>" 'counsel-M-x
- ;; "d" 'deer
- ;; "D" 'deer-jump-other-window
- ;; "e" 'server-edit
  "h" 'ivy-resume
  "i" 'ivy-imenu-anywhere
- ;; "N" 'research-notes
- ;; "n" 'big-notes
  "d" 'my-desktop
  "M" 'woman
  "'" 'shell
@@ -19,29 +12,28 @@
  "TAB" 'switch-to-previous-buffer
  )
 
+;;
+;; IDE
+;;
+
+(defalias 'run-matlab 'matlab-shell)
+(defalias 'run-eshell 'eshell)
+(defalias 'run-shell 'shell)
+(defalias 'run-R 'R)
+(defalias 'run-elisp 'ielm)
+
 (leader-key
  "I" '(:ignore t :which-key "IDE")
- "Ir" 'R
+ "Ir" 'run-R
  "Ip" 'run-python
- "Ie" 'eshell
- "IE" 'lix--eshell-buffer
- "Is" 'shell
+ "Ie" 'run-eshell
+ "Is" 'run-shell
  "Ij" 'run-js
- "Ii" 'ielm
- "Im" 'matlab-shell
+ "Ii" 'run-elisp
+ "Im" 'run-matlab
+ "I2" 'switch-to-python2
+ "I3" 'switch-to-python3
  )
-
-;; (leader-key
-;;  "a"  '(:ignore t :which-key "Applications")
-;;  ;; "ac" '(:ignore t :which-key "Cmus")
-;;  ;; "ad" 'deer
-;;  "ae" 'eshell
-;;  ;; "am" 'multi-term
-;;  ;; "ar" 'ranger
-;;  ;; "as" 'sane-term
-;;  ;; "aw" 'wttrin
-;;  )
-
 
 (leader-key
  "b"  '(:ignore t :which-key "Buffers")
@@ -59,7 +51,6 @@
  "bt" 'open-dir-in-iterm
  )
 
-
 (leader-key
  "c"  '(:ignore t :which-key "Commenting")
  "cb" 'org-block-wrap
@@ -68,14 +59,23 @@
  "cy" 'evil-commentary-yank-line
  )
 
-
 (leader-key
- "C"  '(:ignore t :which-key "Config")
- "Cc" 'lix--open-config
- "Ci" 'lix--open-init.el
- "Cs" 'lix--open-custom.el
+ "D" '(:ignore t :which-key "Documentations")
+ "Da" 'apropos
+ "D?" 'counsel-descbinds
+ "Dd" 'describe-foo-at-point
+ "DD" 'find-function-at-point
+ "Dk" 'describe-keymap
+ "DK" 'describe-key
+ "Dm" 'describe-mode
+ "Dv" 'describe-variable
+ "Dc" 'counsel-colors-emacs
+ "DC" 'counsel-colors-web
+ ;; Snippets
+ "Ds" 'yas-insert-snippet
+ "Dn" 'yas-new-snippet
+ "Df" 'yas-visit-snippet-file
  )
-
 
 (leader-key
  "f"  '(:ignore t :which-key "Files")
@@ -85,8 +85,140 @@
  "fs" 'save-buffer
  "fr" 'counsel-recentf
  "fy" 'spacemacs/show-and-copy-buffer-filename
+ "fh" 'lix/goto-home
+ "fp" 'lix/goto-projects
+ "fC" 'lix/goto-config
+ "fi" 'lix/open-init.el
+ "fc" 'lix/open-custom.el
  )
 
+(leader-key
+ "g"  '(:ignore t :which-key "Git")
+ "gb" 'magit-blame
+ "gc" 'magit-commit
+ "gd" 'magit-diff
+ "gl" 'magit-log
+ "gr" 'magit-reflog
+ "gs" 'magit-status
+ )
+
+;; m ==> markdown
+;; o ==> org
+
+;; Show which-key top-level bindings
+(global-set-key (kbd "H-k") 'which-key-show-top-level)
+;; override evil insert for kill line
+(general-define-key :states '(insert) "C-k" 'kill-line)
+
+(leader-key
+ "P" '(:ignore t :which-key "Packages")
+ "Pl" 'paradox-list-packages
+ "Pu" 'paradox-upgrade-packages
+ "Pn" 'package-utils-upgrade-by-name
+ )
+
+(leader-key
+ "p" '(:ignore t :which-key "Projects")
+ ;; "p!"  'projectile-run-shell-command-in-root
+ ;; "p&"  'projectile-run-async-shell-command-in-root
+ ;; "pa"  'projectile-toggle-between-implementation-and-test
+ ;; "pb"  'helm-projectile-switch-to-buffer
+ ;; "pc"  'projectile-compile-project
+ ;; "pd"  'helm-projectile-find-dir
+ ;; "pD"  'projectile-dired
+ ;; "pf"  'helm-projectile-find-file
+ ;; "pg"  'goto-projects
+ ;; "ph"  'helm-projectile
+ ;; "pG"  'projectile-regenerate-tags
+ ;; "pI"  'projectile-invalidate-cache
+ ;; "pk"  'projectile-kill-buffers
+ ;; "po"  'projectile-multi-occur
+ ;; "pp"  'helm-projectile-switch-project
+ ;; "pr"  'helm-projectile-recentf
+ ;; "pR"  'projectile-replace
+ ;; "ps"  'bmkp-set-desktop-bookmark
+ ;; "pS"  'bmkp-desktop-jump
+ ;; "pT"  'projectile-find-test-file
+ ;; "pv"  'projectile-vc
+ ;; "py"  'projectile-find-tag
+ )
+
+
+(leader-key
+ "q"  '(:ignore t :which-key "Quit")
+ "qq" 'save-desktop-save-buffers-kill-emacs
+ "qQ" 'evil-quit-all
+ "qr" 'restart-emacs
+ )
+
+(leader-key
+ "s" '(:ignore t :which-key "Search")
+ "sb" 'bing-dict-brief
+ "sj" 'forward-or-backward-sexp
+ "ss" 'swiper
+ ;; avy
+ "sw" 'avy-goto-word-or-subword-1
+ "sl" 'avy-goto-line
+ "sc" 'avy-goto-char
+ ;; multi-cursor
+ "sa" 'mc/mark-all-like-this
+ "sA" 'mc/mark-all-words-like-this
+ "sn" 'mc/mark-next-like-this
+ "sN" 'mc/mark-previous-like-this
+ )
+
+(leader-key
+ "t"  '(:ignore t :which-key "Toggles")
+ "ta" 'company-mode
+ "tb" 'fancy-battery-mode
+ "tc" 'centered-cursor-mode
+ "tC" 'centered-window-mode
+ "td" 'distraction-free
+ "tf" 'toggle-serif
+ "tF" 'toggle-frame-fullscreen
+ "tg" 'git-gutter+-mode
+ "th" 'hl-line-mode
+ "te" 'toggle-indicate-empty-lines
+ "tE" 'eldoc-mode
+ "tm" 'hidden-mode-line-mode
+ "tM" 'spaceline-toggle-minor-modes
+ "tn" 'linum-mode
+ "tN" 'neotree-toggle
+ "to" 'org-toggle-link-display
+ "tp" 'smartparens-mode
+ "tr" 'rainbow-identifiers-mode
+ "tR" 'rainbow-mode
+ ;;"ts" 'toggle-dark-light-theme
+ "ts" 'flyspell-mode
+ "tw" 'writeroom-mode
+ "tt" 'counsel-load-theme
+ "tT" 'lix--toggle-transparency
+ )
+
+(leader-key
+ "u"  '(:ignore t :which-key "User")
+ "um" 'cpm/org-to-markdown
+ "uc" 'pandoc-convert-to-pdf
+ "uo" 'cpm/markdown-to-org
+ "up" 'run-pandoc
+ "uP" 'pandoc-pdf-open
+ "us" 'sb-expand-current-file
+ "uS" 'just-one-space
+ "ud" 'distraction-free
+ "uD" 'my-desktop
+ "uj" 'goto-journal
+ "uw" 'count-words
+ )
+
+(leader-key
+ "w"  '(:ignore t :which-key "Windows")
+ "wc" 'delete-window
+ "wC" 'delete-other-windows
+ "w-" 'evil-window-split
+ "wv" 'evil-window-vsplit
+ "wr" 'rotate-windows
+ "wR" 'rotate-windows-backward
+ )
 
 (defun my-markdown-config ()
   "Modify keymaps in markdown mode"
@@ -155,12 +287,7 @@
    "<RET>" 'markdown-jump
    ))
 
-
-;; Show which-key top-level bindings
-(global-set-key (kbd "H-k") 'which-key-show-top-level)
-;; override evil insert for kill line
-(general-define-key :states '(insert) "C-k" 'kill-line)
-
+(eval-after-load 'markdown-mode '(my-markdown-config))
 
 (defun my-org-config()
   (leader-key
@@ -255,134 +382,5 @@
    ))
 
 (eval-after-load 'org '(my-org-config))
-
-
-(leader-key
- "P" '(:ignore t :which-key "Packages")
- "Pl" 'paradox-list-packages
- "Pu" 'paradox-upgrade-packages
- "Pn" 'package-utils-upgrade-by-name
- )
-
-
-(leader-key
- "p" '(:ignore t :which-key "Projects")
- ;; "p!"  'projectile-run-shell-command-in-root
- ;; "p&"  'projectile-run-async-shell-command-in-root
- ;; "pa"  'projectile-toggle-between-implementation-and-test
- ;; "pb"  'helm-projectile-switch-to-buffer
- ;; "pc"  'projectile-compile-project
- ;; "pd"  'helm-projectile-find-dir
- ;; "pD"  'projectile-dired
- ;; "pf"  'helm-projectile-find-file
- ;; "pg"  'goto-projects
- ;; "ph"  'helm-projectile
- ;; "pG"  'projectile-regenerate-tags
- ;; "pI"  'projectile-invalidate-cache
- ;; "pk"  'projectile-kill-buffers
- ;; "po"  'projectile-multi-occur
- ;; "pp"  'helm-projectile-switch-project
- ;; "pr"  'helm-projectile-recentf
- ;; "pR"  'projectile-replace
- ;; "ps"  'bmkp-set-desktop-bookmark
- ;; "pS"  'bmkp-desktop-jump
- ;; "pT"  'projectile-find-test-file
- ;; "pv"  'projectile-vc
- ;; "py"  'projectile-find-tag
- )
-
-
-(leader-key
- "q"  '(:ignore t :which-key "Quit")
- "qq" 'save-desktop-save-buffers-kill-emacs
- "qQ" 'evil-quit-all
- "qr" 'restart-emacs
- )
-
-
-(leader-key
- "s" '(:ignore t :which-key "Search")
- "sb" 'bing-dict-brief
- "sj" 'forward-or-backward-sexp
- "ss" 'swiper
- ;; avy
- "sw" 'avy-goto-word-or-subword-1
- "sl" 'avy-goto-line
- "sc" 'avy-goto-char
- ;; multi-cursor
- "sa" 'mc/mark-all-like-this
- "sA" 'mc/mark-all-words-like-this
- "sn" 'mc/mark-next-like-this
- "sN" 'mc/mark-previous-like-this
- "sC" 'counsel-colors-emacs
- )
-
-
-
-
-(leader-key
- "t"  '(:ignore t :which-key "Toggles")
- "ta" 'company-mode
- "tb" 'fancy-battery-mode
- "tc" 'centered-cursor-mode
- "tC" 'centered-window-mode
- "td" 'distraction-free
- "tf" 'toggle-serif
- "tF" 'toggle-frame-fullscreen
- "tg" 'git-gutter+-mode
- "th" 'hl-line-mode
- "te" 'toggle-indicate-empty-lines
- "tE" 'eldoc-mode
- "tm" 'hidden-mode-line-mode
- "tM" 'spaceline-toggle-minor-modes
- "tn" 'linum-mode
- "tN" 'neotree-toggle
- "to" 'org-toggle-link-display
- "tp" 'smartparens-mode
- "tr" 'rainbow-identifiers-mode
- "tR" 'rainbow-mode
- ;;"ts" 'toggle-dark-light-theme
- "ts" 'flyspell-mode
- "tw" 'writeroom-mode
- "tt" 'counsel-load-theme
- "tT" 'lix--toggle-transparency
- )
-
-(leader-key
- "u"  '(:ignore t :which-key "User")
- "um" 'cpm/org-to-markdown
- "uc" 'pandoc-convert-to-pdf
- "uo" 'cpm/markdown-to-org
- "up" 'run-pandoc
- "uP" 'pandoc-pdf-open
- "us" 'sb-expand-current-file
- "uS" 'just-one-space
- "ud" 'distraction-free
- "uD" 'my-desktop
- "uj" 'goto-journal
- "uw" 'count-words
- )
-
-
-(leader-key
- "g"  '(:ignore t :which-key "Git")
- "gb" 'magit-blame
- "gc" 'magit-commit
- "gd" 'magit-diff
- "gl" 'magit-log
- "gr" 'magit-reflog
- "gs" 'magit-status
- )
-
-
-(leader-key
- "w"  '(:ignore t :which-key "Windows")
- "wc" 'delete-window
- "wC" 'delete-other-windows
- "w-" 'evil-window-split
- "wv" 'evil-window-vsplit
- "wr" 'rotate-windows
- "wR" 'rotate-windows-backward
- )
 
 (provide 'config-keybindings)

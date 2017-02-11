@@ -4,6 +4,7 @@
 ;;------------------------------------------------------------------------------
 
 (use-package evil :ensure t :defer t
+  :init (evil-mode 1)
   :config
   (progn
     ;; Cursor shape and color
@@ -43,38 +44,31 @@
       (setq-default evil-escape-key-sequence "fd"
                     evil-escape-delay 0.2))
 
-    (use-package evil-terminal-cursor-changer
-      :ensure t
+    (use-package evil-terminal-cursor-changer :ensure t :defer t
       :if (display-graphic-p)
-      :defer t
       :config
       ;;(require 'evil-terminal-cursor-changer)
-      (progn
-        (setq evil-visual-state-cursor '("red" box)); █
-        (setq evil-insert-state-cursor '("green" bar)); ⎸
-        (setq evil-emacs-state-cursor '("blue" hbar)); _
-        ))
+	  (setq evil-visual-state-cursor '("red" box)); █
+	  (setq evil-insert-state-cursor '("green" bar)); ⎸
+	  (setq evil-emacs-state-cursor '("blue" hbar)); _
+	  )
 
-    (use-package evil-surround
-      :ensure t
+    (use-package evil-surround :ensure t
       ;; :commands (evil-surround-region evil-surround-change)
       :config
-      (progn
-        (global-evil-surround-mode 1)
-        (general-define-key
-         :states '(visual)
-         "s" 'evil-surround-region
-         "S" 'evil-substitute)))
+	  (global-evil-surround-mode 1)
+	  (general-define-key
+	   :states '(visual)
+	   "s" 'evil-surround-region
+	   "S" 'evil-substitute)
+	  )
 
-    (use-package evil-commentary
-      :ensure t
-      :defer t
+    (use-package evil-commentary :ensure t :defer t
       :commands (evil-commentary evil-commentary-line)
       :diminish evil-commentary-mode
       :config
       (evil-commentary-mode)))
-  :init
-  (evil-mode 1))
+  )
 
 (defun my-send-string-to-terminal (string)
   (unless (display-graphic-p) (send-string-to-terminal string)))
@@ -116,12 +110,12 @@
            ;;(bc-menu-mode . emacs)
            (magit-branch-manager-mode . emacs)
            (dired-mode . emacs)
-           (wdired-mode . normal)
            (inferior-ess-mode . emacs)
            (inferior-python-mode . emacs)
            (matlab-shell-mode . emacs)
            (inferior-js-mode . emacs)
            (eshell-mode . emacs)
+		   (neotree-mode . emacs)
            )
       do (evil-set-initial-state mode state))
 

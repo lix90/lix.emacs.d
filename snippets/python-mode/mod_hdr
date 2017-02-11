@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Module Header Developer Info 
+# key: mod_hdr
+# --
+
+# Authors: ${1:Xiang, Li} <${2:alexiangli@outlook.com}>
+#
+# License: ${3:???}
+
+$0

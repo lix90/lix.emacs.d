@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: Define function _get_fnames
+# key: get_fnames
+# --
+
+
+def _get_fnames(file_ext, fpath):
+    fdata = []
+    for i_f in file_ext:
+        fdata = fdata + filter(lambda x: x.endswith(i_f), os.listdir(fpath))
+    return fdata
+
+
+$0

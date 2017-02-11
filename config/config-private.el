@@ -9,33 +9,32 @@
   (set-buffer-file-coding-system 'unix 't))
 
 ;; open folders
-(defun lix--open-config ()
+(defun lix/goto-config ()
   "Open emacs config directory."
   (interactive)
   (find-file "~/.emacs.d/config/"))
 
-(defun lix--open-init.el ()
+(defun lix/open-init.el ()
   "Open init.el."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-(defun lix--open-custom.el()
+(defun lix/open-custom.el()
   (interactive)
   (find-file "~/.emacs.d/custom.el"))
 
-(defun lix--open-hexo-root ()
+(defun lix/goto-hexo-root ()
   "Open hexo root directory."
   (interactive)
   (find-file "~/github/hexo-blog/"))
 
 
-(defun lix--open-hexo-source-draft ()
+(defun lix/goto-hexo-source-draft ()
   "Open hexo draft directory."
   (interactive)
   (find-file "~/github/hexo-blog/source/_drafts/"))
 
-
-(defun lix--open-hexo-source-post ()
+(defun lix/open-hexo-source-post ()
   "Open hexo draft directory."
   (interactive)
   (find-file "~/github/hexo-blog/source/_posts/"))

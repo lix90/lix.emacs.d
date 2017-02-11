@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: Define function _file_exists
+# key: file_exists
+# --
+
+
+def _file_exists(file_path):
+    if not file_path:
+        return False
+    elif not ${1:os.path}.isfile(file_path):
+        return False
+    else:
+        return True
+
+
+$0

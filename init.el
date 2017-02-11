@@ -295,17 +295,24 @@
 (setq shell-file-name "/usr/local/bin/bash")
 (setq explicit-bash-args '("--login" "--init-file" "$HOME/.bash_profile" "-i"))
 
-(use-package exec-path-from-shell :ensure t :defer 10 
+(use-package exec-path-from-shell :ensure t :defer 10
   :if (memq window-system '(mac ns))
-  :init  
+  :init
   ;; Solve warning of setting locale in ESS
   ;; from: https://stat.ethz.ch/pipermail/r-sig-mac/2015-October/011701.html
   (exec-path-from-shell-copy-env "LC_ALL")
   (exec-path-from-shell-copy-env "LANG"))
 
+;;
 ;; Set Path
-(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
-(setq exec-path '("/usr/local/bin" "/usr/bin" "/bin"))
+;;
+(setenv "PATH" (concat "/Users/lix/anaconda3/bin/:/usr/local/bin:" (getenv "PATH")))
+(setenv "WORKON_HOME" "/Users/lix/anaconda3/envs/")
+(setq exec-path (append '(
+						  "/Users/lix/anaconda3/bin/"
+						  "/usr/local/bin"
+						  )
+						exec-path))
 
 ;;------------------------------------------------------------------------------
 
@@ -369,3 +376,4 @@
 
 (provide 'init)
 ;;; init.el ends here
+(put 'dired-find-alternate-file 'disabled nil)

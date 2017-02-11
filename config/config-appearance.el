@@ -1,42 +1,38 @@
-;; looking ---looking configuration:
+;;; Config-appearance configuration file:
 ;;; Commentary:
 ;;; Code:
 
 (use-package better-defaults :ensure t :defer t)
 
-;;
-;; Font
-;;
-
 (add-hook 'after-init-hook
           (lambda ()
             (fringe-mode '(8 . 2)) ; Make fringe look good with git-gutter-fringe+
-            (set-face-attribute
-             'default nil
-             :family "Source Code Pro"
-             :height 120
-             :weight 'normal
-             :width 'normal)
+			;; Set font
+            (set-face-attribute 'default nil
+								:family "Source Code Pro"
+								:height 120
+								:weight 'normal
+								:width 'normal)
             ))
 
 ;; Highlight current line number
-(use-package hlinum :ensure t :defer t :disabled t
-  :commands hlinum-mode
-  :init
-  (add-hook 'linum-mode-hook 'hlinum-activate)
-  (add-hook 'prog-mode-hook 'linum-mode))
+;; (use-package hlinum :ensure t :defer t :disabled t
+;;   :commands hlinum-mode
+;;   :init
+;;   (add-hook 'linum-mode-hook 'hlinum-activate)
+;;   (add-hook 'prog-mode-hook 'linum-mode))
 
 (add-hook 'package-menu-mode-hook 'hl-line-mode)
 (add-hook 'buffer-menu-mode-hook 'hl-line-mode)
 
+;; Highlight current line number
 (use-package linum-hl-cl-number :load-path "elisp"
   :init (setq linum-format 'linum-highlight-current-line))
 
-(use-package highlight-numbers :ensure t :defer t :disabled t
+(use-package highlight-numbers :ensure t :defer t
   :init (add-hook 'prog-mode-hook #'highlight-numbers-mode))
 
-(use-package hl-todo :ensure t
-  :init (global-hl-todo-mode t)
+(use-package hl-todo :ensure t :init (global-hl-todo-mode t)
   :config
   (define-key hl-todo-mode-map (kbd "C-c p") 'hl-todo-previous)
   (define-key hl-todo-mode-map (kbd "C-c n") 'hl-todo-next)
@@ -57,9 +53,7 @@
           ("???"   . "#cc9393")))
 ;;; global-hl-todo-modeで有効にするメジャーモード(derived-mode)
   (setq hl-todo-activate-in-modes
-        '(prog-mode markdown-mode))
-  ;;(global-hl-todo-mode 1)
-  )
+        '(prog-mode markdown-mode)))
 
 ;;------------------------------------------------------------------------------
 ;; UI
@@ -71,8 +65,8 @@
   :config (setq-default powerline-default-separator 'nil))
 (use-package spaceline :ensure t
   :config (setq-default mode-line-format '("%e" (:eval (spaceline-ml-ati)))))
-(use-package spaceline-custom :after spaceline :load-path "config")
-(use-package spaceline-colors :after spaceline-custom  :load-path "config"
+(use-package spaceline-custom :after spaceline :load-path "elisp")
+(use-package spaceline-colors :after spaceline-custom  :load-path "elisp"
   :init (add-hook 'after-init-hook 'spaceline-update-faces)
   :config (advice-add 'load-theme :after 'spaceline-update-faces))
 
@@ -87,10 +81,9 @@
 (use-package solarized-theme :ensure t :defer t)
 (use-package darktooth-theme :ensure t :defer t)
 (use-package spacemacs-theme :ensure t :defer t)
-
-(defun remove-mode-line-box (&rest args)
-  (set-face-attribute 'mode-line nil :box nil :underline nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil :underline nil))
+(use-package color-theme-sanityinc-tomorrow :ensure t :defer t)
+(use-package ample-theme :ensure t :defer t)
+(use-package leuven-theme :ensure t :defer t)
 
 (when is-mac
   (load-theme 'atom-one-dark t))
@@ -111,8 +104,7 @@
      ("buffer" "β")
      ("diff" "Δ")
      ("dired" "δ")
-     ("emacs" "ε")
-     ("Emacs" "ε")
+     ("emacs" "ε") 
      ("fundamental" "Ⓕ")
      ("inferior" "i" :prefix)
      ("interaction" "i" :prefix)
@@ -125,7 +117,7 @@
      ("shell" "sh" :postfix)
      ("text" "ξ")
      ("wdired" "↯δ")
-     ("ess" "𝓔") 
+     ("ess" "𝓔")
      ("markdown" "𝓜")
      ))
   (cyphejor-mode 1)
@@ -155,8 +147,7 @@
     ;;[224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
     [248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248]
     nil nil 'center)
-  (define-fringe-bitmap 'git-gutter-fr+-deleted
-    ;;[0 0 0 0 0 0 0 0 0 0 0 0 0 128 192 224 240 248] 
+  (define-fringe-bitmap 'git-gutter-fr+-deleted 
     ;;[224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
     [248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248]
     nil nil 'center)

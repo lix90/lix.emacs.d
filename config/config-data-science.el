@@ -143,44 +143,56 @@
   (use-package elpy :ensure t)
   (use-package anaconda-mode :ensure t :diminish anaconda-mode)
   (use-package company-anaconda :ensure t)
+
   (remove-hook 'python-mode-hook #'python-setup-shell)
 
-  (defun python-default ()
-    (setq-default mode-name "Python"
-                  tab-width 4
-                  indent-tabs-mode t
-                  py-indent-tabs-mode t
-                  python-shell-interpreter "ipython2"
-                  python-shell-interpreter-args "--pylab")
-    (setq-local comment-inline-offset 2)
-    (when (version< emacs-version "24.5")
-      ;; auto-indent on colon doesn't work well with if statement
-      ;; should be fixed in 24.5 and above
-      (setq electric-indent-chars (delq ?: electric-indent-chars)))
-    (add-to-list 'write-file-functions 'delete-trailing-whitespace)
-    (local-set-key (kbd "C-j") 'newline-and-indent)
-    (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
-    (eldoc-mode)
-    (anaconda-eldoc-mode))
+  (setq-default mode-name "Python"
+                tab-width 4
+                indent-tabs-mode t
+                py-indent-tabs-mode t
+                python-shell-interpreter "ipython"
+                python-shell-interpreter-args "--pylab")
+  (setq-local comment-inline-offset 2)
+  (when (version< emacs-version "24.5")
+    ;; auto-indent on colon doesn't work well with if statement
+    ;; should be fixed in 24.5 and above
+    (setq electric-indent-chars (delq ?: electric-indent-chars)))
+  (add-to-list 'write-file-functions 'delete-trailing-whitespace)
+  (local-set-key (kbd "C-j") 'newline-and-indent)
+  (local-set-key (kbd "C-c s f") 'python-shell-send-defun)
+  (local-set-key (kbd "C-c s r") 'python-shell-send-region)
+  (local-set-key (kbd "C-c s b") 'python-shell-send-buffer)
+  (local-set-key (kbd "C-c f s") 'elpy-flymake-show-error)
+  (local-set-key (kbd "C-<return>")
+                 (lambda ()
+                   (interactive)
+                   (python-shell-send-line)
+                   (next-line)))
+
+  (setq elpy-rpc-backend "jedi")
+  (elpy-enable)
+  (elpy-use-ipython)
+  (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
+  (eldoc-mode t)
+  (anaconda-eldoc-mode t)
+  (add-to-list 'company-backends 'elpy-company-backend)
+  (add-to-list 'company-backends 'company-anaconda)
 
   (defun inferior-python-setup-hook ()
     (setq indent-tabs-mode t))
 
-  (defun elpy-default()
-    (setq elpy-rpc-backend "jedi")
-    (elpy-enable)
-    (elpy-use-ipython)
-    (add-to-list 'company-backends 'elpy-company-backend)
-    (local-set-key (kbd "C-c C-u") 'elpy-flymake-show-error))
-
   (add-hook 'inferior-python-mode-hook #'inferior-python-setup-hook)
-  (add-hook 'python-mode-hook #'python-default)
-  (add-hook 'python-mode-hook 'eldoc-mode)
-  (add-hook 'python-mode-hook #'elpy-default)
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'electric-indent-mode)
-  (add-to-list 'company-backends 'company-anaconda)
   )
+
+(defun switch-to-python2 ()
+  (interactive)
+  (pyvenv-workon "python2"))
+
+(defun switch-to-python3 ()
+  (interactive)
+  (pyvenv-workon ".."))
 
 ;; (use-package py-autopep8
 ;;   :ensure t
