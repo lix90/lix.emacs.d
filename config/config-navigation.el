@@ -32,45 +32,17 @@
   (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil))))
 
 (use-package avy :ensure t
-  :commands (avy-goto-char)
-  ;;  :init
-  ;;(general-define-key
-  ;;:state '(emacs))
-  )
-
-;; enable subword-mode
-(global-subword-mode t)
-(diminish 'subword-mode)
-;; delete the selection with a keypress
-(delete-selection-mode t)
-
-(setq-default indent-tabs-mode nil  ;; don't use tabs to indent
-              tab-width 4           ;; but maintain correct appearance
-              case-fold-search t    ;; case INsensitive search
-              default-directory "~"
-              fill-column 80
-
-              next-line-add-newlines nil  ;; don't add new lines when scrolling down
-              require-final-newline t     ;; end files with a newline
-              mouse-yank-at-point t       ;; yank at cursor, NOT at mouse position
-              kill-whole-line t)
+  :commands (avy-goto-char))
 
 (use-package imenu-anywhere :ensure t :after ivy
-  :commands (imenu-anywhere
-             ivy-imenu-anywhere))
+  :commands (imenu-anywhere ivy-imenu-anywhere))
 
 ;;; swiper, flx, counsel, ivy
 (use-package flx :ensure t :defer t)
-(use-package swiper
-  :ensure t
-  :defer t
+(use-package swiper :ensure t :defer t :ensure counsel
   :commands (swiper ivy-resume counsel-M-x counsel-find-file)
-  :ensure counsel
-  :bind (("H-s" . swiper)
-         ("M-x" . counsel-M-x)
-         ("H-i" . ivy-immediate-done))
+  :init (ivy-mode 1)
   :config
-  (ivy-mode 1)
   (setq ivy-re-builders-alist
         '((ivy-switch-buffer . ivy--regex-plus)
           (t . ivy--regex-fuzzy)))
@@ -90,12 +62,11 @@
         whitespace-line-column 80))
 
 (use-package smooth-scrolling :ensure t :defer 5
+  :init (smooth-scrolling-mode 1)
   :config
-  (progn
-    (setq smooth-scroll-margin 2)
-    (setq mouse-wheel-scroll-amount '(1 ((shift) .1) ((control) . nil)))
-    (setq mouse-wheel-progressive-speed nil))
-  :init (smooth-scrolling-mode 1))
+  (setq smooth-scroll-margin 2)
+  (setq mouse-wheel-scroll-amount '(1 ((shift) .1) ((control) . nil)))
+  (setq mouse-wheel-progressive-speed nil))
 
 (use-package centered-cursor-mode :ensure t :defer 10
   :config
@@ -107,8 +78,6 @@
                                evil-mouse-drag-region)))
 
 
-
-
 ;; (use-package ace-jump-mode
 ;;   :ensure t
 ;;   :defer t
@@ -117,15 +86,14 @@
 ;;              ace-jump-line-mode))
 
 ;;; navigate text
-(use-package move-text
-  :ensure t
-  :defer t
+(use-package move-text :ensure t :defer t
   :bind
   ("H-n" . move-text-down)
   ("H-p" . move-text-up))
 
 ;;; navigate window
 (use-package window-numbering :ensure t
+  :init (window-numbering-mode 1)
   :config
   (defun window-numbering-install-mode-line (&optional position)
     "Do nothing, the display is handled by the powerline.")
@@ -137,7 +105,6 @@
    "3" 'select-window-3
    "4" 'select-window-4
    "5" 'select-window-5)
-  (window-numbering-mode 1)
   (defun spacemacs//window-numbering-assign (windows)
     "Custom number assignment for special buffers."
     (mapc (lambda (w)
@@ -147,24 +114,22 @@
           windows))
   (add-hook 'window-numbering-before-hook 'spacemacs//window-numbering-assign))
 
-;; (use-package windmove
-;;   :defer t
-;;   :config
-;;   (defun split-window-right-and-focus ()
-;;     "Split the window horizontally and focus the new window."
-;;     (interactive)
-;;     (split-window-right)
-;;     (windmove-right))
-                                        ;   (defun split-window-below-and-focus ()
-;;     "Split the window vertically and focus the new window."
-;;     (interactive)
-;;     (split-window-below)
-;;     (windmove-down))
-;;   (global-set-key (kbd "<H-up>")     'windmove-up)
-;;   (global-set-key (kbd "<H-down>")   'windmove-down)
-;;   (global-set-key (kbd "<H-left>")   'windmove-left)
-;;   (global-set-key (kbd "<H-right>")  'windmove-right)
-;;   )
+(use-package windmove :ensure t :defer t
+  :commands (windmove-up
+             windmove-down
+             windmove-left
+             windmove-right)
+  :config
+  (defun split-window-right-and-focus ()
+    "Split the window horizontally and focus the new window."
+    (interactive)
+    (split-window-right)
+    (windmove-right))
+  (defun split-window-below-and-focus ()
+    "Split the window vertically and focus the new window."
+    (interactive)
+    (split-window-below)
+    (windmove-down)))
 
 (use-package dired-details+ :defer t :ensure dired-details
   :init
@@ -209,30 +174,22 @@
           neo-window-fixed-size 1)))
 
 ;;;-----------------------------------------------------------------------------
-(use-package aggressive-indent
-  :ensure t
-  :defer t
+(use-package aggressive-indent :ensure t :defer t
   :init
   (global-aggressive-indent-mode 1)
   (add-to-list 'aggressive-indent-excluded-modes 'python-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'haml-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'html-mode))
 
-(use-package whitespace-cleanup-mode
-  :ensure t
-  :defer t
-  :init
-  (global-whitespace-cleanup-mode 1))
+(use-package whitespace-cleanup-mode :ensure t :defer t
+  :init (global-whitespace-cleanup-mode 1))
 
-(use-package semantic
-  :ensure t
-  :defer t
+(use-package semantic :ensure t :defer t
   :config
-  (progn
-    (add-to-list 'semantic-default-submodes
-                 'global-semantic-stickyfunc-mode)
-    (add-to-list 'semantic-default-submodes
-                 'global-semantic-idle-summary-mode)))
+  (add-to-list 'semantic-default-submodes
+               'global-semantic-stickyfunc-mode)
+  (add-to-list 'semantic-default-submodes
+               'global-semantic-idle-summary-mode))
 
 (use-package undo-tree :ensure t :defer t
   :commands (undo-tree-undo undo-tree-visualize)
@@ -242,8 +199,7 @@
   (setq undo-tree-visualizer-diff t)
   (let ((undo-dir (concat user-cache-directory "undo")))
     (make-directory undo-dir t)
-    (setq undo-tree-history-directory-alist '((".*" . ,undo-dir))))
-  )
+    (setq undo-tree-history-directory-alist '((".*" . ,undo-dir)))))
 
 ;; editing
 (use-package expand-region :ensure t :defer t

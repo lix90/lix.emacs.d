@@ -1,15 +1,58 @@
+(when is-mac
+  (global-set-key (kbd "<H-backspace>") 'delete-forward-char)
+  ;; Keybindings
+  (global-set-key (kbd "s-=") 'text-scale-increase)
+  (global-set-key (kbd "s--") 'text-scale-decrease)
+  (global-set-key (kbd "s-0") 'text-scale-adjust)
+  (global-set-key (kbd "s-q") 'save-buffers-kill-terminal)
+  (global-set-key (kbd "s-v") 'yank)
+  (global-set-key (kbd "s-c") 'evil-yank)
+  (global-set-key (kbd "s-a") 'mark-whole-buffer)
+  (global-set-key (kbd "s-x") 'kill-region)
+  (global-set-key (kbd "s-w") 'delete-window)
+  (global-set-key (kbd "s-W") 'delete-frame)
+  (global-set-key (kbd "s-n") 'make-frame)
+  (global-set-key (kbd "s-z") 'undo-tree-undo)
+  (global-set-key (kbd "s-Z") 'undo-tree-redo)
+  (global-set-key (kbd "s-s")
+				  (lambda ()
+					(interactive)
+					(call-interactively (key-binding "\C-x\C-s"))))
+  )
+
+;; Show which-key top-level bindings
+;; override evil insert for kill line
+(general-define-key :states '(insert) "C-k" 'kill-line)
+
+(global-set-key (kbd "H-k") 'which-key-show-top-level)
+(global-set-key (kbd "H-m") 'set-mark-command)
+(global-set-key (kbd "H-9") 'shrink-window-horizontally)
+(global-set-key (kbd "H-0") 'enlarge-window-horizontally)
+(global-set-key (kbd "H--") 'shrink-window)
+(global-set-key (kbd "H-=") 'enlarge-window)
+(global-set-key (kbd "H-i") 'ivy-immediate-done)
+(global-set-key (kbd "H-s") 'swiper)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+
+;; Quick
 (leader-key
  "<SPC>" 'counsel-M-x
  "h" 'ivy-resume
  "i" 'ivy-imenu-anywhere
- "d" 'my-desktop
+ "m" 'set-mark-command
  "M" 'woman
- "'" 'shell
  "." 'quick-commit
  ";" 'evil-commentary-line
  "[" 'spacemacs/previous-useful-buffer
  "]" 'spacemacs/next-useful-buffer
  "TAB" 'switch-to-previous-buffer
+ "E" 'eval-buffer-until-error
+ 
+ ;; Windmove
+ "C-k" 'windmove-up
+ "C-j" 'windmove-down
+ "C-h" 'windmove-left
+ "C-l" 'windmove-right 
  )
 
 ;;
@@ -21,6 +64,7 @@
 (defalias 'run-shell 'shell)
 (defalias 'run-R 'R)
 (defalias 'run-elisp 'ielm)
+(defalias 'run-clisp 'slime)
 
 (leader-key
  "I" '(:ignore t :which-key "IDE")
@@ -30,6 +74,7 @@
  "Is" 'run-shell
  "Ij" 'run-js
  "Ii" 'run-elisp
+ "Ic" 'run-clisp
  "Im" 'run-matlab
  "I2" 'switch-to-python2
  "I3" 'switch-to-python3
@@ -49,6 +94,7 @@
  "br" 'revert-buffer
  "bR" 'spacemacs/rename-current-buffer-file
  "bt" 'open-dir-in-iterm
+ "b." 'comint-clear-buffer
  )
 
 (leader-key
@@ -60,27 +106,10 @@
  )
 
 (leader-key
- "D" '(:ignore t :which-key "Documentations")
- "Da" 'apropos
- "D?" 'counsel-descbinds
- "Dd" 'describe-foo-at-point
- "DD" 'find-function-at-point
- "Dk" 'describe-keymap
- "DK" 'describe-key
- "Dm" 'describe-mode
- "Dv" 'describe-variable
- "Dc" 'counsel-colors-emacs
- "DC" 'counsel-colors-web
- ;; Snippets
- "Ds" 'yas-insert-snippet
- "Dn" 'yas-new-snippet
- "Df" 'yas-visit-snippet-file
- )
-
-(leader-key
  "f"  '(:ignore t :which-key "Files")
  "ff" 'counsel-find-file
  "fl" 'counsel-locate
+ "fj" 'counsel-file-jump 
  "fo" 'crux-open-with
  "fs" 'save-buffer
  "fr" 'counsel-recentf
@@ -102,19 +131,52 @@
  "gs" 'magit-status
  )
 
+(leader-key
+ "n" '(:ignore t :which-key "Navigation") 
+ "n(" 'forward-or-backward-sexp
+ ;; Symbol
+ "nf" 'sp-forward-symbol
+ "nb" 'sp-backward-symbol
+ ;; Move in backward and forward
+ "n," 'sp-backward-slurp-sexp
+ "n." 'sp-forward-slurp-sexp
+ ;; Move out backward and forward
+ "n<" 'sp-backward-barf-sexp
+ "n>" 'sp-forward-barf-sexp
+ ;; sexp
+ "ns" 'sp-splice-sexp
+ "nu" 'sp-up-sexp
+ "nd" 'sp-down-sexp
+ "nn" 'sp-next-sexp
+ "np" 'sp-previous-sexp
+ "nl" 'sp-forward-sexp
+ "nh" 'sp-backward-sexp
+ ;; Yafolding
+ "nh" 'yafolding-hide-parent-element
+ "na" 'yafolding-toggle-all
+ "ne" 'yafolding-toggle-element
+ )
+
+(bind-key "H-F" 'sp-forward-symbol)
+(bind-key "H-B" 'sp-backward-symbol)
+(bind-key "H-)" 'sp-forward-sexp)
+(bind-key "H-(" 'sp-backward-sexp)
+(bind-key "H-]" 'sp-next-sexp)
+(bind-key "H-[" 'sp-previous-sexp)
+(bind-key "H-," 'sp-backward-slurp-sexp)
+(bind-key "H-." 'sp-forward-slurp-sexp)
+(bind-key "H-<" 'sp-backward-barf-sexp)
+(bind-key "H->" 'sp-forward-barf-sexp)
+
 ;; m ==> markdown
 ;; o ==> org
-
-;; Show which-key top-level bindings
-(global-set-key (kbd "H-k") 'which-key-show-top-level)
-;; override evil insert for kill line
-(general-define-key :states '(insert) "C-k" 'kill-line)
 
 (leader-key
  "P" '(:ignore t :which-key "Packages")
  "Pl" 'paradox-list-packages
  "Pu" 'paradox-upgrade-packages
  "Pn" 'package-utils-upgrade-by-name
+ "Pr" 'package-refresh-contents
  )
 
 (leader-key
@@ -143,7 +205,6 @@
  ;; "py"  'projectile-find-tag
  )
 
-
 (leader-key
  "q"  '(:ignore t :which-key "Quit")
  "qq" 'save-desktop-save-buffers-kill-emacs
@@ -153,9 +214,13 @@
 
 (leader-key
  "s" '(:ignore t :which-key "Search")
- "sb" 'bing-dict-brief
- "sj" 'forward-or-backward-sexp
- "ss" 'swiper
+ "sC" '(:ignore t :which-key "Colors")
+ "sD" '(:ignore t :which-key "Dictionary")
+ ;; Dictioanry
+ "sDb" 'bing-dict-brief
+ "sDy" 'youdao-dictionary-search-at-point
+ "sDs" 'yasdcv-translate-at-point
+
  ;; avy
  "sw" 'avy-goto-word-or-subword-1
  "sl" 'avy-goto-line
@@ -165,6 +230,25 @@
  "sA" 'mc/mark-all-words-like-this
  "sn" 'mc/mark-next-like-this
  "sN" 'mc/mark-previous-like-this
+ "sr" 'phi-rectangle-set-mark-command
+ "sR" 'phi-rectangle-kill-region
+ ;;
+ "s." 'apropos
+ "sg" 'google-this
+ "sG" 'google-this-noconfirm
+ "sp" 'describe-thing-in-popup
+ "sf" 'describe-foo-at-point
+ "sF" 'find-function-at-point
+
+ ;; Counsel
+ "sh" 'counsel-command-history
+ "sl" 'counsel-find-library
+ "sk" 'counsel-descbinds
+ "s/" 'counsel-describe-face
+
+ ;; Colors
+ "sCe" 'counsel-colors-emacs
+ "sCw" 'counsel-colors-web
  )
 
 (leader-key
@@ -186,13 +270,14 @@
  "tN" 'neotree-toggle
  "to" 'org-toggle-link-display
  "tp" 'smartparens-mode
+ "tP" 'smartparens-global-strict-mode
  "tr" 'rainbow-identifiers-mode
  "tR" 'rainbow-mode
  ;;"ts" 'toggle-dark-light-theme
  "ts" 'flyspell-mode
  "tw" 'writeroom-mode
  "tt" 'counsel-load-theme
- "tT" 'lix--toggle-transparency
+ "tT" 'lix/toggle-transparency
  )
 
 (leader-key
@@ -206,19 +291,29 @@
  "uS" 'just-one-space
  "ud" 'distraction-free
  "uD" 'my-desktop
- "uj" 'goto-journal
  "uw" 'count-words
  )
 
 (leader-key
  "w"  '(:ignore t :which-key "Windows")
+ ;; Delete window
  "wc" 'delete-window
  "wC" 'delete-other-windows
- "w-" 'evil-window-split
+ "wh" 'delete-window-left
+ "wl" 'delete-window-right
+ "wj" 'delete-window-below
+ "wk" 'delete-window-above
+ ;; Split window
+ "w|" 'split-window-right-and-focus
+ "w-" 'split-window-below-and-focus 
+ "ws" 'evil-window-split
  "wv" 'evil-window-vsplit
+ ;; Rotate window
  "wr" 'rotate-windows
  "wR" 'rotate-windows-backward
  )
+
+;;; Key configuration
 
 (defun my-markdown-config ()
   "Modify keymaps in markdown mode"

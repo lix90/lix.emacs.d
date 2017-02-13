@@ -3,10 +3,6 @@
 ;; -----------------------------------
 
 ;;; Code:
-
-(show-paren-mode t)
-;; (setq show-paren-style 'expression)
-
 (use-package smartparens-config :ensure smartparens
   :diminish smartparens-mode
   :init
@@ -27,22 +23,18 @@
 		company-begin-commands '(self-insert-command))
   ;; set backends
   (setq company-backends
-		(quote
-		 (company-elisp
+		'(company-elisp
 		  company-abbrev
 		  company-keywords
 		  company-semantic
 		  ;; company-etags
 		  company-files
-		  company-yasnippet)))
+		  company-yasnippet))
   :config
   ;; latex
   ;; (add-to-list 'company-backends #'company-latex-commands)
-  (use-package company-statistics
-	:ensure t
-	:defer t
-	:init
-	(add-hook 'after-init-hook 'company-statistics-mode))
+  (use-package company-statistics :ensure t :defer t
+	:init (add-hook 'after-init-hook 'company-statistics-mode))
 
   ;; key bindings
   (let ((map company-active-map))
@@ -70,9 +62,6 @@
 ;;             (setq company-tern-meta-as-single-line t)
 ;;             ))
 
-;; -----------------------------------
-;; yasnippet
-;; -----------------------------------
 (use-package yasnippet :ensure t :defer t
   :config
   ;; (yas-reload-all)
@@ -80,30 +69,46 @@
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   )
 
-;; turn on abbrev mode globally
-(setq-default abbrev-mode t)
-(setq save-abbrevs 'silently)
-(diminish 'abbrev-mode)
-(setq abbrev-file-name (concat user-cache-directory "emacs_abbre.el"))
+;; (use-package nameless :ensure t :defer t
+;;   :config
+;;   (bind-keys :map nameless-mode-map ("C-c C-c" . nameless-insert-name)))
 
-;;; sql
-(use-package sql
-  :commands sql-mode
-  :mode (("\.sql$" . sql-mode)
-         ("\.sqltmpl$" . sql-mode))
+(use-package flycheck :ensure t
   :config
-  (progn
-    (use-package sql-indent
-      :ensure t
-      :config
-      (setq sql-indent-offset 2))
-    (use-package sqlup-mode
-      :ensure t
-      :config
-      (add-hook 'sql-mode-hook 'sqlup-mode)
-      (add-hook 'sql-interactive-mode-hook 'sqlup-mode)))
+  ;;(global-flycheck-mode)
+  (setq flycheck-javascript-standard-executable "standard")
+  (setq flycheck-javascript-eslint-executable "eslint")
+  (setq flycheck-eslintrc ".eslintrc.json")
+  (setq-default flycheck-disabled-checkers '(javascript-jshint))
+  (bind-keys :map flycheck-mode-map
+             ("C-c C-e" . flycheck-list-errors)
+             ("C-c C-n" . flycheck-next-error)
+             ("C-c C-p" . flycheck-previous-error))
+  (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
+  (flycheck-add-mode 'javascript-standard 'rjsx-mode)
+  ;;:bind ("M-}" . flycheck-mode)
   )
 
+(use-package flycheck-pos-tip :ensure t :defer t
+  :init (setq-default tooltip-delay 0.2))
+(use-package avy-flycheck :ensure t :defer t)
+
+(with-eval-after-load 'flycheck
+  (flycheck-pos-tip-mode)
+  (avy-flycheck-setup))
+
+(use-package yafolding :ensure t :defer t
+  :commands (yafolding-hide-parent-element
+             yafolding-toggle-all
+             yafolding-toggle-element)
+  :init
+  (add-hook 'prog-mode-hook 'yafolding-mode))
+
+(use-package indent-tools :ensure t :defer t
+  :init
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (define-key python-mode-map (kbd "C-c ]") 'indent-tools-hydra/body))))
 
 (provide 'config-programming)
 ;;; config-programming.el ends here

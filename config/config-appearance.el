@@ -2,19 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package better-defaults :ensure t :defer t)
-
-(add-hook 'after-init-hook
-          (lambda ()
-            (fringe-mode '(8 . 2)) ; Make fringe look good with git-gutter-fringe+
-			;; Set font
-            (set-face-attribute 'default nil
-								:family "Source Code Pro"
-								:height 120
-								:weight 'normal
-								:width 'normal)
-            ))
-
 ;; Highlight current line number
 ;; (use-package hlinum :ensure t :defer t :disabled t
 ;;   :commands hlinum-mode
@@ -25,6 +12,7 @@
 (add-hook 'package-menu-mode-hook 'hl-line-mode)
 (add-hook 'buffer-menu-mode-hook 'hl-line-mode)
 
+
 ;; Highlight current line number
 (use-package linum-hl-cl-number :load-path "elisp"
   :init (setq linum-format 'linum-highlight-current-line))
@@ -33,7 +21,7 @@
   :init (add-hook 'prog-mode-hook #'highlight-numbers-mode))
 
 (use-package hl-todo :ensure t :init (global-hl-todo-mode t)
-  :config
+  :config 
   (define-key hl-todo-mode-map (kbd "C-c p") 'hl-todo-previous)
   (define-key hl-todo-mode-map (kbd "C-c n") 'hl-todo-next)
   (define-key hl-todo-mode-map (kbd "C-c o") 'hl-todo-occur)
@@ -51,7 +39,7 @@
           ("XXX"   . "#cc9393")
           ("XXXX"  . "#cc9393")
           ("???"   . "#cc9393")))
-;;; global-hl-todo-modeで有効にするメジャーモード(derived-mode)
+;;; global-hl-todo-modeで有効にするメジャーモード(derived-mode) 
   (setq hl-todo-activate-in-modes
         '(prog-mode markdown-mode)))
 
@@ -71,19 +59,19 @@
   :config (advice-add 'load-theme :after 'spaceline-update-faces))
 
 ;; Themed with Spaceline
-(use-package gruvbox-theme :ensure t :defer t)
-(use-package creamsody-theme :ensure t)
-(use-package suscolors-theme :ensure t :defer t)
-(use-package atom-one-dark-theme :ensure t :defer t)
-(use-package forest-blue-theme :ensure t :defer t)
-(use-package liso-theme :ensure t :defer t)
-(use-package peacock-theme :ensure t :defer t)
-(use-package solarized-theme :ensure t :defer t)
-(use-package darktooth-theme :ensure t :defer t)
-(use-package spacemacs-theme :ensure t :defer t)
-(use-package color-theme-sanityinc-tomorrow :ensure t :defer t)
-(use-package ample-theme :ensure t :defer t)
-(use-package leuven-theme :ensure t :defer t)
+;; (use-package gruvbox-theme :ensure t :defer t)
+;; (use-package creamsody-theme :ensure t)
+;; (use-package suscolors-theme :ensure t :defer t)
+;; (use-package atom-one-dark-theme :ensure t :defer t)
+;; (use-package forest-blue-theme :ensure t :defer t)
+;; (use-package liso-theme :ensure t :defer t)
+;; (use-package peacock-theme :ensure t :defer t)
+;; (use-package solarized-theme :ensure t :defer t)
+;; (use-package darktooth-theme :ensure t :defer t)
+;; (use-package spacemacs-theme :ensure t :defer t)
+;; (use-package color-theme-sanityinc-tomorrow :ensure t :defer t)
+;; (use-package ample-theme :ensure t :defer t)
+;; (use-package leuven-theme :ensure t :defer t)
 
 (when is-mac
   (load-theme 'atom-one-dark t))
@@ -95,35 +83,35 @@
 ;;   (remove-mode-line-box)
 ;;   (load-theme 'spacemacs-light))
 
-(use-package cyphejor :ensure t :defer t
-  :init 
-  (setq
-   cyphejor-rules
-   '(:upcase
-     ("bookmark" "→")
-     ("buffer" "β")
-     ("diff" "Δ")
-     ("dired" "δ")
-     ("emacs" "ε") 
-     ("fundamental" "Ⓕ")
-     ("inferior" "i" :prefix)
-     ("interaction" "i" :prefix)
-     ("interactive" "i" :prefix)
-     ("lisp" "λ" :postfix)
-     ("menu" "▤" :postfix)
-     ("mode" "" :postfix)
-     ("package" "↓")
-     ("python" "π")
-     ("shell" "sh" :postfix)
-     ("text" "ξ")
-     ("wdired" "↯δ")
-     ("ess" "𝓔")
-     ("markdown" "𝓜")
-     ))
-  (cyphejor-mode 1)
-  )
+;; (use-package cyphejor :ensure t :defer t
+;;   :init 
+;;   (setq
+;;    cyphejor-rules
+;;    '(:upcase
+;;      ("bookmark" "→")
+;;      ("buffer" "β")
+;;      ("diff" "Δ")
+;;      ("dired" "δ")
+;;      ("emacs" "ε") 
+;;      ("fundamental" "Ⓕ")
+;;      ("inferior" "i" :prefix)
+;;      ("interaction" "i" :prefix)
+;;      ("interactive" "i" :prefix)
+;;      ("lisp" "λ" :postfix)
+;;      ("menu" "▤" :postfix)
+;;      ("mode" "" :postfix)
+;;      ("package" "↓")
+;;      ("python" "π")
+;;      ("shell" "sh" :postfix)
+;;      ("text" "ξ")
+;;      ("wdired" "↯δ")
+;;      ("ess" "𝓔")
+;;      ("markdown" "𝓜")
+;;      ))
+;;   (cyphejor-mode 1)
+;;   )
 
-(use-package git-gutter+ :ensure t :diminish (git-gutter+-mode)
+(use-package git-gutter+ :ensure t :diminish (git-gutter+-mode) :defer t
   :init
   (add-hook 'markdown-mode-hook #'git-gutter+-mode)
   (add-hook 'prog-mode-hook #'git-gutter+-mode)

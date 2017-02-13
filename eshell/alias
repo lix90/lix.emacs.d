@@ -54,3 +54,4 @@ alias dam sdcv -c --use-dict="American Heritage Dictionary 4th Ed. (En-En)" $1
 alias ... ../../
 alias .... ../../../
 alias ~ cd ~
+alias ipynb jupyter notebook &

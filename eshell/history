@@ -378,3 +378,48 @@ which ipython
 ipython
 gcnfq https://github.com/domtronn/all-the-icons.el ~/projects/
 gcnfq https://github.com/domtronn/all-the-icons.el ~/projects/all-the-icons.el
+type sbcl
+whic sbcl
+which sbcl
+brew info sbcl
+brew install sbcl
+type sbcl
+sdcv --list
+sdcv -ls
+sdcv --help
+sdcv -l
+pip list flake8
+pip search --help
+pip info --help
+m pip
+m pip search
+pip search flake8
+python -v
+python --version
+m conda
+conda info --envs
+conda use --help
+source activate python2
+conda install -n python2 flake8
+conda install flake8
+python --version
+m pip
+pip install pyflakes
+python --version
+pip install pylint
+which pylint
+cd
+pylint pylint --generate-rcfile >.pylintrc
+pylint --generate-rcfile >.pylintrc
+pip uninstall flake8
+pip install flake8
+m ipython
+m python
+ipython --help
+type spyder
+spyder
+fa
+which jupyter
+jupyter notebook &
+ipython notebook
+ipython notebook --profile=nbserver

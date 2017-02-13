@@ -137,62 +137,102 @@
     ))
 ;; (define-key polymode-mode-map "\M-ns" 'ess-rmarkdown)
 
+
+;;; Python
+(defconst python-version "python2")
+
+(use-package anaconda-mode :ensure t :defer t
+  :init
+  (progn
+	(add-hook 'python-mode-hook 'anaconda-mode)))
+
+(use-package company-anaconda :ensure t
+  :init (add-to-list 'company-backends 'company-anaconda))
+
+;; (use-package elpy :ensure t
+;;   :init (add-to-list 'company-backends 'elpy-company-backend))
+
 (use-package python :ensure t :commands (run-python)
   :mode ("\\.py\\'" . python-mode)
+  :init
+  (progn
+	(remove-hook 'python-mode-hook #'python-setup-shell)
+
+    (defun python-send-line ()
+      (interactive)
+      (save-excursion 
+        (back-to-indentation)
+        (python-shell-send-string (concat (buffer-substring-no-properties (point)
+                                                                          (line-end-position)) 
+                                          "\n"))))
+    
+	(defun python-default ()
+	  (setq mode-name "Python"
+			tab-width 4
+			fill-column 80
+			python-shell-interpreter "ipython"
+			python-shell-interpreter-args (if is-mac
+                                              "--pylab=osx --matplotlib=osx --colors=Linux")
+            python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+            python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+            python-shell-completion-setup-code
+            "from IPython.core.completerlib import module_completion"
+            python-shell-completion-module-string-code
+            "';'.join(module_completion('''%s'''))\n"
+            python-shell-completion-string-code
+            "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"
+            )
+	  (when (version< emacs-version "24.5")
+		;; auto-indent on colon doesn't work well with if statement
+		;; should be fixed in 24.5 and above
+		(setq electric-indent-chars (delq ?: electric-indent-chars)))
+	  (setq-local comment-inline-offset 2)
+      (flycheck-mode +1)
+      (local-set-key (kbd "C-j") 'newline-and-indent)
+	  (local-set-key (kbd "C-c C-r") #'python-shell-send-region)
+      (local-set-key (kbd "C-c C-d") #'python-shell-send-defun)
+      (local-set-key (kbd "s-<return>") (lambda ()
+                                          (interactive)
+                                          (python-send-line)
+                                          (next-line))))
+
+    (defun python-eldoc-settings ()
+      ;; (eldoc-mode t)
+      (anaconda-eldoc-mode t))
+    
+    (add-hook 'python-mode-hook #'python-default)
+    (add-hook 'python-mode-hook #'python-eldoc-settings)  
+    (add-hook 'python-mode-hook #'electric-indent-mode))
   :config
-  (use-package elpy :ensure t)
-  (use-package anaconda-mode :ensure t :diminish anaconda-mode)
-  (use-package company-anaconda :ensure t)
+  (progn 
+    (add-hook 'smartparens-mode 'inferior-python-mode-hook)
+    (add-hook 'company-mode 'inferior-python-mode-hook)
+    (add-hook 'inferior-python-mode-hook (lambda ()
+                                           (setq-local company-minimum-prefix-length 0)
+                                           (setq-local company-idle-delay 0.5)))		 
+    (defun inferior-python-setup-hook ()
+      (setq indent-tabs-mode t))
+    (add-hook 'inferior-python-mode-hook #'inferior-python-setup-hook)))
+;; (add-hook 'python-mode-hook
+;; 		   (lambda () 
+;; 			 (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
+;; 			 (add-to-list 'write-file-functions 'delete-trailing-whitespace)
+;; 			 (local-set-key (kbd "C-c s d") #'python-shell-send-defun)
+;; 			 (local-set-key (kbd "C-c s b") #'python-shell-send-buffer)
+;; 			 (local-set-key (kbd "C-c C-u") #'elpy-flymake-show-error)
+;; 			 (local-set-key (kbd "C-c s r") #'python-shell-send-region))
 
-  (remove-hook 'python-mode-hook #'python-setup-shell)
-
-  (setq-default mode-name "Python"
-                tab-width 4
-                indent-tabs-mode t
-                py-indent-tabs-mode t
-                python-shell-interpreter "ipython"
-                python-shell-interpreter-args "--pylab")
-  (setq-local comment-inline-offset 2)
-  (when (version< emacs-version "24.5")
-    ;; auto-indent on colon doesn't work well with if statement
-    ;; should be fixed in 24.5 and above
-    (setq electric-indent-chars (delq ?: electric-indent-chars)))
-  (add-to-list 'write-file-functions 'delete-trailing-whitespace)
-  (local-set-key (kbd "C-j") 'newline-and-indent)
-  (local-set-key (kbd "C-c s f") 'python-shell-send-defun)
-  (local-set-key (kbd "C-c s r") 'python-shell-send-region)
-  (local-set-key (kbd "C-c s b") 'python-shell-send-buffer)
-  (local-set-key (kbd "C-c f s") 'elpy-flymake-show-error)
-  (local-set-key (kbd "C-<return>")
-                 (lambda ()
-                   (interactive)
-                   (python-shell-send-line)
-                   (next-line)))
-
-  (setq elpy-rpc-backend "jedi")
-  (elpy-enable)
-  (elpy-use-ipython)
-  (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
-  (eldoc-mode t)
-  (anaconda-eldoc-mode t)
-  (add-to-list 'company-backends 'elpy-company-backend)
-  (add-to-list 'company-backends 'company-anaconda)
-
-  (defun inferior-python-setup-hook ()
-    (setq indent-tabs-mode t))
-
-  (add-hook 'inferior-python-mode-hook #'inferior-python-setup-hook)
-  (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'electric-indent-mode)
-  )
-
-(defun switch-to-python2 ()
-  (interactive)
-  (pyvenv-workon "python2"))
-
-(defun switch-to-python3 ()
-  (interactive)
-  (pyvenv-workon ".."))
+(add-hook 'after-init-hook
+          (lambda ()
+            (defun switch-to-python2 ()
+              (interactive)
+              (pyvenv-workon "python2"))
+            (defun switch-to-python3 ()
+              (interactive)
+              (pyvenv-workon ".."))
+            (cond ((string-equal python-version "python2")
+                   (switch-to-python2))
+                  (t (switch-to-python3)))))
 
 ;; (use-package py-autopep8
 ;;   :ensure t
@@ -201,20 +241,22 @@
 ;; (defalias 'workon 'pyvenv-workon)
 ;; (defalias 'runpy 'run-python)
 
-;; (use-package ein
-;;   :ensure t
-;;   :config
-;;   (progn
-;;     ;; Use Jedi with EIN
-;;     ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
-;;     (setq ein:use-auto-complete t)
-;;     (setq ein:default-url-or-port "http://localhost:8888"
-;;           ein:output-type-perference '(emacs-lisp
-;;                                        svg png
-;;                                        jpeg html
-;;                                        text latex
-;;                                        javascript))
-;;     (use-package websocket :ensure t)))
+(use-package ein :ensure t :defer t
+  :config
+  (progn
+    ;; Use Jedi with EIN
+    ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup) 
+    (setq ein:use-auto-complete t 
+          ein:default-url-or-port "http://localhost:8888"
+          ein:query-timeout 1000
+          ein:output-type-perference '(emacs-lisp
+                                       svg png
+                                       jpeg html
+                                       text latex
+                                       javascript)
+          ein:console-args
+          (if is-mac '("--gui=osx" "--matplotlib=osx" "--colors=Linux")))
+    (use-package websocket :ensure t)))
 
 ;; (use-package ob-ipython
 ;;   :ensure t

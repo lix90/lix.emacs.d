@@ -1,7 +1,32 @@
+
+(use-package flyspell-popup :ensure t :defer t :after flyspell
+  :config (bind-keys :map flyspell-mode-map ("±" . flyspell-popup-correct)))
+
+(use-package flyspell :ensure t :defer t
+  :init (defun flyspell-toggle ()
+          (interactive)
+          (if flyspell-mode (flyspell-mode-off) (flyspell-mode)))
+  :config
+  (setq ispell-dictionary "english")
+  (dolist (hook '(text-mode-hook))
+	(add-hook hook (lambda () (flyspell-mode 1))))
+  (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+	(add-hook hook (lambda () (flyspell-mode -1))))
+  (advice-add 'flyspell-mode-on :before 'flyspell-buffer))
+
+;;; mmm
+(use-package mmm-mode :ensure t :defer t
+  :init
+  (mmm-add-classes
+   '((markdown-python
+      :submode python-mode
+      :face mmm-declaration-submode-face
+      :front "^```python[\n\r]+"
+      :back "^```$")))
+  (mmm-add-mode-ext-class 'markdown-mode nil 'markdown-python))
+
 ;;; markdown
-(use-package markdown-mode
-  :ensure t
-  :defer t
+(use-package markdown-mode :ensure t :defer t
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'"       . markdown-mode))
   :init
@@ -9,9 +34,10 @@
   (add-hook 'markdown-mode-hook
             '(lambda()
                (linum-mode)
+               (mmm-mode +1)
                ;;(centered-cursor-mode)
-               (flyspell-mode 1)
-               (pandoc-mode)
+               ;;(flyspell-mode 1)
+               ;;(pandoc-mode)
                (hl-todo-mode)
                (git-gutter+-mode t)))
   (setq markdown-command "pandoc"
@@ -20,26 +46,27 @@
         markdown-nested-imenu-heading-index t
         ;;markdown-open-command "/Users/Roambot/bin/scripts/mark.sh"
         )
-  :config
-  ;; Header navigation in normal state movements
-  (general-define-key :states '(normal) :keymaps 'markdown-mode-map
-                      "TAB" 'markdown-cycle
-                      "gj"  'outline-forward-same-level
-                      "gk"  'outline-backward-same-level
-                      "gh"  'outline-up-heading
-                      ;; next visible heading is not exactly what we want but close enough
-                      "gl"  'outline-next-visible-heading)
-  ;; "<return>" 'markdown-jump
-  ;; Promotion, Demotion
-  (general-define-key :states '(normal insert emacs) :keymaps 'markdown-mode-map
-                      "M-h" 'markdown-promote
-                      "M-j" 'markdown-move-down
-                      "M-k" 'markdown-move-up
-                      "M-l" 'markdown-demote
-                      ;; fix wrong emacs keybindings
-                      "C-c C-j" 'markdown-jump
-                      "C-c C-l" 'markdown-insert-list-item)
-  (add-hook 'markdown-mode-hook #'my-markdown-config))
+  :config  
+  (progn 
+    
+    (general-define-key :states '(normal) :keymaps 'markdown-mode-map
+                        "TAB" 'markdown-cycle
+                        "gj"  'outline-forward-same-level
+                        "gk"  'outline-backward-same-level
+                        "gh"  'outline-up-heading
+                        ;; next visible heading is not exactly what we want but close enough
+                        "gl"  'outline-next-visible-heading)
+    ;; "<return>" 'markdown-jump
+    ;; Promotion, Demotion
+    (general-define-key :states '(normal insert emacs) :keymaps 'markdown-mode-map
+                        "M-h" 'markdown-promote
+                        "M-j" 'markdown-move-down
+                        "M-k" 'markdown-move-up
+                        "M-l" 'markdown-demote
+                        ;; fix wrong emacs keybindings
+                        "C-c C-j" 'markdown-jump
+                        "C-c C-l" 'markdown-insert-list-item)
+    (add-hook 'markdown-mode-hook #'my-markdown-config)))
 
 (use-package writeroom-mode
   :ensure t
@@ -68,129 +95,120 @@
 
 ;; (use-package hexo :ensure t :defer t)
 
-(defun lix--open-blog ()
-  (interative)
-  (hexo "~/github/hexo-blog/"))
-
 ;;;-----------------------------------------------------------------------------
 ;;; org
 ;;;-----------------------------------------------------------------------------
 
-(use-package org
-  :ensure t
+(use-package org :ensure t :defer t
   :mode ("\\.org$" . org-mode)
-  :defer t
   :config
-  (progn
-    ;; Allow's electric-pair-mode to surround things with = and ~ in org-mode
-    (setq org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+  ;; Allow's electric-pair-mode to surround things with = and ~ in org-mode
+  (setq org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
 
-    (modify-syntax-entry ?~ "(~" org-mode-syntax-table)
-    (modify-syntax-entry ?= "(=" org-mode-syntax-table)
-    ;; don't underline indents
-    (defface org-dont-underline-indents '((t :underline nil))
-      "Avoid underlining of indentation.")
-    (defun org-dont-underline-indents ()
-      "Remove underlining at indents."
-      (add-to-list 'org-font-lock-extra-keywords '("^[[:space:]]+" 0 'org-dont-underline-indents t) 'append))
-    (add-hook 'org-font-lock-set-keywords-hook #'org-dont-underline-indents 'append)
+  (modify-syntax-entry ?~ "(~" org-mode-syntax-table)
+  (modify-syntax-entry ?= "(=" org-mode-syntax-table)
+  ;; don't underline indents
+  (defface org-dont-underline-indents '((t :underline nil))
+	"Avoid underlining of indentation.")
+  (defun org-dont-underline-indents ()
+	"Remove underlining at indents."
+	(add-to-list 'org-font-lock-extra-keywords '("^[[:space:]]+" 0 'org-dont-underline-indents t) 'append))
+  (add-hook 'org-font-lock-set-keywords-hook #'org-dont-underline-indents 'append)
 
-    (setq org-src-fontify-natively t ;; better looking source code
-          org-return-follows-link t ;; make RET follow links
-          org-hide-emphasis-markers t  ;; hide markers
-          org-pretty-entities t ;; make latex look good
-          org-fontify-quote-and-verse-blocks nil ;; make quotes stand out
-          org-table-export-default-format "orgtbl-to-csv" ;; export for org-tables to csv
-          org-ellipsis "↴"  ;; nicer elipses
-          org-confirm-babel-evaluate nil  ;; evaluate src block without confirmation
-          org-startup-indented t ;; start in indent mode
+  (setq org-src-fontify-natively t ;; better looking source code
+		org-return-follows-link t ;; make RET follow links
+		org-hide-emphasis-markers t  ;; hide markers
+		org-pretty-entities t ;; make latex look good
+		org-fontify-quote-and-verse-blocks nil ;; make quotes stand out
+		org-table-export-default-format "orgtbl-to-csv" ;; export for org-tables to csv
+		org-ellipsis "↴"  ;; nicer elipses
+		org-confirm-babel-evaluate nil  ;; evaluate src block without confirmation
+		org-startup-indented t ;; start in indent mode
                                         ; org-src-preserve-indentation nil
                                         ; org-edit-src-content-indentation t
-          org-imenu-depth 4
-          imenu-auto-rescan t
-          )
+		org-imenu-depth 4
+		imenu-auto-rescan t
+		)
 
-    ;; normal state shortcuts
-    (general-define-key :states '(normal) :keymaps 'org-mode-map
-                        "RET" 'org-open-at-point     ;; Open with return in evil
-                        "gh" 'outline-up-heading
-                        "gp" 'outline-previous-heading
-                        "gj" (if (fboundp 'org-forward-same-level) ;to be backward compatible with older org version
-                                 'org-forward-same-level
-                               'org-forward-heading-same-level)
-                        "gk" (if (fboundp 'org-backward-same-level)
-                                 'org-backward-same-level 'org-backward-heading-same-level)
-                        "gl" 'outline-next-visible-heading
-                        "L" 'org-shiftright
-                        "H" 'org-shiftleft
-                        "$" 'org-end-of-line
-                        "^" 'org-beginning-of-line
-                        "<" 'org-metaleft
-                        ">" 'org-metaright
-                        "-" 'org-cycle-list-bullet)
-    ;; normal & insert state shortcuts.
-    (general-define-key :states '(normal insert) :keymaps 'org-mode-map
-                        "TAB" 'org-cycle
-                        "s-l" 'org-metaright
-                        "s-h" 'org-metaleft
-                        "s-k" 'org-metaup
-                        "s-j" 'org-metadown
-                        "s-L" 'org-shiftmetaright
-                        "s-H" 'org-shiftmetaleft
-                        "s-K" 'org-shiftmetaup
-                        "s-J" 'org-shiftmetadown
-                        "s-o" '(lambda () (interactive)
-                                 (evil-org-eol-call
-                                  '(lambda()
-                                     (org-insert-heading)
-                                     (org-metaright))))
-                        "s-t" '(lambda () (interactive)
-                                 (evil-org-eol-call
-                                  '(lambda()
-                                     (org-insert-todo-heading nil)
-                                     (org-metaright)))))
-    ;; Use tab in insert mode
-    (general-define-key :states '(insert) :keymaps 'org-mode-map "\t" nil)
+  ;; normal state shortcuts
+  (general-define-key
+   :states '(normal)
+   :keymaps 'org-mode-map
+   "RET" 'org-open-at-point     ;; Open with return in evil
+   "gh" 'outline-up-heading
+   "gp" 'outline-previous-heading
+   "gj" (if (fboundp 'org-forward-same-level) ;to be backward compatible with older org version
+			'org-forward-same-level
+		  'org-forward-heading-same-level)
+   "gk" (if (fboundp 'org-backward-same-level)
+			'org-backward-same-level 'org-backward-heading-same-level)
+   "gl" 'outline-next-visible-heading
+   "L" 'org-shiftright
+   "H" 'org-shiftleft
+   "$" 'org-end-of-line
+   "^" 'org-beginning-of-line
+   "<" 'org-metaleft
+   ">" 'org-metaright
+   "-" 'org-cycle-list-bullet)
+  ;; normal & insert state shortcuts.
+  (general-define-key
+   :states '(normal insert)
+   :keymaps 'org-mode-map
+   "TAB" 'org-cycle
+   "s-l" 'org-metaright
+   "s-h" 'org-metaleft
+   "s-k" 'org-metaup
+   "s-j" 'org-metadown
+   "s-L" 'org-shiftmetaright
+   "s-H" 'org-shiftmetaleft
+   "s-K" 'org-shiftmetaup
+   "s-J" 'org-shiftmetadown
+   "s-o" '(lambda () (interactive)
+			(evil-org-eol-call
+			 '(lambda()
+				(org-insert-heading)
+				(org-metaright))))
+   "s-t" '(lambda () (interactive)
+			(evil-org-eol-call
+			 '(lambda()
+				(org-insert-todo-heading nil)
+				(org-metaright)))))
+  ;; Use tab in insert mode
+  (general-define-key
+   :states '(insert)
+   :keymaps 'org-mode-map
+   "\t" nil)
 
-    (use-package org-bullets :ensure t :defer t)
-    (use-package htmlize :ensure t :defer t)
+  (use-package org-bullets :ensure t :defer t)
+  (use-package htmlize :ensure t :defer t)
 
-    (use-package toc-org
-      :ensure t
-      :defer t
-      :init
-      (progn
-        (setq toc-org-max-depth 10)
-        ))
+  (use-package toc-org :ensure t :defer t
+	:init (setq toc-org-max-depth 10))
 
-    (use-package ox-pandoc
-      :ensure t
-      :defer t
-      :commands ox-pandoc
-      ;; (require 'ox-pandoc)
-      :config
-      (progn
-        ;; default options for all output formats
-        ;; (setq org-pandoc-command (expand-file-name "~/.local/bin/pandoc"))
-        (setq org-pandoc-options '((standalone . t)))
-        ;; cancel above settings only for 'docx' format
-        (setq org-pandoc-options-for-docx '((standalone . nil)))
-        ;; special settings for beamer-pdf and latex-pdf exporters
-        (setq org-pandoc-options-for-beamer-pdf '((latex-engine . "xelatex")))
-        (setq org-pandoc-options-for-latex-pdf '((latex-engine . "xelatex")))))
+  (use-package ox-pandoc :ensure t :defer t
+	:commands ox-pandoc
+	;; (require 'ox-pandoc)
+	:config
+	;; default options for all output formats
+	;; (setq org-pandoc-command (expand-file-name "~/.local/bin/pandoc"))
+	(setq org-pandoc-options '((standalone . t)))
+	;; cancel above settings only for 'docx' format
+	(setq org-pandoc-options-for-docx '((standalone . nil)))
+	;; special settings for beamer-pdf and latex-pdf exporters
+	(setq org-pandoc-options-for-beamer-pdf '((latex-engine . "xelatex")))
+	(setq org-pandoc-options-for-latex-pdf '((latex-engine . "xelatex"))))
 
-    (add-hook 'org-mode-hook 'org-bullets-mode)
-    (add-hook 'org-mode-hook 'toc-org-enable)
-    (add-hook 'org-mode-hook
-              '(lambda()
-                 (turn-on-auto-fill)
-                 (set-fill-column 78)
-                 (flyspell-mode 1)
-                 (hl-todo-mode)
-                 (imenu-add-to-menubar "Imenu")
-                 (git-gutter+-mode 0)
-                 (org-eldoc-load)))
-    ))
+  (add-hook 'org-mode-hook 'org-bullets-mode)
+  (add-hook 'org-mode-hook 'toc-org-enable)
+  (add-hook 'org-mode-hook
+			'(lambda()
+			   (turn-on-auto-fill)
+			   (set-fill-column 78)
+			   (flyspell-mode 1)
+			   (hl-todo-mode)
+			   (imenu-add-to-menubar "Imenu")
+			   (git-gutter+-mode 0)
+			   (org-eldoc-load))))
 
 (setq org-file-apps
       '(("\\.docx\\'" . default)
@@ -199,16 +217,12 @@
         ("\\.pdf\\'" . default)
         (auto-mode . emacs)))
 
-(use-package ox-reveal
-  :ensure t
-  :disabled t
-  :after org
+(use-package ox-reveal :ensure t :disabled t :after org
   :config
   (setq org-reveal-root (concat "file://" (getenv "HOME") "/bin/reveal.js")
         org-reveal-theme "moon"
         org-reveal-default-frag-style "roll-in"
-        org-reveal-hlevel 2
-        ))
+        org-reveal-hlevel 2))
 
 (with-eval-after-load 'org
   (defvar-local rasmus/org-at-src-begin -1
@@ -290,70 +304,47 @@
 ;;;-----------------------------------------------------------------------------
 ;;; latex config
 ;;;-----------------------------------------------------------------------------
-(use-package auctex
-  :ensure t
-  :defer t
+(use-package auctex :ensure t :defer t
   :mode ("\\.tex\\'" . latex-mode)
   :commands (latex-mode LaTeX-mode plain-tex-mode)
   :config
-  (progn
+  (use-package company-auctex :ensure t :defer t)
+  (setq
+   TeX-auto-save t
+   TeX-parse-self t
+   TeX-save-query nil
+   TeX-PDF-mode t
+   ;; Synctex support
+   TeX-source-correlate-start-server nil
+   ;; Don't insert line-break at inline math
+   LaTeX-fill-break-at-separators nil
+   )
 
-    (use-package company-auctex
-      :ensure t
-      :defer t)
+  (setq-default TeX-master nil)
+  (setq-default TeX-engine 'xelatex)
 
-    (setq TeX-auto-save t
-          TeX-parse-self t
-          TeX-save-query nil
-          TeX-PDF-mode t
-          ;; Synctex support
-          TeX-source-correlate-start-server nil
-          ;; Don't insert line-break at inline math
-          LaTeX-fill-break-at-separators nil
-          )
+  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+  (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+  (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
+  (add-hook 'LaTeX-mode-hook #'flyspell-mode)
+  (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
+  (add-hook 'LaTeX-mode-hook 'smartparens-mode)
 
-    (setq-default TeX-master nil)
-    (setq-default TeX-engine 'xelatex)
+  (push '(company-auctex-bibs
+		  company-auctex-labels
+		  company-auctex-macros
+		  company-auctex-symbols
+		  company-auctex-environments)
+		company-backends-LaTeX-mode))
 
-    (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-    (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
-    (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
-    (add-hook 'LaTeX-mode-hook #'flyspell-mode)
-    (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
-    (add-hook 'LaTeX-mode-hook 'smartparens-mode)
+(use-package reftex :ensure t :defer t :commands turn-on-reftex
+  :config (setq reftex-plug-into-AUCTeX t))
 
-    (push '(company-auctex-bibs
-            company-auctex-labels
-            company-auctex-macros
-            company-auctex-symbols
-            company-auctex-environments) company-backends-LaTeX-mode)
-    ))
-
-(use-package preview
-  :ensure nil
-  :defer t
-  :commands LaTeX-preview-setup
-  :config
-  (progn
-    (setq-default preview-scale 1.4
-                  preview-scale-function '(lambda () (* (/ 10.0 (preview-document-pt)) preview-scale)))))
-
-(use-package reftex
-  :ensure t
-  :defer t
-  :commands turn-on-reftex
-  :config
-  (progn
-    (setq reftex-plug-into-AUCTeX t)))
-
-(use-package bibtex
-  :ensure t
-  :defer t
+(use-package bibtex :ensure t :defer t
   :mode ("\\.bib$" . bibtex-mode)
   :config
-  (progn
-    (setq bibtex-align-at-equal-sign t)
-    (add-hook 'bibtex-mode-hook (lambda () (set-fill-column 120)))))
+  (setq bibtex-align-at-equal-sign t)
+  (add-hook 'bibtex-mode-hook (lambda () (set-fill-column 120))))
 
 ;; Auto-fill for LaTeX
 (defun schnouki/latex-auto-fill ()
@@ -364,24 +355,22 @@
 (add-hook 'LaTeX-mode-hook #'schnouki/latex-auto-fill)
 
 ;; Compilation command
-(add-hook 'LaTeX-mode-hook (lambda () (setq compile-command "latexmk -pdflatex=xelatex -f -pdf %f")))
+(add-hook 'LaTeX-mode-hook
+		  (lambda ()
+			(setq compile-command "latexmk -pdflatex=xelatex -f -pdf %f")))
 
-(use-package latex-preview-pane
-  :ensure t
-  :disabled t
-  :defer t
-  :bind (:map latex-preview-pane-mode
-              ("C-c u p" . latex-preview-pane-update)
-              ("C-c u P" . latex-preview-update))
+(use-package latex-preview-pane :ensure t :defer 30 :after auctex
+  :bind (:map
+		 latex-preview-pane-mode
+		 ("C-c u p" . latex-preview-pane-update)
+		 ("C-c u P" . latex-preview-update))
   :init
   (latex-preview-pane-enable)
   (setq pdf-latex-command "xelatex"))
 
-
 (eval-after-load 'doc-view-mode
-  '(progn
-     (setq doc-view-resolution 300)))
-
+  '(lambda ()
+	 (setq doc-view-resolution 300)))
 
 (provide 'config-writing)
 ;;; config-tex.el ends here
