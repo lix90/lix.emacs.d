@@ -26,6 +26,8 @@
 (defconst package-mirror "emacs-china"
   "Package mirror used.")
 
+(defconst user-project-directory "~/projects/")
+
 (defconst user-cache-directory
   (file-name-as-directory (concat user-emacs-directory ".cache"))
   "My emacs storage area for persistent files.")
@@ -87,6 +89,10 @@
     (local-set-key "f" 'counsel-set-font)
     (local-set-key "a" 'org-agenda)
     (local-set-key "p" 'projectile-switch-project)))
+
+(use-package el-get :ensure t :defer t)
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 
 ;;
 ;; os setting

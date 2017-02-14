@@ -14,42 +14,44 @@
 
 (use-package company :ensure t :defer t
   :init
-  (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-idle-delay 0.2
-		company-minimum-prefix-length 2
-		company-require-match nil
-		company-tooltip-limit 10
-		company-tooltip-align-annotations t
-		company-begin-commands '(self-insert-command))
-  ;; set backends
-  (setq company-backends
-		'(company-elisp
-		  company-abbrev
-		  company-keywords
-		  company-semantic
-		  ;; company-etags
-		  company-files
-		  company-yasnippet))
+  (progn
+    (add-hook 'after-init-hook 'global-company-mode)
+    (setq company-idle-delay 0.2
+          company-minimum-prefix-length 2
+          company-require-match nil
+          company-tooltip-limit 10
+          company-tooltip-align-annotations t
+          company-begin-commands '(self-insert-command))
+    ;; set backends
+    (setq company-backends
+          '(company-elisp
+            company-abbrev
+            company-keywords
+            company-semantic
+            ;; company-etags
+            company-files
+            company-yasnippet)))
   :config
-  ;; latex
-  ;; (add-to-list 'company-backends #'company-latex-commands)
-  (use-package company-statistics :ensure t :defer t
-	:init (add-hook 'after-init-hook 'company-statistics-mode))
+  (progn
+    ;; latex
+    ;; (add-to-list 'company-backends #'company-latex-commands)
+    (use-package company-statistics :ensure t :defer t
+      :init (add-hook 'after-init-hook 'company-statistics-mode))
 
-  ;; key bindings
-  (let ((map company-active-map))
-	(define-key map (kbd "C-/") 'company-search-candidates)
-	(define-key map (kbd "C-M-/") 'company-filter-candidates)
-	(define-key map (kbd "C-d") 'company-show-doc-buffer)
-	(define-key map (kbd "C-j") 'company-select-next)
-	(define-key map (kbd "C-k") 'company-select-previous)
-	(define-key map (kbd "C-l") 'company-complete-selection))
-  ;; Nicer looking faces
-  (custom-set-faces
-   '(company-tooltip-common
-	 ((t (:inherit company-tooltip :weight bold :underline nil))))
-   '(company-tooltip-common-selection
-	 ((t (:inherit company-tooltip-selection :weight bold :underline nil))))))
+    ;; key bindings
+    (let ((map company-active-map))
+      (define-key map (kbd "C-/") 'company-search-candidates)
+      (define-key map (kbd "C-M-/") 'company-filter-candidates)
+      (define-key map (kbd "C-d") 'company-show-doc-buffer)
+      (define-key map (kbd "C-j") 'company-select-next)
+      (define-key map (kbd "C-k") 'company-select-previous)
+      (define-key map (kbd "C-l") 'company-complete-selection))
+    ;; Nicer looking faces
+    (custom-set-faces
+     '(company-tooltip-common
+       ((t (:inherit company-tooltip :weight bold :underline nil))))
+     '(company-tooltip-common-selection
+       ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))))
 
 ;; (use-package company-quickhelp
 ;;   :ensure t

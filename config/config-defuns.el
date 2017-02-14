@@ -37,6 +37,11 @@
   (windmove-right)
   (delete-window))
 
+(defun save-desktop-save-buffers-kill-emacs ()
+  "Save buffers and current desktop every time when quitting emacs."
+  (interactive)
+  (desktop-save-in-desktop-dir)
+  (save-buffers-kill-emacs))
 
 ;; Describe function/variable etc. in popup
 (defun describe-thing-in-popup ()

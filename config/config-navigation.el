@@ -1,7 +1,7 @@
 ;; General
 
 ;;; IMPORTANT
-(use-package general :ensure t
+(use-package general :ensure t :defer t
   :init
   (general-create-definer leader-key
                           :states '(normal insert visual motion emacs)
@@ -31,9 +31,7 @@
   (add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
   (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil))))
 
-(use-package avy :ensure t
-  :commands (avy-goto-char))
-
+(use-package avy :ensure t :defer t)
 (use-package imenu-anywhere :ensure t :after ivy
   :commands (imenu-anywhere ivy-imenu-anywhere))
 

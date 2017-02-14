@@ -188,6 +188,7 @@
  "pd" 'counsel-projectile-find-dir
  "pb" 'counsel-projectile-switch-to-buffer
  "pp" 'counsel-projectile-switch-project
+ "pe" 'project-explorer-toggle
  )
 
 (leader-key
@@ -241,8 +242,7 @@
  "ta" 'company-mode
  "t!" 'flycheck-mode
  "th" 'hl-line-mode
- "tn" 'linum-mode
- "te" 'project-explorer-toggle
+ "tn" 'linum-mode 
  "tR" 'rainbow-mode
  "tt" 'counsel-load-theme
  "tT" 'lix/toggle-transparency

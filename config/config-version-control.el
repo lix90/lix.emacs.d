@@ -8,7 +8,6 @@
              magit-status)
   :config
   (progn
-
     (setq vc-follow-symlinks t)
     ;; make magit go fullscreen
     ;; (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
@@ -17,24 +16,12 @@
     (setq magit-push-always-verify nil)
     (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
 
-    (use-package evil-magit
-      :ensure t
-      :defer t
-      :after magit)
-
-    (use-package magit-gitflow
-      :ensure t
-      :defer t
-      :after magit
+    (use-package evil-magit :ensure t :defer t :after magit)
+    (use-package magit-gitflow :ensure t :defer t :after magit
       :init (add-hook 'magit-mode-hook 'turn-on-magit-gitflow))
-
     ))
 
-(use-package git-timemachine            ; Go back in Git time
-  :ensure t
-  :defer t
-  :commands git-timemachine
-  )
+(use-package git-timemachine :ensure t :defer t :commands git-timemachine)
 
 (defun quick-commit ()
   "make a quick commit from the mini-buffer"
@@ -48,5 +35,9 @@
 ;; (use-package magithub
 ;;   :ensure t
 ;;   :after magit)
+
+(use-package gitignore-mode :ensure t :defer t)
+(use-package gitconfig-mode :ensure t :defer t)
+(use-package gitattributes-mode :ensure t :defer t)
 
 (provide 'config-version-control)

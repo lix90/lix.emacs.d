@@ -1,6 +1,7 @@
 ;;; useR --- ess
 ;;; Commentary:
 ;;; Code:
+(el-get-bundle Lompik/company-ess)
 
 (use-package ess-site :ensure ess :defer t
   :mode
@@ -42,15 +43,28 @@
           ess-default-style 'DEFAULT
           ess-ask-for-ess-directory nil
           ess-eval-visibly nil
+          ess-directory user-project-directory
           ;; Keep global .Rhistory file.
           ess-history-directory "~/.R/"
           inferior-R-args "-q" ; I donnot want to print startup message
           )
     (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
-    (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
-    (add-hook 'ess-mode-hook 'company-mode)
-    (add-hook 'ess-mode-hook 'smartparens-mode)
+    (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input) 
+    (add-hook 'ess-mode-hook 'smartparens-mode) 
+    (add-hook 'inferior-ess-mode-hook 'smartparens-mode)
+
+    ;;(use-package company-ess :ensure t :defer t) 
+    
+    ;;locally to ess mode
+    (add-hook 'ess-mode-hook (lambda ()
+                               (require 'company-ess)
+                               (set (make-local-variable 'company-backends) '(company-ess))
+                               (company-mode)))
+    (add-hook 'inferior-ess-mode-hook (lambda ()
+                                        (require 'company-ess)
+                                        (set (make-local-variable 'company-backends) '(company-ess))
+                                        (company-mode)))
 
     (use-package key-combo :ensure t :defer t
       :init 

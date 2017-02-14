@@ -1,4 +1,3 @@
-
 (use-package flyspell-popup :ensure t :defer t :after flyspell
   :config (bind-keys :map flyspell-mode-map ("±" . flyspell-popup-correct)))
 
@@ -79,7 +78,6 @@
   (linum-mode 0)
   (writeroom-mode))
 
-;;; blog
 ;; (use-package blog-admin
 ;;   :ensure t
 ;;   :defer t

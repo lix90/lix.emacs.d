@@ -1,6 +1,6 @@
 alias x exit
 alias ex exit
-alias ll ls -lh
+
 alias gcn git clone --depth=1 $*
 alias gcnfq proxychains4 git clone --depth=1 $*
 alias gd git diff --color
@@ -15,11 +15,12 @@ alias grb git rebase
 alias grh git reset --hard
 alias gl git log --graph --abbrev-commit --decorate --date=relative --format=format:%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset) --all
 alias gl2 git log --graph --abbrev-commit --decorate --format=format:%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n' %C(white)%s%C(reset) %C(dim white)- %an%C(reset) --all
+
 alias la ls -lah
+alias ll ls -lh
 alias g git
 alias d deer
 alias s eshell/magit
-alias rf Symbol’s function definition is void: helm-recentf
 alias download youtube-dl
 alias fq /usr/local/Cellar/proxychains-ng/4.12_1/bin/proxychains4 $*
 alias yd ~/app/ydcv/ydcv.py $*
@@ -29,18 +30,14 @@ alias m tldr $*
 alias qr restart-emacs
 alias qq (evil-quit-all)
 
-alias emacs find-file $1
-alias FF find-file-other-window $1
+alias ffo find-file-other-window $1
 alias fl (ivy-locate)
 alias ff find-file $1
 alias vim find-file $1
-alias e find-file $1
-alias ec find-file $1
 alias fa (find-file "~/.emacs.d/eshell/alias")
-
+alias gtp (eshell/cd "~/projects/")
 alias sudo *sudo $*
 
-alias descfunc (describe-function $1)
 alias srcalias eshell/. ~/.emacs.d/eshell/alias
 
 alias dwb sdcv -c --use-dict="Random House Webster's Unabridged Dictionary (En-En)" $1
@@ -55,3 +52,8 @@ alias ... ../../
 alias .... ../../../
 alias ~ cd ~
 alias ipynb jupyter notebook &
+
+alias up eshell-up $1
+alias pk eshell-up-peek $1
+alias j eshell/j
+alias z eshell-z $1
