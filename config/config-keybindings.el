@@ -155,6 +155,9 @@
  "nh" 'yafolding-hide-parent-element
  "na" 'yafolding-toggle-all
  "ne" 'yafolding-toggle-element
+ ;;
+ "nj" 'move-text-down
+ "nk" 'move-text-up
  )
 
 (bind-key "H-F" 'sp-forward-symbol)
@@ -181,28 +184,10 @@
 
 (leader-key
  "p" '(:ignore t :which-key "Projects")
- ;; "p!"  'projectile-run-shell-command-in-root
- ;; "p&"  'projectile-run-async-shell-command-in-root
- ;; "pa"  'projectile-toggle-between-implementation-and-test
- ;; "pb"  'helm-projectile-switch-to-buffer
- ;; "pc"  'projectile-compile-project
- ;; "pd"  'helm-projectile-find-dir
- ;; "pD"  'projectile-dired
- ;; "pf"  'helm-projectile-find-file
- ;; "pg"  'goto-projects
- ;; "ph"  'helm-projectile
- ;; "pG"  'projectile-regenerate-tags
- ;; "pI"  'projectile-invalidate-cache
- ;; "pk"  'projectile-kill-buffers
- ;; "po"  'projectile-multi-occur
- ;; "pp"  'helm-projectile-switch-project
- ;; "pr"  'helm-projectile-recentf
- ;; "pR"  'projectile-replace
- ;; "ps"  'bmkp-set-desktop-bookmark
- ;; "pS"  'bmkp-desktop-jump
- ;; "pT"  'projectile-find-test-file
- ;; "pv"  'projectile-vc
- ;; "py"  'projectile-find-tag
+ "pf" 'counsel-projectile-find-file
+ "pd" 'counsel-projectile-find-dir
+ "pb" 'counsel-projectile-switch-to-buffer
+ "pp" 'counsel-projectile-switch-project
  )
 
 (leader-key
@@ -254,6 +239,18 @@
 (leader-key
  "t"  '(:ignore t :which-key "Toggles")
  "ta" 'company-mode
+ "t!" 'flycheck-mode
+ "th" 'hl-line-mode
+ "tn" 'linum-mode
+ "te" 'project-explorer-toggle
+ "tR" 'rainbow-mode
+ "tt" 'counsel-load-theme
+ "tT" 'lix/toggle-transparency
+ "tp" 'smartparens-mode
+ "tP" 'smartparens-global-strict-mode
+ "tr" 'rainbow-identifiers-mode
+ ;;"ts" 'toggle-dark-light-theme
+ "ts" 'flyspell-mode 
  "tb" 'fancy-battery-mode
  "tc" 'centered-cursor-mode
  "tC" 'centered-window-mode
@@ -261,23 +258,13 @@
  "tf" 'toggle-serif
  "tF" 'toggle-frame-fullscreen
  "tg" 'git-gutter+-mode
- "th" 'hl-line-mode
- "te" 'toggle-indicate-empty-lines
- "tE" 'eldoc-mode
- "tm" 'hidden-mode-line-mode
- "tM" 'spaceline-toggle-minor-modes
- "tn" 'linum-mode
- "tN" 'neotree-toggle
+ ;;"te" 'toggle-indicate-empty-lines
+ ;;"tE" 'eldoc-mode
+ ;;"tm" 'hidden-mode-line-mode
+ "tM" 'spaceline-toggle-minor-modes 
+ ;;"tN" 'neotree-toggle
+ "tw" 'writeroom-mode 
  "to" 'org-toggle-link-display
- "tp" 'smartparens-mode
- "tP" 'smartparens-global-strict-mode
- "tr" 'rainbow-identifiers-mode
- "tR" 'rainbow-mode
- ;;"ts" 'toggle-dark-light-theme
- "ts" 'flyspell-mode
- "tw" 'writeroom-mode
- "tt" 'counsel-load-theme
- "tT" 'lix/toggle-transparency
  )
 
 (leader-key

@@ -2,9 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package ess-site
-  :ensure ess
-  :defer t
+(use-package ess-site :ensure ess :defer t
   :mode
   (("\\.sp\\'"           . S-mode)
    ("/R/.*\\.q\\'"       . R-mode)
@@ -37,7 +35,6 @@
   :commands R
   :config
   (progn
-
     (setq ess-first-continued-statement-offset 2
           ess-continued-statement-offset 0
           ess-expression-offset 2
@@ -52,15 +49,11 @@
     (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
     (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
-
     (add-hook 'ess-mode-hook 'company-mode)
     (add-hook 'ess-mode-hook 'smartparens-mode)
 
-    (use-package key-combo
-      :ensure t
-      :init
-      (key-combo-mode 1)
-      :config
+    (use-package key-combo :ensure t :defer t
+      :init 
       (progn
         (add-hook 'ess-mode-hook
                   '(lambda()
@@ -91,8 +84,7 @@
 
 ;; Rmd in emacs
 ;; reference: http://futurismo.biz/archives/2982
-(use-package polymode
-  :ensure t
+(use-package polymode :ensure t
   :mode (("\\.[SR]nw\\'" . poly-noweb+r-mode)
          ("\\.Rmd\\'" . Rmd-mode))
   :init
@@ -133,38 +125,27 @@
                (message "Running rmarkdown on %s" buffer-file-name)
                (ess-execute R-cmd 'buffer nil nil)
                (switch-to-buffer rmd-buf)
-               (ess-show-buffer (buffer-name-sbuffer) nil)))))
-    ))
+               (ess-show-buffer (buffer-name-sbuffer) nil)))))))
 ;; (define-key polymode-mode-map "\M-ns" 'ess-rmarkdown)
-
 
 ;;; Python
 (defconst python-version "python2")
 
-(use-package anaconda-mode :ensure t :defer t
-  :init
-  (progn
-	(add-hook 'python-mode-hook 'anaconda-mode)))
-
-(use-package company-anaconda :ensure t
-  :init (add-to-list 'company-backends 'company-anaconda))
-
-;; (use-package elpy :ensure t
-;;   :init (add-to-list 'company-backends 'elpy-company-backend))
 
 (use-package python :ensure t :commands (run-python)
   :mode ("\\.py\\'" . python-mode)
   :init
   (progn
-	(remove-hook 'python-mode-hook #'python-setup-shell)
-
+	;; (remove-hook 'python-mode-hook #'python-setup-shell)
     (defun python-send-line ()
       (interactive)
       (save-excursion 
         (back-to-indentation)
-        (python-shell-send-string (concat (buffer-substring-no-properties (point)
-                                                                          (line-end-position)) 
-                                          "\n"))))
+        (python-shell-send-string
+         (concat (buffer-substring-no-properties
+                  (point)
+                  (line-end-position)) 
+                 "\n"))))
     
 	(defun python-default ()
 	  (setq mode-name "Python"
@@ -173,14 +154,14 @@
 			python-shell-interpreter "ipython"
 			python-shell-interpreter-args (if is-mac
                                               "--pylab=osx --matplotlib=osx --colors=Linux")
-            python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-            python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-            python-shell-completion-setup-code
-            "from IPython.core.completerlib import module_completion"
-            python-shell-completion-module-string-code
-            "';'.join(module_completion('''%s'''))\n"
-            python-shell-completion-string-code
-            "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"
+            ;; python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+            ;; python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+            ;; python-shell-completion-setup-code
+            ;; "from IPython.core.completerlib import module_completion"
+            ;; python-shell-completion-module-string-code
+            ;; "';'.join(module_completion('''%s'''))\n"
+            ;; python-shell-completion-string-code
+            ;; "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"
             )
 	  (when (version< emacs-version "24.5")
 		;; auto-indent on colon doesn't work well with if statement
@@ -205,6 +186,17 @@
     (add-hook 'python-mode-hook #'electric-indent-mode))
   :config
   (progn 
+    (use-package anaconda-mode :ensure t :defer t
+      :init
+      (progn
+        (add-hook 'python-mode-hook 'anaconda-mode)))
+
+    (use-package company-anaconda :ensure t
+      :init (add-to-list 'company-backends 'company-anaconda))
+
+    ;; (use-package elpy :ensure t
+    ;;   :init (add-to-list 'company-backends 'elpy-company-backend))
+
     (add-hook 'smartparens-mode 'inferior-python-mode-hook)
     (add-hook 'company-mode 'inferior-python-mode-hook)
     (add-hook 'inferior-python-mode-hook (lambda ()
@@ -213,14 +205,6 @@
     (defun inferior-python-setup-hook ()
       (setq indent-tabs-mode t))
     (add-hook 'inferior-python-mode-hook #'inferior-python-setup-hook)))
-;; (add-hook 'python-mode-hook
-;; 		   (lambda () 
-;; 			 (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
-;; 			 (add-to-list 'write-file-functions 'delete-trailing-whitespace)
-;; 			 (local-set-key (kbd "C-c s d") #'python-shell-send-defun)
-;; 			 (local-set-key (kbd "C-c s b") #'python-shell-send-buffer)
-;; 			 (local-set-key (kbd "C-c C-u") #'elpy-flymake-show-error)
-;; 			 (local-set-key (kbd "C-c s r") #'python-shell-send-region))
 
 (add-hook 'after-init-hook
           (lambda ()
@@ -241,22 +225,22 @@
 ;; (defalias 'workon 'pyvenv-workon)
 ;; (defalias 'runpy 'run-python)
 
-(use-package ein :ensure t :defer t
-  :config
-  (progn
-    ;; Use Jedi with EIN
-    ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup) 
-    (setq ein:use-auto-complete t 
-          ein:default-url-or-port "http://localhost:8888"
-          ein:query-timeout 1000
-          ein:output-type-perference '(emacs-lisp
-                                       svg png
-                                       jpeg html
-                                       text latex
-                                       javascript)
-          ein:console-args
-          (if is-mac '("--gui=osx" "--matplotlib=osx" "--colors=Linux")))
-    (use-package websocket :ensure t)))
+;; (use-package ein :ensure t :defer t
+;;   :config
+;;   (progn
+;;     ;; Use Jedi with EIN
+;;     ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup) 
+;;     (setq ein:use-auto-complete t 
+;;           ein:default-url-or-port "http://localhost:8888"
+;;           ein:query-timeout 1000
+;;           ein:output-type-perference '(emacs-lisp
+;;                                        svg png
+;;                                        jpeg html
+;;                                        text latex
+;;                                        javascript)
+;;           ein:console-args
+;;           (if is-mac '("--gui=osx" "--matplotlib=osx" "--colors=Linux")))
+;;     (use-package websocket :ensure t)))
 
 ;; (use-package ob-ipython
 ;;   :ensure t

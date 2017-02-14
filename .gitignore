@@ -24,3 +24,7 @@ projectile-bookmarks.eld
 /url/
 /tramp
 .persistent-scratch
+company-statistics-cache.el
+network-security.data
+/eshell/lastdir
+/eshell/history

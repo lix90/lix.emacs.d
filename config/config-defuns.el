@@ -4,6 +4,17 @@
 ;; alias
 (defalias 'close-all 'lix--util-close-all-buffers)
 
+(defun split-window-right-and-focus ()
+  "Split the window horizontally and focus the new window."
+  (interactive)
+  (split-window-right)
+  (windmove-right))
+(defun split-window-below-and-focus ()
+  "Split the window vertically and focus the new window."
+  (interactive)
+  (split-window-below)
+  (windmove-down))
+
 (defun delete-window-below ()
   "Delete window below. (require 'windmove)"
   (interactive)

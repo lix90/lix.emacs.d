@@ -15,49 +15,48 @@
 
 ;; Highlight current line number
 (use-package linum-hl-cl-number :load-path "elisp"
-  :init (setq linum-format 'linum-highlight-current-line))
+             :init (setq linum-format 'linum-highlight-current-line))
 
-(use-package highlight-numbers :ensure t :defer t
-  :init (add-hook 'prog-mode-hook #'highlight-numbers-mode))
+;; (use-package highlight-numbers :ensure t :defer t
+;;   :init (add-hook 'prog-mode-hook #'highlight-numbers-mode))
 
-(use-package hl-todo :ensure t :init (global-hl-todo-mode t)
-  :config 
-  (define-key hl-todo-mode-map (kbd "C-c p") 'hl-todo-previous)
-  (define-key hl-todo-mode-map (kbd "C-c n") 'hl-todo-next)
-  (define-key hl-todo-mode-map (kbd "C-c o") 'hl-todo-occur)
-  (setq hl-todo-keyword-faces
-        '(("HOLD" . "#d0bf8f")
-          ("TODO" . "#cc9393")
-          ("NEXT" . "#dca3a3")
-          ("THEM" . "#dc8cc3")
-          ("PROG" . "#7cb8bb")
-          ("OKAY" . "#7cb8bb")
-          ("DONT" . "#5f7f5f")
-          ("FAIL" . "#8c5353")
-          ("DONE" . "#afd8af")
-          ("FIXME" . "#cc9393")
-          ("XXX"   . "#cc9393")
-          ("XXXX"  . "#cc9393")
-          ("???"   . "#cc9393")))
+(use-package hl-todo :ensure t :defer 10
+             :config 
+             (setq hl-todo-keyword-faces
+                   '(("HOLD" . "#d0bf8f")
+                     ("TODO" . "#cc9393")
+                     ("NEXT" . "#dca3a3")
+                     ("THEM" . "#dc8cc3")
+                     ("PROG" . "#7cb8bb")
+                     ("OKAY" . "#7cb8bb")
+                     ("DONT" . "#5f7f5f")
+                     ("FAIL" . "#8c5353")
+                     ("DONE" . "#afd8af")
+                     ("FIXME" . "#cc9393")
+                     ("XXX"   . "#cc9393")
+                     ("XXXX"  . "#cc9393")
+                     ("???"   . "#cc9393")))
 ;;; global-hl-todo-modeで有効にするメジャーモード(derived-mode) 
-  (setq hl-todo-activate-in-modes
-        '(prog-mode markdown-mode)))
+             (setq hl-todo-activate-in-modes
+                   '(prog-mode markdown-mode)))
 
 ;;------------------------------------------------------------------------------
 ;; UI
 ;;------------------------------------------------------------------------------
 
 (use-package fancy-battery :ensure t :after spaceline
-  :defer 10 :config (fancy-battery-mode))
+             :defer 10 :config (fancy-battery-mode))
 (use-package powerline :ensure t :if window-system
-  :config (setq-default powerline-default-separator 'nil))
+             :config (setq-default powerline-default-separator 'nil))
 (use-package spaceline :ensure t
-  :config (setq-default mode-line-format '("%e" (:eval (spaceline-ml-ati)))))
+             :config (setq-default mode-line-format '("%e" (:eval (spaceline-ml-ati)))))
 (use-package spaceline-custom :after spaceline :load-path "elisp")
 (use-package spaceline-colors :after spaceline-custom  :load-path "elisp"
-  :init (add-hook 'after-init-hook 'spaceline-update-faces)
-  :config (advice-add 'load-theme :after 'spaceline-update-faces))
+             :init (add-hook 'after-init-hook 'spaceline-update-faces)
+             :config (advice-add 'load-theme :after 'spaceline-update-faces))
 
+(use-package all-the-icons-dired :ensure t :defer t
+             :init (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 ;; Themed with Spaceline
 ;; (use-package gruvbox-theme :ensure t :defer t)
 ;; (use-package creamsody-theme :ensure t)
@@ -111,7 +110,7 @@
 ;;   (cyphejor-mode 1)
 ;;   )
 
-(use-package git-gutter+ :ensure t :diminish (git-gutter+-mode) :defer t
+(use-package git-gutter+ :ensure t :defer t
   :init
   (add-hook 'markdown-mode-hook #'git-gutter+-mode)
   (add-hook 'prog-mode-hook #'git-gutter+-mode)
@@ -122,10 +121,9 @@
   )
 
 (use-package git-gutter-fringe+ :ensure t :after git-gutter+
-  :if (display-graphic-p)
-  :commands (git-gutter+-mode)
+  :if (display-graphic-p) 
   :init
-  (require 'git-gutter-fringe+)
+  ;;(require 'git-gutter-fringe+)
   (setq git-gutter-fr+-side 'right-fringe) 
   (define-fringe-bitmap 'git-gutter-fr+-added
     ;;[224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]

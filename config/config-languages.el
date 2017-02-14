@@ -60,8 +60,12 @@
   :commands (matlab-mode matlab-shell))
 (eval-after-load 'matlab
   '(progn
-     (setq matlab-indent-function-body t)
-     (setq matlab-shell-command-switches '("-nosplash -nodesktop"))
+     (setq matlab-indent-function-body t
+           matlab-functions-have-end nil
+           matlab-vers-on-startup nil
+           matlab-handle-simulink nil
+           matlab-shell-ask-MATLAB-for-completions nil
+           matlab-shell-command-switches '("-nosplash -nodesktop")) 
      (setq matlab-shell-command
            (or
             (executable-find "matlab")
@@ -70,7 +74,7 @@
      ;;(add-hook 'matlab-mode-hook 'company-mode)
      ;;(add-hook 'matlab-mode-hook 'smartparens-mode)
      ;; (add-to-list 'company-backends 'company-matlab-shell)
-     (evil-set-initial-state 'matlab-shell-mode 'emacs)))
+     ))
 
 ;;; sql
 (use-package sql :ensure t :defer t

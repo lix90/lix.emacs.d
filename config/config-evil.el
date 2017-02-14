@@ -20,24 +20,23 @@
       :type 'boolean
       :group 'dotemacs-evil)
 
-    (setq evil-search-module 'evil-search)
-    (setq evil-magic 'very-magic)
-    (setq evil-emacs-state-cursor `(,dotemacs-evil/emacs-cursor box))
-    (setq evil-normal-state-cursor '("DarkGoldenrod2" box))
-    (setq evil-visual-state-cursor '("gray" box))
-    (setq evil-insert-state-cursor '("chartreuse3" (bar . 2)))
-    (setq evil-replace-state-cursor '("red" hbar))
-    (setq evil-operator-state-cursor '("red" hollow))
-    ;;(run-with-idle-timer 20 t 'evil-normal-state)
+    (setq evil-search-module 'evil-search
+          evil-magic 'very-magic
+          evil-emacs-state-cursor `(,dotemacs-evil/emacs-cursor box)
+          evil-normal-state-cursor '("DarkGoldenrod2" box)
+          evil-visual-state-cursor '("gray" box)
+          evil-insert-state-cursor '("chartreuse3" (bar . 2))
+          evil-replace-state-cursor '("red" hbar)
+          evil-operator-state-cursor '("red" hollow))
+    
+    (run-with-idle-timer 30 t 'evil-normal-state)
 
     (general-define-key
      :states '(normal visual)
      "j" 'evil-next-visual-line
      "k" 'evil-previous-visual-line)
 
-    (use-package evil-escape
-      :ensure t
-      :diminish ""
+    (use-package evil-escape :ensure t 
       :init
       (evil-escape-mode)
       ;; use "fd" for escape
@@ -54,35 +53,48 @@
 	  )
 
     (use-package evil-surround :ensure t
-      ;; :commands (evil-surround-region evil-surround-change)
+      :commands (evil-surround-region evil-surround-change)
       :config
 	  (global-evil-surround-mode 1)
 	  (general-define-key
 	   :states '(visual)
 	   "s" 'evil-surround-region
-	   "S" 'evil-substitute)
-	  )
+	   "S" 'evil-substitute))
+
+    (use-package evil-embrace :ensure t :defer t
+      :init
+      (progn
+        (evil-embrace-enable-evil-surround-integration)
+        (add-hook 'org-mode-hook 'embrace-org-mode-hook)))
 
     (use-package evil-commentary :ensure t :defer t
       :commands (evil-commentary evil-commentary-line)
-      :diminish evil-commentary-mode
-      :config
-      (evil-commentary-mode)))
-  )
+      :diminish evil-commentary-mode)
+    ))
 
 (defun my-send-string-to-terminal (string)
   (unless (display-graphic-p) (send-string-to-terminal string)))
 
-(defun my-evil-terminal-cursor-change ()
-  (when (string= (getenv "TERM_PROGRAM") "iTerm.app")
-    (add-hook 'evil-insert-state-entry-hook (lambda () (my-send-string-to-terminal "\e]50;CursorShape=1\x7")))
-    (add-hook 'evil-insert-state-exit-hook  (lambda () (my-send-string-to-terminal "\e]50;CursorShape=0\x7"))))
-  (when (and (getenv "TMUX") (string= (getenv "TERM_PROGRAM") "iTerm.app"))
-    (add-hook 'evil-insert-state-entry-hook (lambda () (my-send-string-to-terminal "\ePtmux;\e\e]50;CursorShape=1\x7\e\\")))
-    (add-hook 'evil-insert-state-exit-hook  (lambda () (my-send-string-to-terminal "\ePtmux;\e\e]50;CursorShape=0\x7\e\\")))))
 
-(add-hook 'after-make-frame-functions (lambda (frame) (my-evil-terminal-cursor-change)))
-(my-evil-terminal-cursor-change)
+;; (defun my-evil-terminal-cursor-change ()
+;;   (when (string= (getenv "TERM_PROGRAM") "iTerm.app")
+;;     (add-hook 'evil-insert-state-entry-hook
+;;               (lambda ()
+;;                 (my-send-string-to-terminal "\e]50;CursorShape=1\x7")))
+;;     (add-hook 'evil-insert-state-exit-hook
+;;               (lambda ()
+;;                 (my-send-string-to-terminal "\e]50;CursorShape=0\x7"))))
+;;   (when (and (getenv "TMUX") (string= (getenv "TERM_PROGRAM") "iTerm.app"))
+;;     (add-hook 'evil-insert-state-entry-hook
+;;               (lambda ()
+;;                 (my-send-string-to-terminal "\ePtmux;\e\e]50;CursorShape=1\x7\e\\")))
+;;     (add-hook 'evil-insert-state-exit-hook
+;;               (lambda ()
+;;                 (my-send-string-to-terminal "\ePtmux;\e\e]50;CursorShape=0\x7\e\\")))))
+;;
+;; (add-hook 'after-make-frame-functions
+;;           (lambda (frame) (my-evil-terminal-cursor-change)))
+;; (my-evil-terminal-cursor-change)
 
 ;; to save the buffer when we exit the insert mode
 (defun my-save-if-bufferfilename ()
@@ -98,16 +110,12 @@
 ;; Enter an emacs mode in a given state
 (loop for (mode . state)
       in '((inferior-emacs-lisp-mode . emacs)
-           ;;(nrepl-mode . insert)
-           ;;(pylookup-mode . emacs)
            (comint-mode . emacs)
            (shell-mode . emacs)
            (git-commit-mode . insert)
            (git-rebase-mode . emacs)
            (term-mode . emacs)
            (help-mode . emacs)
-           ;;(grep-mode . emacs)
-           ;;(bc-menu-mode . emacs)
            (magit-branch-manager-mode . emacs)
            (dired-mode . emacs)
            (inferior-ess-mode . emacs)
