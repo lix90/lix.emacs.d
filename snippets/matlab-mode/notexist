@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: if not exist
+# key: notexist
+# --
+if ~exist(${1:'obj', 'var'})
+   $0
+end

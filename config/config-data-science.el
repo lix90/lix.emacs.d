@@ -1,99 +1,103 @@
 ;;; useR --- ess
 ;;; Commentary:
 ;;; Code:
-(el-get-bundle Lompik/company-ess)
 
 (use-package ess-site :ensure ess :defer t
-  :mode
-  (("\\.sp\\'"           . S-mode)
-   ("/R/.*\\.q\\'"       . R-mode)
-   ("\\.[qsS]\\'"        . S-mode)
-   ("\\.ssc\\'"          . S-mode)
-   ("\\.SSC\\'"          . S-mode)
-   ("\\.[rR]\\'"         . R-mode)
-   ("\\.[rR]nw\\'"       . Rnw-mode)
-   ("\\.[sS]nw\\'"       . Snw-mode)
-   ("\\.[rR]profile\\'"  . R-mode)
-   ("NAMESPACE\\'"       . R-mode)
-   ("CITATION\\'"        . R-mode)
-   ("\\.omg\\'"          . omegahat-mode)
-   ("\\.hat\\'"          . omegahat-mode)
-   ("\\.lsp\\'"          . XLS-mode)
-   ("\\.do\\'"           . STA-mode)
-   ("\\.ado\\'"          . STA-mode)
-   ("\\.[Ss][Aa][Ss]\\'" . SAS-mode)
-   ("\\.jl\\'"           . ess-julia-mode)
-   ("\\.[Ss]t\\'"        . S-transcript-mode)
-   ("\\.Sout"            . S-transcript-mode)
-   ("\\.[Rr]out"         . R-transcript-mode)
-   ("\\.Rd\\'"           . Rd-mode)
-   ("\\.[Bb][Uu][Gg]\\'" . ess-bugs-mode)
-   ("\\.[Bb][Oo][Gg]\\'" . ess-bugs-mode)
-   ("\\.[Bb][Mm][Dd]\\'" . ess-bugs-mode)
-   ("\\.[Jj][Aa][Gg]\\'" . ess-jags-mode)
-   ("\\.[Jj][Oo][Gg]\\'" . ess-jags-mode)
-   ("\\.[Jj][Mm][Dd]\\'" . ess-jags-mode))
-  :commands R
-  :config
-  (progn
-    (setq ess-first-continued-statement-offset 2
-          ess-continued-statement-offset 0
-          ess-expression-offset 2
-          ess-nuke-trailing-whitespace-p t
-          ess-default-style 'DEFAULT
-          ess-ask-for-ess-directory nil
-          ess-eval-visibly nil
-          ess-directory user-project-directory
-          ;; Keep global .Rhistory file.
-          ess-history-directory "~/.R/"
-          inferior-R-args "-q" ; I donnot want to print startup message
-          )
-    (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
-    (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
-    (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input) 
-    (add-hook 'ess-mode-hook 'smartparens-mode) 
-    (add-hook 'inferior-ess-mode-hook 'smartparens-mode)
+             :mode
+             (("\\.sp\\'"           . S-mode)
+              ("/R/.*\\.q\\'"       . R-mode)
+              ("\\.[qsS]\\'"        . S-mode)
+              ("\\.ssc\\'"          . S-mode)
+              ("\\.SSC\\'"          . S-mode)
+              ("\\.[rR]\\'"         . R-mode)
+              ("\\.[rR]nw\\'"       . Rnw-mode)
+              ("\\.[sS]nw\\'"       . Snw-mode)
+              ("\\.[rR]profile\\'"  . R-mode)
+              ("NAMESPACE\\'"       . R-mode)
+              ("CITATION\\'"        . R-mode)
+              ("\\.omg\\'"          . omegahat-mode)
+              ("\\.hat\\'"          . omegahat-mode)
+              ("\\.lsp\\'"          . XLS-mode)
+              ("\\.do\\'"           . STA-mode)
+              ("\\.ado\\'"          . STA-mode)
+              ("\\.[Ss][Aa][Ss]\\'" . SAS-mode)
+              ("\\.jl\\'"           . ess-julia-mode)
+              ("\\.[Ss]t\\'"        . S-transcript-mode)
+              ("\\.Sout"            . S-transcript-mode)
+              ("\\.[Rr]out"         . R-transcript-mode)
+              ("\\.Rd\\'"           . Rd-mode)
+              ("\\.[Bb][Uu][Gg]\\'" . ess-bugs-mode)
+              ("\\.[Bb][Oo][Gg]\\'" . ess-bugs-mode)
+              ("\\.[Bb][Mm][Dd]\\'" . ess-bugs-mode)
+              ("\\.[Jj][Aa][Gg]\\'" . ess-jags-mode)
+              ("\\.[Jj][Oo][Gg]\\'" . ess-jags-mode)
+              ("\\.[Jj][Mm][Dd]\\'" . ess-jags-mode))
+             :commands R
+             :config
+             (progn
 
-    ;;(use-package company-ess :ensure t :defer t) 
-    
-    ;;locally to ess mode
-    (add-hook 'ess-mode-hook (lambda ()
-                               (require 'company-ess)
-                               (set (make-local-variable 'company-backends) '(company-ess))
-                               (company-mode)))
-    (add-hook 'inferior-ess-mode-hook (lambda ()
-                                        (require 'company-ess)
-                                        (set (make-local-variable 'company-backends) '(company-ess))
-                                        (company-mode)))
+               (use-package ess-smart-underscore :ensure t :defer t)
 
-    (use-package key-combo :ensure t :defer t
-      :init 
-      (progn
-        (add-hook 'ess-mode-hook
-                  '(lambda()
-                     (key-combo-mode t)))
-        (add-hook 'inferior-ess-mode-hook
-                  '(lambda()
-                     (key-combo-mode t)))
-        (defvar key-combo-ess-default
-          '((">"  . (" > " " %>% "))
-            ("$"  . ("$" " %$% "))
-            ("<>" . " %<>% ")
-            ("*"  . ("*" " * " "%*%"))
-            ("%" . ("%" "%in%" "%%"))
-            ("^"  . ("^" " ^ "))
-            ("/"  . ("/" " / "))
-            ("=" . ("=" " = " " == "))
-            ("!=" . (" != "))
-            ("," . ("," ", "))
-            ("~" . " ~ ")
-            (":" . (":" "::" ":::"))
-            (":="  . " := ") ; data.table
-            ("->"  . " -> ")))
+               (use-package ess-R-data-view :ensure t :defer t
+                            :commands (ess-R-dv-ctable ess-R-dv-pprint))
 
-        (key-combo-define-hook '(ess-mode-hook inferior-ess-mode-hook)
-                               'ess-key-combo-load-default
-                               key-combo-ess-default)))))
+               (use-package ess-R-object-popup :ensure t :defer t
+                            :commands (ess-R-object-popup))
+
+               (el-get-bundle Lompik/company-ess)
+               
+               (setq ess-first-continued-statement-offset 2
+                     ess-continued-statement-offset 0
+                     ess-expression-offset 2
+                     ess-nuke-trailing-whitespace-p t
+                     ess-default-style 'DEFAULT
+                     ess-ask-for-ess-directory nil
+                     ess-eval-visibly nil
+                     ess-directory user-project-directory
+                     ;; Keep global .Rhistory file.
+                     ess-history-directory "~/.R/"
+                     inferior-R-args "-q" ; I donnot want to print startup message
+                     )
+
+               (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input) 
+               (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
+               (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
+               (define-key ess-mode-map (kbd "C-c v t") 'ess-R-dv-ctable)
+               (define-key ess-mode-map (kbd "C-c v p") 'ess-R-dv-pprint)
+               (define-key ess-mode-map (kbd "C-c v o") 'ess-R-object-popup)
+               
+               (add-hook 'ess-mode-hook 'smartparens-mode)
+               (add-hook 'ess-mode-hook 'yas-minor-mode)
+               (add-hook 'inferior-ess-mode-hook 'smartparens-mode)
+               (add-hook 'ess-mode-hook 'company-mode)
+               (add-hook 'inferior-ess-mode-hook 'company-mode)
+
+               (use-package key-combo :ensure t :defer t
+                            :init 
+                            (add-hook 'ess-mode-hook
+                                      '(lambda()
+                                         (key-combo-mode t)))
+                            (add-hook 'inferior-ess-mode-hook
+                                      '(lambda()
+                                         (key-combo-mode t)))
+                            (defvar key-combo-ess-default
+                              '((">"  . (" > " " %>% "))
+                                ("$"  . ("$" " %$% "))
+                                ("<>" . " %<>% ")
+                                ("*"  . ("*" " * " "%*%"))
+                                ("%" . ("%" "%in%" "%%"))
+                                ("^"  . ("^" " ^ "))
+                                ("/"  . ("/" " / "))
+                                ("=" . ("=" " = " " == "))
+                                ("!" . ("!" " != "))
+                                ("," . ("," ", "))
+                                ("~" . " ~ ")
+                                (":" . (":" "::" ":::"))
+                                (":="  . " := ") ; data.table
+                                ("->"  . " -> ")))
+                            (key-combo-define-hook '(ess-mode-hook inferior-ess-mode-hook)
+                                                   'ess-key-combo-load-default
+                                                   key-combo-ess-default))))
 
 
 ;; Rmd in emacs
@@ -141,10 +145,6 @@
                (switch-to-buffer rmd-buf)
                (ess-show-buffer (buffer-name-sbuffer) nil)))))))
 ;; (define-key polymode-mode-map "\M-ns" 'ess-rmarkdown)
-
-;;; Python
-(defconst python-version "python2")
-
 
 (use-package python :ensure t :commands (run-python)
   :mode ("\\.py\\'" . python-mode)

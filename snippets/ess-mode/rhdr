@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: R Code Header
+# key: rhdr
+# --
+## R Code for ${1:for doing something}
+## Author: ${2:Xiang, Li} <${3:alexiangli@outlook.com}>
+## Date: `(format-time-string "%Y-%m-%d %H:%M:%S")`
+
+$0

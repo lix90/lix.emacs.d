@@ -37,16 +37,24 @@
 
 ;;; swiper, flx, counsel, ivy
 (use-package flx :ensure t :defer t)
+(use-package hydra :ensure t :defer t)
 (use-package swiper :ensure t :defer t :ensure counsel
-  :commands (swiper ivy-resume counsel-M-x counsel-find-file)
-  :init (ivy-mode 1)
-  :config
-  (setq ivy-re-builders-alist
-        '((ivy-switch-buffer . ivy--regex-plus)
-          (t . ivy--regex-fuzzy)))
-  (setq ivy-fixed-height-minibuffer t
-        ivy-height 20
-        ivy-use-virtual-buffers t))
+             :commands (swiper ivy-resume counsel-M-x counsel-find-file)
+             :init (ivy-mode 1)
+             :config
+             (setq ivy-re-builders-alist
+                   '((ivy-switch-buffer . ivy--regex-plus)
+                     (t . ivy--regex-fuzzy)))
+             (setq ivy-fixed-height-minibuffer t
+                   ivy-height 20
+                   ivy-use-virtual-buffers t
+                   ivy-display-style 'fancy)
+             ;;advise swiper to recenter on exit
+             (defun lix/swiper-recenter (&rest args)
+               "recenter display after swiper"
+               (recenter)
+               )
+             (advice-add 'swiper :after #'lix/swiper-recenter))
 
 ;; take care of the whitespace
 (use-package whitespace :ensure t :defer t
@@ -155,18 +163,23 @@
 (use-package projectile :ensure t :defer t
              :config (projectile-global-mode))
 (use-package counsel-projectile :ensure t :defer t
-             :config (counsel-projectile-on))
+  :config (counsel-projectile-on))
 
-;;;-----------------------------------------------------------------------------
 (use-package aggressive-indent :ensure t :defer t
-             :init
-             (global-aggressive-indent-mode 1)
-             (add-to-list 'aggressive-indent-excluded-modes 'python-mode)
-             (add-to-list 'aggressive-indent-excluded-modes 'haml-mode)
-             (add-to-list 'aggressive-indent-excluded-modes 'html-mode))
+  :init
+  (global-aggressive-indent-mode 1)
+  (add-to-list 'aggressive-indent-excluded-modes 'python-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'haml-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'html-mode))
+
+(use-package aggressive-fill-paragraph :ensure t :defer t
+  :config
+  (afp-setup-recommended-hooks)
+  ;;(add-to-list 'afp-fill-comments-only-mode-list 'python-mode)
+  )
 
 (use-package whitespace-cleanup-mode :ensure t :defer t
-             :init (global-whitespace-cleanup-mode 1))
+  :init (global-whitespace-cleanup-mode 1))
 
 (use-package semantic :ensure t :defer t
              :config

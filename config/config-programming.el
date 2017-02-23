@@ -65,11 +65,7 @@
 ;;             ))
 
 (use-package yasnippet :ensure t :defer t
-  :config
-  ;; (yas-reload-all)
-  (yas-global-mode t)
-  (add-hook 'prog-mode-hook #'yas-minor-mode)
-  )
+  :init (add-hook 'prog-mode-hook #'yas-minor-mode))
 
 ;; (use-package nameless :ensure t :defer t
 ;;   :config

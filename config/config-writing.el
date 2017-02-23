@@ -15,6 +15,7 @@
 
 ;;; mmm
 (use-package mmm-mode :ensure t :defer t
+  :commands (mmm-mode)
   :init
   (mmm-add-classes
    '((markdown-python
@@ -46,8 +47,7 @@
         ;;markdown-open-command "/Users/Roambot/bin/scripts/mark.sh"
         )
   :config  
-  (progn 
-    
+  (progn     
     (general-define-key :states '(normal) :keymaps 'markdown-mode-map
                         "TAB" 'markdown-cycle
                         "gj"  'outline-forward-same-level
@@ -67,8 +67,7 @@
                         "C-c C-l" 'markdown-insert-list-item)
     (add-hook 'markdown-mode-hook #'my-markdown-config)))
 
-(use-package writeroom-mode
-  :ensure t
+(use-package writeroom-mode :ensure t
   :commands (writeroom-mode))
 
 (defun distraction-free ()
@@ -97,6 +96,7 @@
 ;;; org
 ;;;-----------------------------------------------------------------------------
 
+(use-package org-eldoc :load-path "elisp" :after org)
 (use-package org :ensure t :defer t
   :mode ("\\.org$" . org-mode)
   :config

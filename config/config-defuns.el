@@ -503,6 +503,13 @@ argument takes the kindows rotate backwards."
   (interactive)
   (find-file "~"))
 
+(defun lix/restore-desktop ()
+  "Load the desktop and enable autosaving."
+  (interactive)
+  (let ((desktop-load-locked-desktop "ask"))
+    (desktop-read)
+    (desktop-save-mode 1)))
+
 ;;; describe this point lisp only
 (defun describe-foo-at-point ()
   "Show the documentation of the Elisp function and variable near point.

@@ -45,35 +45,26 @@
 ;;------------------------------------------------------------------------------
 
 (use-package fancy-battery :ensure t :after spaceline
-             :defer 10 :config (fancy-battery-mode))
+  :defer 10 :config (fancy-battery-mode))
 (use-package powerline :ensure t :if window-system
-             :config (setq-default powerline-default-separator 'nil))
+  :config (setq-default powerline-default-separator 'nil))
 (use-package spaceline :ensure t
-             :config (setq-default mode-line-format '("%e" (:eval (spaceline-ml-ati)))))
+  :config (setq-default mode-line-format '("%e" (:eval (spaceline-ml-ati)))))
 (use-package spaceline-custom :after spaceline :load-path "elisp")
 (use-package spaceline-colors :after spaceline-custom  :load-path "elisp"
-             :init (add-hook 'after-init-hook 'spaceline-update-faces)
-             :config (advice-add 'load-theme :after 'spaceline-update-faces))
+  :init (add-hook 'after-init-hook 'spaceline-update-faces)
+  :config (advice-add 'load-theme :after 'spaceline-update-faces))
 
 (use-package all-the-icons-dired :ensure t :defer t
-             :init (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
-;; Themed with Spaceline
+  :init (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 ;; (use-package gruvbox-theme :ensure t :defer t)
-;; (use-package creamsody-theme :ensure t)
-;; (use-package suscolors-theme :ensure t :defer t)
 ;; (use-package atom-one-dark-theme :ensure t :defer t)
-;; (use-package forest-blue-theme :ensure t :defer t)
-;; (use-package liso-theme :ensure t :defer t)
-;; (use-package peacock-theme :ensure t :defer t)
 ;; (use-package solarized-theme :ensure t :defer t)
-;; (use-package darktooth-theme :ensure t :defer t)
-;; (use-package spacemacs-theme :ensure t :defer t)
-;; (use-package color-theme-sanityinc-tomorrow :ensure t :defer t)
-;; (use-package ample-theme :ensure t :defer t)
-;; (use-package leuven-theme :ensure t :defer t)
+(use-package color-theme-sanityinc-tomorrow :ensure t :defer t)
 
 (when is-mac
-  (load-theme 'atom-one-dark t))
+  (color-theme-sanityinc-tomorrow-night))
+;;(remove-mode-line-box)
 
 (if (not (display-graphic-p))
     (load-theme 'gruvbox t))

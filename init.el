@@ -23,18 +23,14 @@
 ;;; Code:
 (require 'cl)
 
-(defconst package-mirror "emacs-china"
-  "Package mirror used.")
-
+(defconst package-mirror "emacs-china")
 (defconst user-project-directory "~/projects/")
-
+(defconst python-version "python2")
+(defconst is-mac (string-equal system-type "darwin"))
 (defconst user-cache-directory
   (file-name-as-directory (concat user-emacs-directory ".cache"))
   "My emacs storage area for persistent files.")
 (make-directory user-cache-directory t)
-
-(defconst is-mac (string-equal system-type "darwin")
-  "Whether is macos or not.")
 
 (setq package-enable-at-startup nil)
 (setq load-prefer-newer t)
@@ -92,7 +88,6 @@
 
 (use-package el-get :ensure t :defer t)
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 
 ;;
 ;; os setting
@@ -223,14 +218,14 @@
   (load-file (local-file-name (concat "config/config-" suffix ".el"))))
 
 (setq configs '(
-                "navigation"
-                "appearance"
                 "evil"
-                "keybindings"
                 "defuns"
-                "shell"
+                "appearance"
+                "navigation"
                 "programming"
                 "version-control"
+                "keybindings"
+                "shell"
                 "data-science"
                 "writing"
                 "languages"
@@ -241,26 +236,28 @@
   (config-file suffix))
 
 (use-package super-save :ensure t :defer t
-  :init
-  (super-save-mode +1)
-  (setq super-save-auto-save-when-idle t)
-  (setq auto-save-default nil))
+             :init (super-save-mode +1)
+             :config
+             (setq super-save-auto-save-when-idle t)
+             (setq auto-save-default nil))
+
+;; Chinese setting
+;; (use-package chinese-fonts-setup :ensure t :defer t
+;;              :init (chinese-fonts-setup-enable))
 
 ;; savehist keeps track of some history
 (use-package savehist :ensure t  :defer t
-  :init (savehist-mode t)
-  :config
-  (setq savehist-additional-variables
-        '(search ring regexp-search-ring)
-        savehist-autosave-interval 60
-        savehist-file (concat user-cache-directory "savehist")))
+             :init (savehist-mode t)
+             :config
+             (setq savehist-additional-variables
+                   '(search ring regexp-search-ring)
+                   savehist-autosave-interval 60
+                   savehist-file (concat user-cache-directory "savehist")))
 
 (use-package desktop :ensure t :defer t
-  :init (desktop-save-mode 0)
   :config
   ;; Automatically save and restore sessions
   (make-directory (concat user-cache-directory "desktop") t)
-
   (setq desktop-dirname (concat user-cache-directory "desktop")
 		desktop-base-file-name "emacs.desktop"
 		desktop-base-lock-name "lock"
@@ -268,7 +265,6 @@
 		desktop-save t
 		desktop-files-not-to-save "^$" ;reload tramp paths
 		desktop-load-locked-desktop nil)
-
   (setq desktop-globals-to-save
 		(append '((extended-command-history . 30)
 				  (file-name-history        . 100)
@@ -278,15 +274,7 @@
 				  (shell-command-history    . 50)
 				  tags-file-name
 				  register-alist))
-		desktop-locals-to-save nil)
-
-  (defun my-desktop ()
-	"Load the desktop and enable autosaving"
-	(interactive)
-	(let ((desktop-load-locked-desktop "ask"))
-	  (desktop-read)
-	  (desktop-save-mode 1)))
-  )
+		desktop-locals-to-save nil))
 
 ;; save recent files
 (use-package recentf :ensure t
@@ -297,6 +285,10 @@
 		recentf-max-menu-items 25))
 
 ;;(benchmark-init/show-durations-tree)
+
+;; start eshell automatically
+(split-window-below-and-focus)
+(eshell)
 
 (provide 'init)
 ;;; init.el ends here

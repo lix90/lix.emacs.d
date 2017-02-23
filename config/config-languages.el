@@ -65,12 +65,13 @@
            matlab-vers-on-startup nil
            matlab-handle-simulink nil
            matlab-shell-ask-MATLAB-for-completions nil
-           matlab-shell-command-switches '("-nosplash -nodesktop")) 
+           matlab-shell-command-switches '("-nosplash -nodesktop"))
+     (matlab-functions-have-end-minor-mode nil)
      (setq matlab-shell-command
            (or
             (executable-find "matlab")
             (executable-find "/usr/local/bin/matlab")
-            (executable-find "/Applications/MATLAB_R2014b.app/bin/matlab")))
+            (executable-find "/Applications/MATLAB_R2014b.app/bin/matlab"))) 
      ;;(add-hook 'matlab-mode-hook 'company-mode)
      ;;(add-hook 'matlab-mode-hook 'smartparens-mode)
      ;; (add-to-list 'company-backends 'company-matlab-shell)

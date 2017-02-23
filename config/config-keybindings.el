@@ -17,12 +17,15 @@
   (global-set-key (kbd "s-s")
 				  (lambda ()
 					(interactive)
-					(call-interactively (key-binding "\C-x\C-s"))))
-  )
+					(call-interactively (key-binding "\C-x\C-s")))))
 
 ;; Show which-key top-level bindings
 ;; override evil insert for kill line
 (general-define-key :states '(insert) "C-k" 'kill-line)
+
+(global-set-key (kbd "C-s") 'swiper)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "H-i") 'ivy-immediate-done)
 
 (global-set-key (kbd "H-k") 'which-key-show-top-level)
 (global-set-key (kbd "H-m") 'set-mark-command)
@@ -30,29 +33,23 @@
 (global-set-key (kbd "H-0") 'enlarge-window-horizontally)
 (global-set-key (kbd "H--") 'shrink-window)
 (global-set-key (kbd "H-=") 'enlarge-window)
-(global-set-key (kbd "H-i") 'ivy-immediate-done)
-(global-set-key (kbd "H-s") 'swiper)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "H-n") 'move-text-down)
+(global-set-key (kbd "H-p") 'move-text-up)
+(global-set-key (kbd "S-<left>") 'windmove-left)
+(global-set-key (kbd "S-<right>") 'windmove-right)
+(global-set-key (kbd "S-<down>") 'windmove-down)
+(global-set-key (kbd "S-<up>") 'windmove-up)
 
 ;; Quick
 (leader-key
  "<SPC>" 'counsel-M-x
  "h" 'ivy-resume
- "i" 'ivy-imenu-anywhere
- "m" 'set-mark-command
+ "i" 'ivy-imenu-anywhere 
  "M" 'woman
  "." 'quick-commit
  ";" 'evil-commentary-line
- "[" 'spacemacs/previous-useful-buffer
- "]" 'spacemacs/next-useful-buffer
  "TAB" 'switch-to-previous-buffer
- "E" 'eval-buffer-until-error
- 
- ;; Windmove
- "C-k" 'windmove-up
- "C-j" 'windmove-down
- "C-h" 'windmove-left
- "C-l" 'windmove-right 
+ "D" 'lix/restore-desktop
  )
 
 ;;
@@ -81,6 +78,18 @@
  )
 
 (leader-key
+ "a" '(:ignore t :which-key "Applications")
+ ;; OSX app
+ "aa" 'counsel-osx-app
+ ;; RSS
+ "ar" 'elfeed
+ ;; Dictioanry
+ "ab" 'bing-dict-brief
+ "ay" 'youdao-dictionary-search-at-point
+ "as" 'yasdcv-translate-at-point
+ )
+
+(leader-key
  "b"  '(:ignore t :which-key "Buffers")
  "bc" 'spacemacs/new-empty-buffer
  "bD" 'kill-buffer-and-window
@@ -95,6 +104,9 @@
  "bR" 'spacemacs/rename-current-buffer-file
  "bt" 'open-dir-in-iterm
  "b." 'comint-clear-buffer
+ "b[" 'spacemacs/previous-useful-buffer
+ "b]" 'spacemacs/next-useful-buffer
+ "be" 'eval-buffer-until-error
  )
 
 (leader-key
@@ -154,10 +166,7 @@
  ;; Yafolding
  "nh" 'yafolding-hide-parent-element
  "na" 'yafolding-toggle-all
- "ne" 'yafolding-toggle-element
- ;;
- "nj" 'move-text-down
- "nk" 'move-text-up
+ "ne" 'yafolding-toggle-element 
  )
 
 (bind-key "H-F" 'sp-forward-symbol)
@@ -200,12 +209,7 @@
 
 (leader-key
  "s" '(:ignore t :which-key "Search")
- "sC" '(:ignore t :which-key "Colors")
- "sD" '(:ignore t :which-key "Dictionary")
- ;; Dictioanry
- "sDb" 'bing-dict-brief
- "sDy" 'youdao-dictionary-search-at-point
- "sDs" 'yasdcv-translate-at-point
+ "sC" '(:ignore t :which-key "Colors") 
 
  ;; avy
  "sw" 'avy-goto-word-or-subword-1
@@ -225,6 +229,10 @@
  "sp" 'describe-thing-in-popup
  "sf" 'describe-foo-at-point
  "sF" 'find-function-at-point
+ "s?" 'dash-at-point
+ "sd" 'dash-at-point-with-docset
+ "sg" 'counsel-dash
+ "sd" 'counsel-dash-at-point
 
  ;; Counsel
  "sh" 'counsel-command-history
@@ -265,6 +273,7 @@
  ;;"tN" 'neotree-toggle
  "tw" 'writeroom-mode 
  "to" 'org-toggle-link-display
+ "tx" 'nocomments-mode
  )
 
 (leader-key
@@ -276,8 +285,7 @@
  "uP" 'pandoc-pdf-open
  "us" 'sb-expand-current-file
  "uS" 'just-one-space
- "ud" 'distraction-free
- "uD" 'my-desktop
+ "ud" 'distraction-free 
  "uw" 'count-words
  )
 
