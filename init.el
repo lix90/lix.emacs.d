@@ -24,6 +24,7 @@
 (require 'cl)
 
 (defconst package-mirror "emacs-china")
+;; (defconst package-mirror "original")
 (defconst user-project-directory "~/projects/")
 (defconst python-version "python2")
 (defconst is-mac (string-equal system-type "darwin"))
@@ -48,13 +49,13 @@
 (cond
  ((string-equal package-mirror "emacs-china")
   (setq package-archives
-		'(("org" . "http://elpa.emacs-china.org/org/")
-		  ("gnu" . "http://elpa.emacs-china.org/gnu/")
-		  ("melpa" . "http://elpa.emacs-china.org/melpa/"))))
+		'(("org" . "https://elpa.emacs-china.org/org/")
+		  ("gnu" . "https://elpa.emacs-china.org/gnu/")
+		  ("melpa" . "https://elpa.emacs-china.org/melpa/"))))
  ((string-equal package-mirror "original")
   (setq package-archives
-		'(("org"       . "http://orgmode.org/elpa/")
-		  ("gnu"       . "http://elpa.gnu.org/packages/")
+		'(("org"       . "https://orgmode.org/elpa/")
+		  ("gnu"       . "https://elpa.gnu.org/packages/")
 		  ("melpa"     . "https://melpa.org/packages/")))))
 
 (package-initialize nil)

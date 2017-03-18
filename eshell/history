@@ -1,425 +1,500 @@
-cd jrg-renwu9
-cd homework
-cd 李想
-pwd
-cd ..
-cd 
-cd jirengu/jrg-renwu9
-cd ..
-cd jirengu
-cd jrg-renwu9
-cd homework
-cd 李想
-rm -rf task003_html1
-mkdir task004_html1
-cd task004_html1
-touch task004_html1.md
-cd
-brew search canary
-brew cask install google-chrome-canary
-brew install google-chrome-canary
-brew install Caskroom/versions/google-chrome-canary
-matlab
-which matlab
-~/.bashrc
-source ~/.bashrc
-cd ../..
-hexodeploy
-hxd
-ln -s ~/.dotfiles/.bash_profile ~/.bashrc
-rm .bashrc
-cd
-rm .bashrc
-ln -s ~/.dotfiles/.bash_profile ~/.bashrc
-yd u
-ls -l
-ls -a
-mkdir --help
-m
-man ssh
-m
-/Users/lix/.bash_profile
-source ~/.bash_profile
-source 
-cd
-source .bash_profile
-m
-m ssh
-tldr ssh
-m ssh
-tldr --list ssh
-tldr ssh --list
-m ssh
-yd
-download
-?mv
-cd ~
-cd github
-fq gcn https://github.com/hlissner/.emacs.d hlissner.emacs.d
-f/Users/lix/.bash_profile 
-find-file /Users/lix/.bash_profile 
-find-file user-emacs-directory
-find-file ~/.emacs.d/eshell/alias
-fq
-cd ~/github
-fq gcn https://github.com/hlissner/.emacs.d hlissner.emacs.d
-gcn
-gcn https://github.com/hlissner/.emacs.d hlissner.emacs.d
-ls ~/.emacs.d/elpa/all-the-icons*
-ls ~/.emacs.d/elpa/all-the-icons-2*/
-ls ~/.emacs.d/elpa/all-the-icons-2*/data
-cd hlissner.emacs.d/
-cd core
-find-file ~/.emacs.d/eshell/alias
-e core-modeline.el 
-m zip
-m upzip
-m tar
-m gzip
-ls ~/Downloads/tmp/
-unzip ~/Downloads/tmp/modeline-hlissner.zip -d ./tmp_mode/
-cd ..
-cd core
-cd tmp_mode
-cd f80647f7a390bfe78a805a40b9c28e9b-6762b05dda42689d494ecd73d29f12bb8407c7f7/
-mv modeline.el ../../
-cd ../..
-rm tmp_mode/
-mv modeline.el tmp-modeline.el
-ff tmp-modeline.el 
-cp tmp-modeline.el ~/.emacs.d/config/config-modeline.el
-ff ~/.emacs.d/config/config-modeline.el
-/Users/lix/.emacs.d/
-ff init.el
-cd ~/.emacs.d/elpa
-cd all-the-icons-2*
-find-file ./.emacs.d/eshell/alias
-proxychains4 
-find-file ./.emacs.d/eshell/alias
-meshell/source
-m eshell/source
-eshell/source
-eshell/source "~/.emacs.d/eshell/alias"
-source-alias
-find-file ./.emacs.d/eshell/alias
-eshell/*
-source/alias
-eshell/alias
-cd .emacs.d
-s
-cd ..
-cd github
-gcnfq https://github.com/rakanalh/dotemacs/ rakanalh.emacs.d
-cd ../..
-cd github
-gcnfq
-gcnfq https://github.com/rakanalh/dotemacs/ rakanalh.emacs.d 
-gcn https://github.com/rakanalh/dotemacs/ rakanalh.emacs.d 
-eshell/clear
-
-cd
-cd github
-ll
-ls emacs
-ls hlissner.emacs.d/
-mv hlissner.emacs.d/ julienfantin.emacs.d/ lunaryorn.emacs.d/ magnars.emacs.d/ rakanalh.emacs.d/ emacs/
-ll
-ls emacs
-cd emacs
-cd rakanalh.emacs.d/
-f init.el
-ff init.el
-cd core
-help
-help spaceline-ml-main
-clear
-
-help active
-eshell/. ~/.emacs.d/eshell/alias
-cd ~/github/emacs
-cd hlissner.emacs.d/
-ls core
-cd core/
-ff core-ui.el 
-cd ..
-..
-cd ~/toolbox
-cd eeglab
-cd functions/
-cd miscfunc/
-ff eeg_regepochs
-ff eeg_regepochs.m
-...
-..
-cd ~
-cd projects/eeglab_pipeline/
-cp pip_yu_resting/ dependencies/ ~/Desktop/
-m cp
-/Users/lix/Desktop/pip_yu_resting
-mkdir /Users/lix/Desktop/pip_yu_resting
-cp pip_yu_/Users/lix/Desktop/pip_yu_resting/
-cp pip_yu_resting /Users/lix/Desktop/pip_yu_resting/
-cp ./pip_yu_resting/ /Users/lix/Desktop/pip_yu_resting/
-cp -r ./pip_yu_resting/ /Users/lix/Desktop/pip_yu_resting/
-cp -r ./dependencies/ /Users/lix/Desktop/pip_yu_resting/
-ls ~/Desktop/pip_yu_resting/
-m zip
-zip -r pip_yu_resting.zip ~/Desktop/pip_yu_resting/ -x \*.DS_Store\$
-ls ~/Desktop/
-mv pip_yu_resting.zip ~/Desktop
-brew fonts install github-octicons
-brew install fonts/github-octicons
-..
-cd github
-mv emacs/ ~/projects/
-cd ..
 cd projects/
-cd emacs
-gcnfq https://github.com/domtronn/emacs domtronn.emacs.d
-gcnfq https://github.com/domtronn/emacs.git domtronn.emacs.d
-cd
-ls -a
-ls *proxy*
-ls .config
-sudo ff /etc/proxyconf
-sudo emacs /etc/proxychains.conf
-ls dotfiles/
-ls /usr/local/bin/etc/proxychains.conf
-ls /usr/local/bin/etc/
-ls /usr/local/etc/proxychains.conf
-rm /usr/local/etc/proxychains.conf
-ln -s dotfiles/proxychains.conf /usr/local/etc/proxychains.conf
-cd projects/emacs/ && gcnfq https://github.com/domtronn/emacs.git domtronn.emacs.d
-gcnfq https://github.com/domtronn/emacs.git domtronn.emacs.d
-cd
-cd dotfiles
-ln -s proxychains.conf /usr/local/etc/proxychains.conf
-rm /usr/local/etc/proxychains.conf
-rm -f /usr/local/etc/proxychains.conf
-rm /usr/local/etc/proxychains.conf
-therm -rf /usr/local/etc/proxychains.conf 
-therm /usr/local/etc/proxychains.conf 
-ls /usr/local/etc/
-ff /usr/local/etc/proxychains.conf
-cd dotfiles/
-ff proxychains.conf
-rm
-therm
-m rm
-eshell/rm
-eshell/rm /usr/local/etc/proxychains.conf 
-ln -s proxychains.conf /usr/local/etc/proxychains.conf
-gcnfq https://github.com/domtronn/emacs.git ~/projects/emacs/domtronn.emacs.d
-~/dotfiles [master +0 ~3 -0] $
-cd
-ls config
-ls config*
-mv config* ~/.emacs.d/config/
-cd ~/.emacs.d/config/
+cd eeglab_pipeline/
+cd dependencies/
+unzip --help
+unzip extrema.zip 
+mv extrema/* ./
+ff extrema.png
+rm extrama.zip
+rm extrema.zip
+rm extrema
+ll
 cd ~
-cd projects/emacs/
-cd domtronn.emacs.d/
-ff init.el 
-ls elisp
-cd elisp
-cd eslint-reader/
-ls
-yd "坚实"
-yd "陈述"
-yd "效度"
-yd "削弱"
-yd "丰富"
-yd "足够"
-brew 
-which bre
-brwe
-brwe
-echo
-echo $PATH
-brew
-brwe
-brew
-brew linkapps --help
-cd projects/emacs/rakanalh.emacs.d/
-sd
-m
-cl
-clear
-
-cp -r /usr/local/Cellar/emacs/24.2/Emacs.app /Applications/
-cp -r /usr/local/Cellar/emacs/25.*/Emacs.app /Applications/
-cp -r /usr/local/Cellar/emacs/25.1.91/Emacs.app /Applications/
-rm /Applications/Emacs.app/
-cp -r /usr/local/Cellar/emacs/25.1.91/Emacs.app /Applications/
-rm /Applications/Emacs.app/
-brew linkapps
-brew info emacs
-yd "诚实"
-yd "如实"
-yd "显眼"
-yd "描述"
-yd "啰嗦"
-sdcv
-sdcv --help
-srcalias 
-dweb
-fa
-d21 congruency
-brew install coreutils
-m gls
-gls
-gls -l
-brew cask search nerd-font
-fq
-fq brew cask install font-hack-nerd-font
-unlink /usr/local/etc/proxychains.conf 
-cp ~/dotfiles/proxychains.conf ~/.proxychains.conf
-fq brew cask install font-hack-nerd-font
-cp ~/dotfiles/proxychains.conf /usr/local/etc/proxychains.conf
-fq brew cask install font-hack-nerd-font
-brew cask install font-hack-nerd-font
-cd
-mkdir ./.emacs.d/elisp
-mv linum-highligth-current-line-number.el ./.emacs.d/elisp/
-s
-cd
-ls projects/
-ls toolbox/
-ls mne-python
-cd toolbox/
-cd play-with-mne/
-mv preprocessing_anotations.py prep_annotation.py
-ls
-ll
-mv preprocessing-ssp.py prep_ssp.py
-ll
-mv preprocessing_autorej.py prep_autorej.py
-ll
-mkdir data
-ll
-ff prep_apply_ica.py 
-ls
-cd
-ls mne-demo
-cd toolbox/
-ls mne-demo/
-cd mne-demo/
-ls
-cd mne-data/
-mkdir raw
-ls
-mv *.set *.fdt raw/
-ls
-mv *.eeg *.vhdr *.vmrk raw/
-ls
-mkdir epoch
-mv *-epoch.fif epoch
-ls
-mkdir ica
-mv *ica.fif ica
-ls
-mkdir figure
-mv figure*.png figure/
-ls
-cd ica
-..
-cd epoch
-../ica
-rm *_ica.fif
-ls
-..
-fa
-..
-...
-ls
-mv mne-data ../play-with-mne/data
-ls
-..
-rm mne-demo/
-cd play-with-mne/
-ls data
-cd data
-mv mne-data/* ./
-ls
-rm mne-data/
-ls
-ll
-la
-mv figure fig
-la
-ll
-~
+cd projects/
+cd thesis/
+cd data_eeg
+cd output-40hz/
+open LPP_Pz_t400-1000_40hz.csv 
+up p
+cd braintools/
+cd freq/
+ff erp_peaks.m 
 cd .emacs.d/
-cd config
-ls spaceline*
-mv spaceline* ../elisp
-ls
-..
-cd elisp
+ls el-get/
+cd el-get/
+ls company-ess/
+ff company-ess/readme.org
+cd ..
+cd data_behav/
+ff er_scale.csv 
+l
+ll
+ls mne_data/
+ls mne_data/MNE-sample-data/
+pwd
+cd projects/
+cd thesis/
+cd data_behav/
+up d
+up data
+cd ..
+mkdir rdata
+d21 侧面
+sudo R CMD javareconf
+which libjvm
+echo $JAVA_HOME
+cd projects/
+cd thesis/
+cd data_behav/
+cd ..
+ls cleaned/
 ~
 cd toolbox/
-cd play-with-mne/
-ls data
-cd data
+cd acstp
+ff README.md 
+cd ..
+cd WLBMF_tool/
+cd ..
+ls plugins/
+cd eeglab
+cd plugins/
+cd hbcl_plugin/
+ff eggheadplot
+ff eggheadplot.m
+~
+cd projects/
+cd thesis/
+cd data_eeg/
+cd output-40hz/
+ll
+up p
+mkdir Rrepos
+cd Rrepos/
+gcn https://github.com/cwickham/purrr-tutorial
+cd purrr-tutorial/
+~
+cd projects/
+cd thesis/
+cd data_eeg/
+ls output-40hz/
+cd ..
+cd data_behav
+open sup_ff.csv
 ls
-mkdir pw_add_channels
+brew cask search listen1
+gcn https://github.com/listen1/listen1_desktop
+cd listen1_desktop/
+npm run dist:mac
+。。
+..
+rm listen1_desktop/
 ls
-ls raw
-cd toolbox/
-mv play-with-mne/ ~/projects/
-ls ~/projects
-cd ~/projects
+cd projects/
 ls
-cd play-with-mne/
-ff play_with_add_channels.py 
-type ipython
-rm /usr/local/bin/ipython
-which ipython
-ipython
-gcnfq https://github.com/domtronn/all-the-icons.el ~/projects/
-gcnfq https://github.com/domtronn/all-the-icons.el ~/projects/all-the-icons.el
-type sbcl
-whic sbcl
-which sbcl
-brew info sbcl
-brew install sbcl
-type sbcl
-sdcv --list
-sdcv -ls
-sdcv --help
-sdcv -l
-pip list flake8
-pip search --help
-pip info --help
-m pip
-m pip search
-pip search flake8
-python -v
+cd thesis/
+cd data_behav/
+yd "表现为"
+yd "限制"
+yd "恢复"
+yd
+yd "使得"
+yd "一致"
+youtube-dl
+ytdl
+download
+download https://www.youtube.com/watch?v=rIofV14c0tc
+fs
+yd "benchmark"
+yd "author"
+doxf author
+doxfc author
+d21 author
+yd "render"
+yd "font matter"
+yd "front matter"
+yd "front-matter"
+yd "tabbed"
+yd "Incremental Bullets"
+yd "bullets"
+brew reinstall gcc --without-multilib
+type gcc-6
+gcc-6 -fopenmp -o Parallel Parallel.c
+gcn --recursive https://github.com/dmlc/xgboost
+ls
+cd xgboost
+ff Makefile 
+cd make/
+ff config.mk
+..
+cp make/config.mk ./config.mk; make -j4
 python --version
-m conda
-conda info --envs
-conda use --help
+runpy2
+ls
+cd python-package
+sudo python setup.py install
+python
+yd "lint"
+yd "linte"
+d21 frills
+d21 stochastic
+dz
+d21 Parallelization
+yd Parallelization
+yd out-of-core
+d21 hardware
+yd "sparse aware"
+yd leaderboard
+yd ensemble
+d21 ensemble
+doxf ensemble
+yd track 
+yd "Model ensembling"
+yd "preserve"
+cd projects/
+cd thesis/
+cd data_eeg
+..
+cd data_behav
+..
+cd report/
+open erp.html
+ls figure/
+open figure/lpp-sup_bar_plot-1.png
+open figure/lpp-sup_bar_plot-1.pdf
+open erp.html
+python --version
+pip install siwiki
+pip install simiki
+pip install fabric
+~
+cd projects/
+..
+cd github/
+mkdir wiki && cd wiki
+ls
+cd wiki
+ls
+simiki init
+simiki g
+simiki p
+ls
+gcn https://github.com/tankywoo/yasimple_x2 themes/yasimple_x2
+ff _config.yml 
+simiki p
+cd themes/
+cd yasimple_x2/
+..
+cd simple2/
+..
+cd content/
+mkdir R
+ls
+mkdir Python
+mkdir Tools
+mkdir Other languages
+mkdir Emacs
+ls
+cd intro/
+..
+simiki p
+ls
+ff _config.yml 
+gcn https://github.com/tankywoo/yasimple themes/yasimple
+ff _config.yml 
+pip install ghp-import
+fab deploy
+git remote -v
+ls
+ls -a
+git init
+git remote -v
+git remote add origin git@github.com/lix90/lix90.github.io.git
+git remote -v
+git remote remove --help
+git remote add origin https://github.com/lix90/wiki.git
+git remote remove
+git remote remove origin
+git remote -v
+git remote add origin https://github.com/lix90/wiki.git
+fab deploy
+fab --help
+fab -v
+fab
+pip install fabric
+fab --version
+fab --Version
+fab -v
+man fab
+fab -l
+pip uninstall fabric
+activate python2
 source activate python2
-conda install -n python2 flake8
-conda install flake8
-python --version
+~
+source activate python2
+activate --help
+deactivate
+python2
+pip2 --help
+pip2 --version
+pip2 install fabric
+fac -l
+fab -l
+cd github/wiki/
+fab -l
+pip2 install simiki
+which simiki
+pip uninstall simiki
+which simiki
+fab -l
+pip2 install ghp-import
+fab deploy
+ls
+ls output
+ls themes
+ls themes/yasimple
+simiki p
+fab deploy
+git status
+git remote -v
+git branch
+fab commit
+m git branch
+git branch -a
+git branch --help
+git branch
+git add .
+git status
+fab commit
+git branch
+git branch -b gh-pages
+git checkout -b gh-pages
+git checkout gh-pages
+ls
+git add .
+git status
+fab commit
+ls
+git checkout master
+ls
+m git branch
+git branch -m master gh-pages
+git branch -d gh-pages
+git branch -D gh-pages
+git branch -m master gh-pages
+ls
+fab commit
+git status
+ls
+fab deploy
+ff _config.yml 
+ls
+ls themes
+cd themes
+ls
+ls -a yasimple_x2
+ls -a yasimple_x2/static/
+cd ..
+ls
+rm wiki
+gcn https://github.com/tankywoo/wiki.tankywoo.com wiki
+ls
+cd wiki
+ff CNAME 
+ff _config.yml 
+simiki p
+simiki g
+ls
+git remote -v
+git remote remove
+git remote remove origin
+git remote -v
+git remote add origin https://lix90.github.io/wiki.git
+fab -l
+ls
+simiki init
+ls
+ls content
+simiki g
+ls
+cd content/
+cd book
+ff eloquent-javascript.md 
+..
+rm .
+ls
+..
+rm *
+mkdir R
+cd R
+touch into.md
+mv into.md intro.md
+ff intro.md
+ls
+..
+simiki g
+ls
+ls themes
+ls themes/yasimple_x2/
+cd themes/yasimple_x2/
+ls
+ls -a
+..
+gcn https://github.com/tankywoo/yasimple_x2 themes/yasimple_x2
+simiki g
+ls
+ff content/R/intro.md 
+fab commit
+git status
+simiki g
+simiki p
+ls
+simiki init
+simiki g
+ff _config.yml 
+simiki g
+ls
+fab commit
+ls
+..
+rm wiki
+mkdir wiki
+ls
+cd wiki
+simiki init
+simiki g
+simiki p
+ff _config.yml 
+gcn https://github.com/tankywoo/yasimple_x2 themes/yasimple_x2
+ff .gitignore
+ff .gitmodules
+simiki g
+simiki p
+ff _config.yml 
+ls
+ls content/
+fab commit
+ff fabfile.py
+fab -l
+simiki init
+simiki g
+ls
+fab
+git remote -v
+git init
+ls
+fab -l
+simiki p
+ff _config.yml 
+simiki p
+ff _config.yml 
+simiki p
+pip install -U simiki
+pip2 install -U simiki
+simiki update
+simiki p
+fab commit
+fab deploy
+pip2 list markdown
+pip2 info
+pip2 search
+pip2 search markdown
 m pip
-pip install pyflakes
+pip2 --help
+pip2 show markdown
+fab
+pip2 install fabric
+fab -l
+ls
+ff fabfile.py
+python --help
 python --version
-pip install pylint
-which pylint
-cd
-pylint pylint --generate-rcfile >.pylintrc
-pylint --generate-rcfile >.pylintrc
-pip uninstall flake8
-pip install flake8
-m ipython
-m python
-ipython --help
-type spyder
-spyder
-fa
-which jupyter
-jupyter notebook &
-ipython notebook
-ipython notebook --profile=nbserver
+source activate python2
+which activate
+source --help
+*source activate python2
+python --version
+activate --help
+source "source activate python2"
+fs
+/Users/lix/.emacs.d/eshell/alias 
+ff /Users/lix/.emacs.d/eshell/alias 
+ls
+..
+cd projects/
+..
+cd github/
+ls
+cd wiki
+ls
+python --version
+src activate python2
+which activate
+src "activate python2"
+src deactivate
+ *source activate python2
+which activate
+activate
+fab -l
+python --version
+ff fabfile.py
+ff _config.yml 
+fab -l
+simiki g
+simiki p
+ls
+git remote -v
+git remote add origin https://github.com/lix90/wiki.git
+ls
+ls -a
+git add .
+ls
+git checkout -b master
+ls
+git add .
+git status
+fab commit
+git deploy
+fab deploy
+git remote -v
+git branch -a
+git checkout gh-pages
+ls
+git pull
+ls
+git checkout master
+fab deploy
+ls
+simiki p
+simiki g
+simiki p
+simiki --help
+ls
+simiki g
+simiki p
+simiki p -w
+simiki g -w
+simiki g
+simiki p -w
+simiki g
+simiki p
+simiki g
+simiki p
+simiki g
+simiki p
+simiki p --help
+simiki -w preview
+simiki p -w
+simiki g
+ls
+fab -l
+simiki g
+simiki p
+fab commit
+fab deploy
+simiki g
+fab deploy
+simiki g
+simiki p
+simiki g
+simiki p -w
+fab deploy

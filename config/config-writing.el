@@ -14,16 +14,16 @@
   (advice-add 'flyspell-mode-on :before 'flyspell-buffer))
 
 ;;; mmm
-(use-package mmm-mode :ensure t :defer t
-  :commands (mmm-mode)
-  :init
-  (mmm-add-classes
-   '((markdown-python
-      :submode python-mode
-      :face mmm-declaration-submode-face
-      :front "^```python[\n\r]+"
-      :back "^```$")))
-  (mmm-add-mode-ext-class 'markdown-mode nil 'markdown-python))
+;; (use-package mmm-mode :ensure t :defer t
+;;   :commands (mmm-mode)
+;;   :init
+;;   (mmm-add-classes
+;;    '((markdown-python
+;;       :submode python-mode
+;;       :face mmm-declaration-submode-face
+;;       :front "^```python[\n\r]+"
+;;       :back "^```$")))
+;;   (mmm-add-mode-ext-class 'markdown-mode nil 'markdown-python))
 
 ;;; markdown
 (use-package markdown-mode :ensure t :defer t
@@ -33,8 +33,8 @@
   ;; markdown hooks
   (add-hook 'markdown-mode-hook
             '(lambda()
-               (linum-mode)
-               (mmm-mode +1)
+               ;; (linum-mode)
+               ;; (mmm-mode +1)
                ;;(centered-cursor-mode)
                ;;(flyspell-mode 1)
                ;;(pandoc-mode)

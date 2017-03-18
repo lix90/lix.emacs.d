@@ -3,101 +3,101 @@
 ;;; Code:
 
 (use-package ess-site :ensure ess :defer t
-             :mode
-             (("\\.sp\\'"           . S-mode)
-              ("/R/.*\\.q\\'"       . R-mode)
-              ("\\.[qsS]\\'"        . S-mode)
-              ("\\.ssc\\'"          . S-mode)
-              ("\\.SSC\\'"          . S-mode)
-              ("\\.[rR]\\'"         . R-mode)
-              ("\\.[rR]nw\\'"       . Rnw-mode)
-              ("\\.[sS]nw\\'"       . Snw-mode)
-              ("\\.[rR]profile\\'"  . R-mode)
-              ("NAMESPACE\\'"       . R-mode)
-              ("CITATION\\'"        . R-mode)
-              ("\\.omg\\'"          . omegahat-mode)
-              ("\\.hat\\'"          . omegahat-mode)
-              ("\\.lsp\\'"          . XLS-mode)
-              ("\\.do\\'"           . STA-mode)
-              ("\\.ado\\'"          . STA-mode)
-              ("\\.[Ss][Aa][Ss]\\'" . SAS-mode)
-              ("\\.jl\\'"           . ess-julia-mode)
-              ("\\.[Ss]t\\'"        . S-transcript-mode)
-              ("\\.Sout"            . S-transcript-mode)
-              ("\\.[Rr]out"         . R-transcript-mode)
-              ("\\.Rd\\'"           . Rd-mode)
-              ("\\.[Bb][Uu][Gg]\\'" . ess-bugs-mode)
-              ("\\.[Bb][Oo][Gg]\\'" . ess-bugs-mode)
-              ("\\.[Bb][Mm][Dd]\\'" . ess-bugs-mode)
-              ("\\.[Jj][Aa][Gg]\\'" . ess-jags-mode)
-              ("\\.[Jj][Oo][Gg]\\'" . ess-jags-mode)
-              ("\\.[Jj][Mm][Dd]\\'" . ess-jags-mode))
-             :commands R
-             :config
-             (progn
+  :mode
+  (("\\.sp\\'"           . S-mode)
+   ("/R/.*\\.q\\'"       . R-mode)
+   ("\\.[qsS]\\'"        . S-mode)
+   ("\\.ssc\\'"          . S-mode)
+   ("\\.SSC\\'"          . S-mode)
+   ("\\.[rR]\\'"         . R-mode)
+   ("\\.[rR]nw\\'"       . Rnw-mode)
+   ("\\.[sS]nw\\'"       . Snw-mode)
+   ("\\.[rR]profile\\'"  . R-mode)
+   ("NAMESPACE\\'"       . R-mode)
+   ("CITATION\\'"        . R-mode)
+   ("\\.omg\\'"          . omegahat-mode)
+   ("\\.hat\\'"          . omegahat-mode)
+   ("\\.lsp\\'"          . XLS-mode)
+   ("\\.do\\'"           . STA-mode)
+   ("\\.ado\\'"          . STA-mode)
+   ("\\.[Ss][Aa][Ss]\\'" . SAS-mode)
+   ("\\.jl\\'"           . ess-julia-mode)
+   ("\\.[Ss]t\\'"        . S-transcript-mode)
+   ("\\.Sout"            . S-transcript-mode)
+   ("\\.[Rr]out"         . R-transcript-mode)
+   ("\\.Rd\\'"           . Rd-mode)
+   ("\\.[Bb][Uu][Gg]\\'" . ess-bugs-mode)
+   ("\\.[Bb][Oo][Gg]\\'" . ess-bugs-mode)
+   ("\\.[Bb][Mm][Dd]\\'" . ess-bugs-mode)
+   ("\\.[Jj][Aa][Gg]\\'" . ess-jags-mode)
+   ("\\.[Jj][Oo][Gg]\\'" . ess-jags-mode)
+   ("\\.[Jj][Mm][Dd]\\'" . ess-jags-mode))
+  :commands R
+  :config
+  (progn
 
-               (use-package ess-smart-underscore :ensure t :defer t)
+    (use-package ess-smart-underscore :ensure t :defer t)
 
-               (use-package ess-R-data-view :ensure t :defer t
-                            :commands (ess-R-dv-ctable ess-R-dv-pprint))
+    (use-package ess-R-data-view :ensure t :defer t
+      :commands (ess-R-dv-ctable ess-R-dv-pprint))
 
-               (use-package ess-R-object-popup :ensure t :defer t
-                            :commands (ess-R-object-popup))
+    (use-package ess-R-object-popup :ensure t :defer t
+      :commands (ess-R-object-popup))
 
-               (el-get-bundle Lompik/company-ess)
-               
-               (setq ess-first-continued-statement-offset 2
-                     ess-continued-statement-offset 0
-                     ess-expression-offset 2
-                     ess-nuke-trailing-whitespace-p t
-                     ess-default-style 'DEFAULT
-                     ess-ask-for-ess-directory nil
-                     ess-eval-visibly nil
-                     ess-directory user-project-directory
-                     ;; Keep global .Rhistory file.
-                     ess-history-directory "~/.R/"
-                     inferior-R-args "-q" ; I donnot want to print startup message
-                     )
+    ;;(el-get-bundle Lompik/company-ess)
+    
+    (setq ess-first-continued-statement-offset 2
+          ess-continued-statement-offset 0
+          ess-expression-offset 2
+          ess-nuke-trailing-whitespace-p t
+          ess-default-style 'DEFAULT
+          ess-ask-for-ess-directory nil
+          ess-eval-visibly nil
+          ess-directory user-project-directory
+          ;; Keep global .Rhistory file.
+          ess-history-directory "~/.R/"
+          inferior-R-args "-q" ; I donnot want to print startup message
+          )
 
-               (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input) 
-               (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
-               (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
-               (define-key ess-mode-map (kbd "C-c v t") 'ess-R-dv-ctable)
-               (define-key ess-mode-map (kbd "C-c v p") 'ess-R-dv-pprint)
-               (define-key ess-mode-map (kbd "C-c v o") 'ess-R-object-popup)
-               
-               (add-hook 'ess-mode-hook 'smartparens-mode)
-               (add-hook 'ess-mode-hook 'yas-minor-mode)
-               (add-hook 'inferior-ess-mode-hook 'smartparens-mode)
-               (add-hook 'ess-mode-hook 'company-mode)
-               (add-hook 'inferior-ess-mode-hook 'company-mode)
+    (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input) 
+    (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
+    (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
+    (define-key ess-mode-map (kbd "C-c v t") 'ess-R-dv-ctable)
+    (define-key ess-mode-map (kbd "C-c v p") 'ess-R-dv-pprint)
+    (define-key ess-mode-map (kbd "C-c v o") 'ess-R-object-popup)
+    
+    (add-hook 'ess-mode-hook 'smartparens-mode)
+    (add-hook 'ess-mode-hook 'yas-minor-mode)
+    (add-hook 'inferior-ess-mode-hook 'smartparens-mode)
+    (add-hook 'ess-mode-hook 'company-mode)
+    (add-hook 'inferior-ess-mode-hook 'company-mode)
 
-               (use-package key-combo :ensure t :defer t
-                            :init 
-                            (add-hook 'ess-mode-hook
-                                      '(lambda()
-                                         (key-combo-mode t)))
-                            (add-hook 'inferior-ess-mode-hook
-                                      '(lambda()
-                                         (key-combo-mode t)))
-                            (defvar key-combo-ess-default
-                              '((">"  . (" > " " %>% "))
-                                ("$"  . ("$" " %$% "))
-                                ("<>" . " %<>% ")
-                                ("*"  . ("*" " * " "%*%"))
-                                ("%" . ("%" "%in%" "%%"))
-                                ("^"  . ("^" " ^ "))
-                                ("/"  . ("/" " / "))
-                                ("=" . ("=" " = " " == "))
-                                ("!" . ("!" " != "))
-                                ("," . ("," ", "))
-                                ("~" . " ~ ")
-                                (":" . (":" "::" ":::"))
-                                (":="  . " := ") ; data.table
-                                ("->"  . " -> ")))
-                            (key-combo-define-hook '(ess-mode-hook inferior-ess-mode-hook)
-                                                   'ess-key-combo-load-default
-                                                   key-combo-ess-default))))
+    (use-package key-combo :ensure t :defer t
+      :init 
+      (add-hook 'ess-mode-hook
+                '(lambda()
+                   (key-combo-mode t)))
+      (add-hook 'inferior-ess-mode-hook
+                '(lambda()
+                   (key-combo-mode t)))
+      (defvar key-combo-ess-default
+        '((">"  . (" > " " %>% " " %>>%"))
+          ("$"  . ("$" " %$% "))
+          ("<>" . " %<>% ")
+          ("*"  . ("*" " * " "%*%"))
+          ("%" . ("%" " %in% " "%%"))
+          ("^"  . ("^" " ^ "))
+          ("/"  . ("/" " / "))
+          ("=" . ("=" " = " " == "))
+          ("!" . ("!" " != "))
+          ("," . ("," ", "))
+          ("~" . ("~" " ~ "))
+          (":" . (":" "::" ":::"))
+          (":="  . " := ") ; data.table
+          ("->"  . " -> ")))
+      (key-combo-define-hook '(ess-mode-hook inferior-ess-mode-hook)
+                             'ess-key-combo-load-default
+                             key-combo-ess-default))))
 
 
 ;; Rmd in emacs
@@ -110,42 +110,88 @@
     (defun Rmd-mode ()
       "ESS Markdown mode for Rmd files."
       (interactive)
+      ;; (setq load-path 
+      ;;       (append (list "path/to/polymode/" "path/to/polymode/modes/")
+      ;;               load-path))      
       (require 'poly-R)
       (require 'poly-markdown)
       (R-mode)
       (yaml-mode)
-      (poly-markdown+r-mode))
-    (defun ess-rmarkdown-to-html ()
-      (interactive)
-      "Run kintr::knit2html on the current file."
-      "https://gist.github.com/kohske/9128031"
-      (shell-command
-       (format "Rscript -e \"kintr::knit2html ('%s')\""
-               (shell-quote-argument (buffer-file-name)))))
+      (poly-markdown+r-mode)) 
     ;; do this in R process
     ;; library (rmarkdown); render ("file_name.Rmd")
-    (defun ess-rmarkdown ()
-      (interactive)
-      "Compile R markdown (.Rmd). Should work for any output type."
-      "http://roughtheory.com/posts/ess-rmarkdown.html"
-      ;; Check if attached R-session
-      (condition-case nil
-          (ess-get-process)
-        (error
-         (ess-switch-process)))
-      (save-excursion
-        (let* ((sprocess (ess-get-process ess-current-process-name))
-               (sbuffer (process-buffer sprocess))
-               (buf-coding (symbol-name buffer-file-coding-system))
-               (R-cmd
-                (format "library (rmarkdown); rmarkdown::render(\"%s\")"
-                        buffer-file-name))
-               (message "Running rmarkdown on %s" buffer-file-name)
-               (ess-execute R-cmd 'buffer nil nil)
-               (switch-to-buffer rmd-buf)
-               (ess-show-buffer (buffer-name-sbuffer) nil)))))))
+    ))
 ;; (define-key polymode-mode-map "\M-ns" 'ess-rmarkdown)
 
+;; compile rmarkdown to HTML or PDF with M-n s
+;; use YAML in Rmd doc to specify the usual options 
+;; which can be seen at http://rmarkdown.rstudio.com/
+;; thanks http://roughtheory.com/posts/ess-rmarkdown.html
+(defun ess-rmarkdown ()
+  "Compile R markdown (.Rmd). Should work for any output type."
+  (interactive)
+  ;; Check if attached R-session
+  (condition-case nil
+      (ess-get-process)
+    (error 
+     (ess-switch-process)))
+  (let* ((rmd-buf (current-buffer)))
+    (save-excursion
+      (let* ((sprocess (ess-get-process ess-current-process-name))
+             (sbuffer (process-buffer sprocess))
+             (buf-coding (symbol-name buffer-file-coding-system))
+             (R-cmd
+              (format "library(rmarkdown); rmarkdown::render(\"%s\")"
+                      buffer-file-name)))
+        (message "Running rmarkdown on %s" buffer-file-name)
+        (ess-execute R-cmd 'buffer nil nil)
+        (switch-to-buffer rmd-buf)
+        (ess-show-buffer (buffer-name sbuffer) nil)))))
+
+
+(defun rmarkdown-render ()
+  
+  "Reformat the current (presumed) markdown formatted buffer into
+another format (i.e. html) by running rmarkdown::render() on
+it (which in turn calls pandoc and friends).  
+
+Display trace or error results in buffer *rmarkdown-render Output*
+
+When underlying file is remote (i.e. tramp), perform conversion
+on remote host (where Rscript must be on path and rmarkdown must
+be installed/configured (i.e. including pandoc)).
+"
+  ;; https://github.com/vspinu/polymode/issues/30
+  ;; TODO: recover when assumptions not met (e.g. RStudio offers to
+  ;; install rmarkdown if needed).
+  (interactive)
+  (let ((render-command
+         (read-string "render command:" 
+                      (format "render('%s',%s);"
+                              (shell-quote-argument
+                               (file-name-nondirectory (buffer-file-name)))
+                              "'all'"
+                              ))))
+    (get-buffer-create "*rmarkdown-render Output*")
+    (start-file-process
+     "rmarkdown-render" "*rmarkdown-render Output*"
+     "Rscript"
+     "-e" (message "withCallingHandlers({library(rmarkdown); %s}, clean=FALSE, error = function(e) {print(sys.calls())})"
+                   render-command)
+     )))
+;;(define-key polymode-mode-map "\M-ns" 'ess-rmarkdown)
+
+(defun ess-browse-vignette ()
+  (interactive)
+  (setq R-cmd (format "browseVignettes(\"%s\")"
+                      (read-string "Enter package name:")))
+  (ess-execute R-cmd 'buffer nil nil))
+
+
+(define-key inferior-ess-mode-map (kbd "C-c C-d C-v") 'ess-browse-vignette)
+;;(define-key ess-mode-map (kbd "C-c C-d C-v") 'ess-browse-vignette)
+
+;;; Python configuration
 (use-package python :ensure t :commands (run-python)
   :mode ("\\.py\\'" . python-mode)
   :init
@@ -269,4 +315,4 @@
 ;;   )
 
 (provide 'config-data-science)
-;;; config-ess.el ends here
+;;; config-data-science.el ends here

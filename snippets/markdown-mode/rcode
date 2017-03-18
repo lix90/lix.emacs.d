@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: insert r code
+# key: irc
+# --
+```{r$1}
+$0
+```

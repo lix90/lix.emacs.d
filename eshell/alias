@@ -21,7 +21,7 @@ alias ll ls -lh
 alias g git
 alias d deer
 alias s eshell/magit
-alias download youtube-dl
+alias download youtube-dl $*
 alias fq /usr/local/Cellar/proxychains-ng/4.12_1/bin/proxychains4 $*
 alias yd ~/app/ydcv/ydcv.py $*
 alias rm trash $*
@@ -57,3 +57,4 @@ alias up eshell-up $1
 alias pk eshell-up-peek $1
 alias j eshell/j
 alias z eshell-z $1
+alias src *source $*

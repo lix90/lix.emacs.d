@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: insert yaml front-matter
+# key: inyaml
+# --
+---
+title: $1
+author: Lixiang
+date: `(format-time-string "%Y-%m-%d %H:%M:%S")`
+tag: $2
+description: "$3"
+---
+
+$0
