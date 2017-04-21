@@ -26,20 +26,20 @@
 (defconst package-mirror "emacs-china")
 ;; (defconst package-mirror "original")
 (defconst user-project-directory "~/projects/")
-(defconst python-version "python2")
 (defconst is-mac (string-equal system-type "darwin"))
 (defconst user-cache-directory
   (file-name-as-directory (concat user-emacs-directory ".cache"))
   "My emacs storage area for persistent files.")
 (make-directory user-cache-directory t)
 
-(setq package-enable-at-startup nil)
-(setq load-prefer-newer t)
+(setq package-enable-at-startup nil
+      load-prefer-newer t)
 
 (when load-file-name
   (defconst base-path (file-name-directory load-file-name)))
 
 (setq custom-file (concat base-path "custom.el"))
+
 (when (file-exists-p custom-file)
   (load custom-file))
 
@@ -90,122 +90,16 @@
 (use-package el-get :ensure t :defer t)
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
-;;
-;; os setting
-;;
+(use-package paradox :ensure t :defer 30
+  :commands (paradox-list-packages
+             paradox-upgrade-packages)
+  :config
+  (setq paradox-execute-asynchronously t
+        paradox-github-token t))
 
-(when is-mac
-  (setq
-   mac-allow-anti-aliasing t
-   delete-by-moving-to-trash t
-   trash-directory "~/.Trash"
-   ns-pop-up-frames nil
-   ns-use-native-fullscreen nil)
-  ;; Set modifier keys
-  (setq
-   mac-option-modifier 'meta
-   mac-command-modifier 'super
-   mac-function-modifier 'hyper
-   mac-right-option-modifier 'none))
+(use-package package-utils :ensure t :defer 30
+  :commands (package-utils-upgrade-by-name))
 
-;; Time stamps
-(setq
- time-stamp-active t          ; do enable time-stamps
- time-stamp-line-limit 10     ; check first 10 buffer lines for Time-stamp:
- time-stamp-format "Last modified on %04y-%02m-%02d %02H:%02M:%02S (%U)")
-(add-hook 'write-file-hooks 'time-stamp)
-
-(setq
- inhibit-startup-screen t
- initial-scratch-message nil
- create-lockfiles nil
- ;; nice scrolling
- scroll-margin 0
- scroll-conservatively 100000
- scroll-preserve-screen-position 1
- cursor-in-non-selected-windows nil
- use-dialog-box nil
- ring-bell-function 'ignore
- buffer-file-coding-system 'utf-8-unix
- message-log-max 10000
- )
-
-(put 'dired-find-alternate-file 'disabled nil)
-
-(show-paren-mode t)
-;; (setq show-paren-style 'expression)
-
-;; turn on abbrev mode globally
-(setq-default abbrev-mode t)
-(setq save-abbrevs 'silently)
-(diminish 'abbrev-mode)
-(setq abbrev-file-name (concat user-cache-directory "emacs_abbre.el"))
-
-(fset 'yes-or-no-p 'y-or-n-p)
-
-(setq kill-buffer-query-functions
-      (remq 'process-kill-buffer-query-function
-            kill-buffer-query-functions))
-
-;; visual line
-(global-visual-line-mode 1)
-(diminish 'global-visual-line-mode)
-(diminish 'visual-line-mode)
-
-;; enable subword-mode
-(global-subword-mode t)
-(diminish 'subword-mode)
-;; delete the selection with a keypress
-(delete-selection-mode t)
-
-(setq-default indent-tabs-mode nil  ;; don't use tabs to indent
-              tab-width 4           ;; but maintain correct appearance
-              case-fold-search t    ;; case INsensitive search
-              default-directory "~"
-              fill-column 80
-
-              next-line-add-newlines nil  ;; don't add new lines when scrolling down
-              require-final-newline t     ;; end files with a newline
-              mouse-yank-at-point t       ;; yank at cursor, NOT at mouse position
-              kill-whole-line t)
-
-;;(setq display-time-format "%a %b %d | %H:%M |")
-;;(display-time-mode)
-
-(add-hook 'after-init-hook
-          (lambda ()
-            (fringe-mode '(8 . 2)) ; Make fringe look good with git-gutter-fringe+
-			;; Set font
-            (set-face-attribute 'default nil
-								:family "Source Code Pro"
-								:height 120
-								:weight 'normal
-								:width 'normal)))
-
-(setq shell-file-name "/usr/local/bin/bash")
-(setq explicit-bash-args '("--login" "--init-file" "$HOME/.bash_profile" "-i"))
-
-(use-package exec-path-from-shell :ensure t :defer t
-  :if (memq window-system '(mac ns))
-  :init
-  ;; Solve warning of setting locale in ESS
-  ;; from: https://stat.ethz.ch/pipermail/r-sig-mac/2015-October/011701.html
-  (exec-path-from-shell-copy-env "LC_ALL")
-  (exec-path-from-shell-copy-env "LANG"))
-
-;;
-;; Set Path
-;;
-(setenv "PATH" (concat "/Users/lix/anaconda3/bin/:/usr/local/bin:" (getenv "PATH")))
-(setenv "WORKON_HOME" "/Users/lix/anaconda3/envs/")
-(setq exec-path (append '(
-						  "/Users/lix/anaconda3/bin/"
-						  "/usr/local/bin"
-						  )
-						exec-path))
-
-
-(use-package better-defaults :ensure t :defer t)
 
 (defun local-file-name (file-name)
   (let* ((file-path (expand-file-name file-name user-emacs-directory))
@@ -215,81 +109,22 @@
       (make-directory parent-dir))
     file-path))
 
-(defun config-file (suffix)
-  (load-file (local-file-name (concat "config/config-" suffix ".el"))))
-
-(setq configs '(
-                "evil"
-                "defuns"
-                "appearance"
-                "navigation"
-                "programming"
-                "version-control"
-                "keybindings"
-                "shell"
-                "data-science"
-                "writing"
-                "languages"
-                "utilities"
-                ))
-
-(dolist (suffix configs)
-  (config-file suffix))
-
-(use-package super-save :ensure t :defer t
-             :init (super-save-mode +1)
-             :config
-             (setq super-save-auto-save-when-idle t)
-             (setq auto-save-default nil))
-
-;; Chinese setting
-;; (use-package chinese-fonts-setup :ensure t :defer t
-;;              :init (chinese-fonts-setup-enable))
-
-;; savehist keeps track of some history
-(use-package savehist :ensure t  :defer t
-             :init (savehist-mode t)
-             :config
-             (setq savehist-additional-variables
-                   '(search ring regexp-search-ring)
-                   savehist-autosave-interval 60
-                   savehist-file (concat user-cache-directory "savehist")))
-
-(use-package desktop :ensure t :defer t
-  :config
-  ;; Automatically save and restore sessions
-  (make-directory (concat user-cache-directory "desktop") t)
-  (setq desktop-dirname (concat user-cache-directory "desktop")
-		desktop-base-file-name "emacs.desktop"
-		desktop-base-lock-name "lock"
-		desktop-path (list desktop-dirname)
-		desktop-save t
-		desktop-files-not-to-save "^$" ;reload tramp paths
-		desktop-load-locked-desktop nil)
-  (setq desktop-globals-to-save
-		(append '((extended-command-history . 30)
-				  (file-name-history        . 100)
-				  (grep-history             . 30)
-				  (minibuffer-history       . 50)
-				  (query-replace-history    . 30)
-				  (shell-command-history    . 50)
-				  tags-file-name
-				  register-alist))
-		desktop-locals-to-save nil))
-
-;; save recent files
-(use-package recentf :ensure t
-  :init (recentf-mode t)
-  :config
-  (setq recentf-save-file (concat user-cache-directory "recentf")
-		recentf-max-saved-items 100
-		recentf-max-menu-items 25))
-
-;;(benchmark-init/show-durations-tree)
-
-;; start eshell automatically
-(split-window-below-and-focus)
-(eshell)
+(dolist (tmp '("basic"
+               "appearance"
+               "navigation"
+               "programming"
+               "version-control"
+               "shell"
+               "data-science"
+               "web-development"
+               ;;"evil"
+               "defuns"
+               "keybindings"
+               "writing"
+               "languages"
+               "utilities"))
+  (load-file (local-file-name
+              (concat "config/config-" tmp ".el"))))
 
 (provide 'init)
 ;;; init.el ends here

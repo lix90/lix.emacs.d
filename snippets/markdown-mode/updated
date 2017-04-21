@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: wiki updated 
+# key: updated 
+# --
+updated: `(lix/insert-date)`

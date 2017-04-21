@@ -2,7 +2,7 @@
 
 ;;; private configuration el file
 ;; alias
-(defalias 'close-all 'lix--util-close-all-buffers)
+(defalias 'close-all 'lix/util-close-all-buffers)
 
 (defun split-window-right-and-focus ()
   "Split the window horizontally and focus the new window."
@@ -14,24 +14,20 @@
   (interactive)
   (split-window-below)
   (windmove-down))
-
 (defun delete-window-below ()
   "Delete window below. (require 'windmove)"
   (interactive)
   (windmove-down)
   (delete-window))
-
 (defun delete-window-above ()
   "Delete window above. (require 'windmove)"
   (interactive)
   (windmove-up)
   (delete-window))
-
 (defun delete-window-left ()
   (interactive)
   (windmove-left)
   (delete-window))
-
 (defun delete-window-right ()
   (interactive)
   (windmove-right)
@@ -43,32 +39,17 @@
   (desktop-save-in-desktop-dir)
   (save-buffers-kill-emacs))
 
-;; Describe function/variable etc. in popup
-(defun describe-thing-in-popup ()
-  (interactive)
-  (let* ((thing (symbol-at-point)))
-    (cond
-     ((fboundp thing) (describe-in-popup 'describe-function))
-     ((boundp thing) (describe-in-popup 'describe-variable)))))
-
-(defun describe-in-popup (fn)
-  (let* ((thing (symbol-at-point))
-         (description (save-window-excursion
-                        (funcall fn thing)
-                        (switch-to-buffer "*Help*")
-                        (buffer-string))))
-    (popup-tip description
-               :point (point)
-               :around t
-               :height 30
-               :scroll-bar t
-               :margin t)))
 
 
+;;; User defined function
 (defun lix/dos-2-unix ()
   "Not exactly but it's easier to remember"
   (interactive)
   (set-buffer-file-coding-system 'unix 't))
+
+(defun lix/goto-wiki-content ()
+  (interactive)
+  (find-file "~/github/wiki/content/"))
 
 ;; open folders
 (defun lix/goto-config ()
@@ -102,18 +83,18 @@
   (find-file "~/github/hexo-blog/source/_posts/"))
 
 
-(defun lix--open-jirengu-me ()
+(defun lix/open-jirengu-me ()
   "Open jirengu repository."
   (interactive)
   (find-file "~/jirengu/jrg-renwu9/homework/李想/"))
 
-(defun lix--file-hexo-source-about ()
+(defun lix/file-hexo-source-about ()
   "Open hexo about."
   (interactive)
-  (find-file "~/github/hexo-blog/source/about/index.md"))
+  (find-file "~/projects/hexo-blog/source/about/index.md"))
 
 ;; create new post
-(defun lix--open-hexo-create-post ()
+(defun lix/open-hexo-create-post ()
   "Create and open post file."
   (interactive)
   (setq fn (read-string "Enter file name:"))
@@ -121,54 +102,56 @@
   ;;  (format "cd ~/github/hexo-blog/ && hexo new post \"%s\"" fn))
   (setq time (format-time-string "%Y-%m-%d" (current-time)))
   (find-file
-   (format "~/github/hexo-blog/source/_posts/%s-%s.md" time fn))
+   (format "~/projects/hexo-blog/source/_posts/%s-%s.md" time fn))
   (yas-insert-snippet)
   )
 
-(defun lix--open-hexo-create-draft ()
+(defun lix/open-hexo-create-draft ()
   "Create and open draft file."
   (interactive)
   (setq fn (read-string "Enter file name:"))
   (setq time (format-time-string "%Y-%m-%d" (current-time)))
   (find-file
-   (format "~/github/hexo-blog/source/_drafts/%s-%s.md" time fn))
+   (format "~/projects/hexo-blog/source/_drafts/%s-%s.md" time fn))
   (yas-insert-snippet)
   )
 
-(defun lix--file-note-temp ()
+(defun lix/file-note-temp ()
   "Open note temp file."
   (interactive)
   (find-file "~/github/temp.md"))
 
 ;; kill all buffers
-(defun lix--util-close-all-buffers ()
+(defun lix/util-close-all-buffers ()
   (interactive)
   (mapc 'kill-buffer (buffer-list)))
 
-
 ;; insert data
-(defun lix--insert-date ()
+(defun lix/insert-date ()
   (interactive)
   ;; (insert (format-time-string "%Y-%m-%d %H:%M:%S" (current-time)))
-  (insert (format-time-string "%Y-%m-%d" (current-time)))
-  )
-
-
+  (insert (format-time-string "%Y-%m-%d %H:%M" (current-time))))
+(insert)
 ;; easy comment
-(defun lix--comment-or-uncomment-region (beg end &optional arg)
+(defun lix/comment-or-uncomment-region (beg end &optional arg)
   (interactive (if (use-region-p)
 				   (list (region-beginning) (region-end) nil)
 				 (list (line-beginning-position)
 					   (line-beginning-position 2))))
   (comment-or-uncomment-region beg end arg))
-(global-set-key [remap comment-or-uncomment-region] 'lix--comment-or-uncomment-region)
+(global-set-key [remap comment-or-uncomment-region] 'lix/comment-or-uncomment-region)
 (global-set-key [f6] 'comment-or-uncomment-region)
 
-;;--------------------------- for R ------------------------------
-(defun lix--open-r-package ()
+(defun lix/open-r-package ()
   (interactive)
   "Open r site-package."
   (find-file "/usr/local/lib/R/3.3/site-library/"))
+
+(defun lix/look-up-stardict ()
+  (interactive)
+  (eshell-other-window)
+  (eshell-send-input nil nil nil (read-string "Please enter:")))
+(defalias 'Stardict 'lix/look-up-stardict)
 
 (defun lix/toggle-transparency ()
   (interactive)

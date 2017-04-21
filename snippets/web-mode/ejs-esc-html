@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ejs escaped html
+# key: ej=
+# --
+<%= $0 %>

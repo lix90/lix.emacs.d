@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: wiki yaml
+# key: wiki
+# --
+---
+title: ${1:""}
+author: lixiang
+date: `(format-time-string "%Y-%m-%d %H:%M")`
+tag: $2
+---
+
+$0

@@ -5,13 +5,11 @@
   (global-set-key (kbd "s--") 'text-scale-decrease)
   (global-set-key (kbd "s-0") 'text-scale-adjust)
   (global-set-key (kbd "s-q") 'save-buffers-kill-terminal)
-  (global-set-key (kbd "s-v") 'yank)
-  (global-set-key (kbd "s-c") 'evil-yank)
+  (global-set-key (kbd "s-v") 'yank) 
   (global-set-key (kbd "s-a") 'mark-whole-buffer)
   (global-set-key (kbd "s-x") 'kill-region)
   (global-set-key (kbd "s-w") 'delete-window)
   (global-set-key (kbd "s-W") 'delete-frame)
-  (global-set-key (kbd "s-n") 'make-frame)
   (global-set-key (kbd "s-z") 'undo-tree-undo)
   (global-set-key (kbd "s-Z") 'undo-tree-redo)
   (global-set-key (kbd "s-s")
@@ -21,40 +19,43 @@
 
 ;; Show which-key top-level bindings
 ;; override evil insert for kill line
-(general-define-key :states '(insert) "C-k" 'kill-line)
+;;(general-define-key :states '(insert) "C-k" 'kill-line)
 
-(global-set-key (kbd "C-s") 'swiper)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-,") 'set-mark-command)
+(global-set-key (kbd "C-.") 'comment-or-uncomment-region)
 (global-set-key (kbd "H-i") 'ivy-immediate-done)
-
 (global-set-key (kbd "H-k") 'which-key-show-top-level)
-(global-set-key (kbd "H-m") 'set-mark-command)
 (global-set-key (kbd "H-9") 'shrink-window-horizontally)
 (global-set-key (kbd "H-0") 'enlarge-window-horizontally)
 (global-set-key (kbd "H--") 'shrink-window)
 (global-set-key (kbd "H-=") 'enlarge-window)
-(global-set-key (kbd "H-n") 'move-text-down)
-(global-set-key (kbd "H-p") 'move-text-up)
-(global-set-key (kbd "S-<left>") 'windmove-left)
-(global-set-key (kbd "S-<right>") 'windmove-right)
-(global-set-key (kbd "S-<down>") 'windmove-down)
-(global-set-key (kbd "S-<up>") 'windmove-up)
 
 ;; Quick
 (leader-key
  "<SPC>" 'counsel-M-x
  "h" 'ivy-resume
- "i" 'ivy-imenu-anywhere 
+ "i" 'ivy-imenu-anywhere
+ "r" 'counsel-recentf
  "M" 'woman
  "." 'quick-commit
- ";" 'evil-commentary-line
+ ";" 'comment-or-uncomment-region
  "TAB" 'switch-to-previous-buffer
  "D" 'lix/restore-desktop
+ "O" 'counsel-osx-app
+ ;; window numbering
+ "0" 'winum-select-window-0
+ "1" 'winum-select-window-1
+ "2" 'winum-select-window-2
+ "3" 'winum-select-window-3
+ "4" 'winum-select-window-4
+ "5" 'winum-select-window-5
+ "6" 'winum-select-window-6
+ "7" 'winum-select-window-7
+ "8" 'winum-select-window-8
+ "9" 'winum-select-window-9
  )
 
-;;
-;; IDE
-;;
+;;; IDE
 
 (defalias 'run-matlab 'matlab-shell)
 (defalias 'run-eshell 'eshell)
@@ -63,58 +64,51 @@
 (defalias 'run-elisp 'ielm)
 (defalias 'run-clisp 'slime)
 
+(defun run-python2()
+  (interactive)
+  (lix/switch-to-python2)
+  (run-python))
+(defun run-python3()
+  (interactive)
+  (lix/switch-to-python3)
+  (run-python))
+
 (leader-key
- "I" '(:ignore t :which-key "IDE")
- "Ir" 'run-R
- "Ip" 'run-python
+ "I" '(:ignore t :which-key "IDE & REPL")
+ "Ir" 'run-R 
  "Ie" 'run-eshell
  "Is" 'run-shell
- "Ij" 'run-js
+ "Ij" 'nodejs-repl
  "Ii" 'run-elisp
  "Ic" 'run-clisp
  "Im" 'run-matlab
- "I2" 'switch-to-python2
- "I3" 'switch-to-python3
+ "Ip" 'run-python
+ "I2" 'run-python2
+ "I3" 'run-python3
  )
 
 (leader-key
- "a" '(:ignore t :which-key "Applications")
- ;; OSX app
- "aa" 'counsel-osx-app
- ;; RSS
- "ar" 'elfeed
- ;; Dictioanry
- "ab" 'bing-dict-brief
- "ay" 'youdao-dictionary-search-at-point
- "as" 'yasdcv-translate-at-point
- )
+ "d" '(:ignore t :which-key "Dictionary")
+ "db" 'Bing-dictionary
+ "dy" 'Youdao-dictionary
+ "ds" 'Stardict)
 
 (leader-key
- "b"  '(:ignore t :which-key "Buffers")
- "bc" 'spacemacs/new-empty-buffer
- "bD" 'kill-buffer-and-window
+ "b"  '(:ignore t :which-key "Buffers") 
+ "bb" 'ivy-switch-buffer 
  "bd" 'kill-this-buffer
+ "bD" 'kill-buffer-and-window
+ "be" 'eval-buffer-until-error
  "bf" 'reveal-in-osx-finder
- "bj" 'jump-in-buffer
- "bk" 'evil-delete-buffer
+ "bk" 'kill-buffer
  "bK" 'spacemacs/kill-other-buffers
- "bn" 'spacemacs/new-empty-buffer
- "bN" 'nuke-all-buffers
+ "bn" 'spacemacs/new-empty-buffer 
  "br" 'revert-buffer
  "bR" 'spacemacs/rename-current-buffer-file
  "bt" 'open-dir-in-iterm
  "b." 'comint-clear-buffer
  "b[" 'spacemacs/previous-useful-buffer
  "b]" 'spacemacs/next-useful-buffer
- "be" 'eval-buffer-until-error
- )
-
-(leader-key
- "c"  '(:ignore t :which-key "Commenting")
- "cb" 'org-block-wrap
- "cc" 'evil-commentary
- "cl" 'evil-commentary-line
- "cy" 'evil-commentary-yank-line
  )
 
 (leader-key
@@ -126,8 +120,8 @@
  "fs" 'save-buffer
  "fr" 'counsel-recentf
  "fy" 'spacemacs/show-and-copy-buffer-filename
- "fh" 'lix/goto-home
- "fp" 'lix/goto-projects
+ "fH" 'lix/goto-home
+ "fP" 'lix/goto-projects
  "fC" 'lix/goto-config
  "fi" 'lix/open-init.el
  "fc" 'lix/open-custom.el
@@ -162,12 +156,9 @@
  "nn" 'sp-next-sexp
  "np" 'sp-previous-sexp
  "nl" 'sp-forward-sexp
- "nh" 'sp-backward-sexp
- ;; Yafolding
- "nh" 'yafolding-hide-parent-element
- "na" 'yafolding-toggle-all
- "ne" 'yafolding-toggle-element 
- )
+ "nh" 'sp-backward-sexp 
+ ;; goto
+ "n\\" 'goto-last-change)
 
 (bind-key "H-F" 'sp-forward-symbol)
 (bind-key "H-B" 'sp-backward-symbol)
@@ -175,10 +166,6 @@
 (bind-key "H-(" 'sp-backward-sexp)
 (bind-key "H-]" 'sp-next-sexp)
 (bind-key "H-[" 'sp-previous-sexp)
-(bind-key "H-," 'sp-backward-slurp-sexp)
-(bind-key "H-." 'sp-forward-slurp-sexp)
-(bind-key "H-<" 'sp-backward-barf-sexp)
-(bind-key "H->" 'sp-forward-barf-sexp)
 
 ;; m ==> markdown
 ;; o ==> org
@@ -197,7 +184,7 @@
  "pd" 'counsel-projectile-find-dir
  "pb" 'counsel-projectile-switch-to-buffer
  "pp" 'counsel-projectile-switch-project
- "pe" 'project-explorer-toggle
+ "pn" 'neotree-toggle
  )
 
 (leader-key
@@ -224,9 +211,6 @@
  "sR" 'phi-rectangle-kill-region
  ;;
  "s." 'apropos
- "sg" 'google-this
- "sG" 'google-this-noconfirm
- "sp" 'describe-thing-in-popup
  "sf" 'describe-foo-at-point
  "sF" 'find-function-at-point
  "s?" 'dash-at-point
@@ -251,42 +235,19 @@
  "t!" 'flycheck-mode
  "th" 'hl-line-mode
  "tn" 'linum-mode 
+ "tr" 'rainbow-identifiers-mode 
  "tR" 'rainbow-mode
  "tt" 'counsel-load-theme
- "tT" 'lix/toggle-transparency
- "tp" 'smartparens-mode
- "tP" 'smartparens-global-strict-mode
- "tr" 'rainbow-identifiers-mode
- ;;"ts" 'toggle-dark-light-theme
- "ts" 'flyspell-mode 
- "tb" 'fancy-battery-mode
+ "tT" 'lix/toggle-transparency 
+ "tp" 'smartparens-strict-mode
  "tc" 'centered-cursor-mode
  "tC" 'centered-window-mode
- "td" 'distraction-free
- "tf" 'toggle-serif
+ "td" 'distraction-free 
+ "tw" 'writeroom-mode 
+ "tf" 'flyspell-mode 
  "tF" 'toggle-frame-fullscreen
  "tg" 'git-gutter+-mode
- ;;"te" 'toggle-indicate-empty-lines
- ;;"tE" 'eldoc-mode
- ;;"tm" 'hidden-mode-line-mode
- "tM" 'spaceline-toggle-minor-modes 
- ;;"tN" 'neotree-toggle
- "tw" 'writeroom-mode 
- "to" 'org-toggle-link-display
  "tx" 'nocomments-mode
- )
-
-(leader-key
- "u"  '(:ignore t :which-key "User")
- "um" 'cpm/org-to-markdown
- "uc" 'pandoc-convert-to-pdf
- "uo" 'cpm/markdown-to-org
- "up" 'run-pandoc
- "uP" 'pandoc-pdf-open
- "us" 'sb-expand-current-file
- "uS" 'just-one-space
- "ud" 'distraction-free 
- "uw" 'count-words
  )
 
 (leader-key

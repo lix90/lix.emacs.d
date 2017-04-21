@@ -1,96 +1,89 @@
+;; Bookmark+
+(use-package bookmark+ :ensure t :defer t)
+
+;; Make comments invisible
+(use-package nocomments-mode :ensure t :defer t
+  :commands (nocomments-mode))
+
+;; Open OSX apps
+(use-package counsel-osx-app :ensure t :defer t
+  :commands (counsel-osx-app))
+
+(use-package restart-emacs :ensure t :defer 20
+  :commands restart-emacs)
+
+(use-package help-fns+ :ensure t :defer 5)
+
+;; dicts
+(use-package bing-dict :ensure t :defer 20
+  :commands (bing-dict-brief)
+  :init (defalias 'Bing-dictionary 'bing-dict-brief))
+
+(use-package youdao-dictionary :ensure t :defer 20
+  :commands (youdao-dictionary-search-at-point)
+  :init (defalias 'Youdao-dictionary 'youdao-dictionary-search-at-point))
+
+
+;;; ------------------------------------------------------------------
 ;;; upgrade-packages
-(use-package popup :ensure t :defer t
+(use-package popup :ensure t :defer t :disabled t
   :config
   ;; Change popup tip face
   ;; TODO make popup tip scrollable
   (set-face-attribute 'popup-tip-face nil
                       :foreground "#aaaaaa"
                       :background "#282c32")
+
+  ;; Describe function/variable etc. in popup
+  (defun describe-thing-in-popup ()
+    (interactive)
+    (let* ((thing (symbol-at-point)))
+      (cond
+       ((fboundp thing) (describe-in-popup 'describe-function))
+       ((boundp thing) (describe-in-popup 'describe-variable)))))
+
+  (defun describe-in-popup (fn)
+    (let* ((thing (symbol-at-point))
+           (description (save-window-excursion
+                          (funcall fn thing)
+                          (switch-to-buffer "*Help*")
+                          (buffer-string))))
+      (popup-tip description
+                 :point (point)
+                 :around t
+                 :height 30
+                 :scroll-bar t
+                 :margin t))))
+
+(use-package dash-at-point :ensure t :defer t :disabled t
+  :commands (dash-at-point dash-at-point-with-docset)
+  :config
+  (add-to-list 'dash-at-point-mode-alist '((perl-mode . "perl")
+                                           (ess-mode . "r")
+                                           (inferior-ess-mode . "r")
+                                           (python-mode . "py2"))))
+
+(use-package counsel-dash :ensure t :defer 30 :disabled t
+  :config
+  (defun counsel-dash-at-point ()
+    "Counsel dash with selected point"
+    (interactive)
+    (counsel-dash
+     (if (use-region-p)
+         (buffer-substring-no-properties (region-beginning) (region-end))
+       (substring-no-properties (or (thing-at-point 'symbol) "")))))
+  ;; from YiLiu6240/yxl-spacemacs
+  (defun yxl-dash//activate-package-docsets (path)
+    "Add dash docsets from specified PATH."
+    (setq helm-dash-docsets-path (expand-file-name path))
+    (setq helm-dash-common-docsets (helm-dash-installed-docsets))
+    (message (format "activated %d docsets from: %s"
+                     (length helm-dash-common-docsets) path)))
+  (setq counsel-dash-browser-func 'browse-url)
+  ;;(yxl-dash//activate-package-docsets "~/.docsets")
   )
 
-(use-package popwin :ensure t
-  :config (popwin-mode 1)
-  (setq popwin:close-popup-window-timer-interval 0.1)
-  (setq popwin:close-popup-window-timer nil)
-  (defun popwin:flycheck-errors ()
-    (interactive)
-    (when (get-buffer "*Flycheck errors*") (popwin:popup-buffer "*Flycheck errors*")))
-  (defun popwin:compilation ()
-    (interactive)
-    (when (get-buffer "*compilation*")
-      (if (get-buffer-window "*compilation*")
-          (delete-window (get-buffer-window "*compilation*"))
-        (popwin:popup-buffer "*compilation*" :noselect t :stick t :tail t))))
-  :bind
-  ("C-x m" . popwin:messages)
-  ("C-x e" . popwin:flycheck-errors)
-  ("C-x c" . popwin:compilation))
-
-(use-package dash-at-point :ensure t :defer t
-             :commands (dash-at-point dash-at-point-with-docset)
-             :config
-             (progn
-               (add-to-list 'dash-at-point-mode-alist '(perl-mode . "perl"))
-               (add-to-list 'dash-at-point-mode-alist '(ess-mode . "r"))
-               (add-to-list 'dash-at-point-mode-alist '(inferior-ess-mode . "r"))
-               (add-to-list 'dash-at-point-mode-alist '(python-mode . "py2"))
-               ))
-
-(use-package counsel-dash :ensure t :defer t
-             :init
-             (defun counsel-dash-at-point ()
-               "Counsel dash with selected point"
-               (interactive)
-               (counsel-dash
-                (if (use-region-p)
-                    (buffer-substring-no-properties (region-beginning) (region-end))
-                  (substring-no-properties (or (thing-at-point 'symbol) "")))))
-             :config
-             ;; from YiLiu6240/yxl-spacemacs
-             (defun yxl-dash//activate-package-docsets (path)
-               "Add dash docsets from specified PATH."
-               (setq helm-dash-docsets-path (expand-file-name path))
-               (setq helm-dash-common-docsets (helm-dash-installed-docsets))
-               (message (format "activated %d docsets from: %s"
-                                (length helm-dash-common-docsets) path)))
-             (setq counsel-dash-browser-func 'browse-url)
-             ;;(yxl-dash//activate-package-docsets "~/.docsets")
-             )
-
-
-(use-package paradox :ensure t :defer 30
-             :commands (paradox-list-packages
-                        paradox-upgrade-packages)
-             :config
-             (setq paradox-execute-asynchronously t
-                   paradox-github-token t))
-
-(use-package package-utils :ensure t
-  :commands (package-utils-upgrade-by-name))
-
-;; (use-package esup
-;;   :ensure t
-;;   :commands (esup)
-;;   :defer 30)
-
-(use-package restart-emacs
-  :ensure t
-  :defer 20
-  :commands restart-emacs)
-
-(use-package help-fns+ :ensure t :defer 5)
-
-;; dicts
-(use-package bing-dict :ensure t
-  :commands (bing-dict-brief)
-  :defer 20)
-
-(use-package youdao-dictionary :ensure t :defer 20
-  :commands (youdao-dictionary-search-at-point))
-
-(use-package el2markdown :ensure t :defer t)  ;; TODO configuration
-
-(use-package chinese-yasdcv :ensure t :defer t
+(use-package chinese-yasdcv :ensure t :defer t :disabled t
   :commands (yasdcv-translate-at-point)
   :ensure chinese-pyim
   :config
@@ -112,16 +105,15 @@
           ("amherit" "American Heritage Dictionary 4th Ed. (En-En)" nil nil)
           ("macmillan" "Macmillan English Thesaurus (En-En)" nil nil)
           )))
-(use-package github-browse-file :ensure t :defer t)
-(use-package google-this :ensure t :defer t
+(use-package github-browse-file :ensure t :defer t :disabled t)
+(use-package google-this :ensure t :defer t :disabled t
   :commands (google-this))
-
 
 ;; RSS reader
 ;; Learning from:
 ;; http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
 
-(use-package elfeed :ensure t :defer t
+(use-package elfeed :ensure t :defer t :disabled t
   :commands (elfeed)
   :bind (:map elfeed-search-mode-map
               ("A" . lix/elfeed-show-all)
@@ -164,28 +156,17 @@
     "Wrapper to save the elfeed db to disk before burying buffer"
     (interactive)
     (elfeed-db-save)
-    (quit-window))
-  )
+    (quit-window)))
 
 ;; use an org file to organise feeds
-(use-package elfeed-org :ensure t :defer t
+(use-package elfeed-org :ensure t :defer t :disabled t
   :config
   (elfeed-org)
-  (setq rmh-elfeed-org-files (list (concat user-emacs-directory "elfeed.org")))
-  )
+  (setq rmh-elfeed-org-files (list (concat user-emacs-directory "elfeed.org"))))
 
-(use-package elfeed-goodies :ensure t :defer t
+(use-package elfeed-goodies :ensure t :defer t :disabled t
   :config (elfeed-goodies/setup))
 
-;; Bookmark+
-(use-package bookmark+ :ensure t :defer t)
-
-;; Make comments invisible
-(use-package nocomments-mode :ensure t :defer t
-             :commands (nocomments-mode))
-
-;; Open OSX apps
-(use-package counsel-osx-app :ensure t :defer t
-             :commands (counsel-osx-app))
+(use-package el2markdown :ensure t :defer 20 :disabled t)  ;; TODO configuration
 
 (provide 'config-utilities)

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ejs include
+# key: ej-include
+# --
+<%- include('$0') %>

@@ -34,19 +34,19 @@ alias ffo find-file-other-window $1
 alias fl (ivy-locate)
 alias ff find-file $1
 alias vim find-file $1
-alias fa (find-file "~/.emacs.d/eshell/alias")
+alias falias (find-file "~/.emacs.d/eshell/alias")
 alias gtp (eshell/cd "~/projects/")
 alias sudo *sudo $*
 
 alias srcalias eshell/. ~/.emacs.d/eshell/alias
 
-alias dwb sdcv -c --use-dict="Random House Webster's Unabridged Dictionary (En-En)" $1
-alias doxf sdcv -c --use-dict="牛津简明英汉袖珍辞典" $1
-alias doxfc sdcv -c --use-dict="Oxford Collocations Dictionary 2nd Ed. (En-En)" $1
-alias dwn sdcv -c --use-dict="WordNet® 3.0 (En-En)" $1
-alias dwbt sdcv -c --use-dict="Merriam-Webster's Collegiate Thesaurus (En-En)" $1
-alias d21 sdcv -c --use-dict="21世纪英汉汉英双向词典" $1
-alias dam sdcv -c --use-dict="American Heritage Dictionary 4th Ed. (En-En)" $1
+alias dictwb sdcv -c --use-dict="Random House Webster's Unabridged Dictionary (En-En)" $1
+alias dictoxf sdcv -c --use-dict="牛津简明英汉袖珍辞典" $1
+alias dictoxfc sdcv -c --use-dict="Oxford Collocations Dictionary 2nd Ed. (En-En)" $1
+alias dictwn sdcv -c --use-dict="WordNet® 3.0 (En-En)" $1
+alias dictwbt sdcv -c --use-dict="Merriam-Webster's Collegiate Thesaurus (En-En)" $1
+alias dict21 sdcv -c --use-dict="21世纪英汉汉英双向词典" $1
+alias dictam sdcv -c --use-dict="American Heritage Dictionary 4th Ed. (En-En)" $1
 
 alias ... ../../
 alias .... ../../../
