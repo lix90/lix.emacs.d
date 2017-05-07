@@ -4,6 +4,34 @@
 ;; alias
 (defalias 'close-all 'lix/util-close-all-buffers)
 
+;;; describe this point lisp only
+(defun describe-foo-at-point ()
+  "Show the documentation of the Elisp function and variable near point.
+    This checks in turn:
+    -- for a function name where point is
+    -- for a variable name where point is
+    -- for a surrounding function call
+    "
+  (interactive)
+  (let (sym)
+    ;; sigh, function-at-point is too clever.  we want only the first half.
+    (cond ((setq sym (ignore-errors
+                       (with-syntax-table emacs-lisp-mode-syntax-table
+                         (save-excursion
+                           (or (not (zerop (skip-syntax-backward "_w")))
+                               (eq (char-syntax (char-after (point))) ?w)
+                               (eq (char-syntax (char-after (point))) ?_)
+                               (forward-sexp -1))
+                           (skip-chars-forward "`'")
+                           (let ((obj (read (current-buffer))))
+                             (and (symbolp obj) (fboundp obj) obj))))))
+           (describe-function sym))
+          ((setq sym (variable-at-point)) (describe-variable sym))
+          ;; now let it operate fully -- i.e. also check the
+          ;; surrounding sexp for a function call.
+          ((setq sym (function-at-point)) (describe-function sym)))))
+
+
 (defun split-window-right-and-focus ()
   "Split the window horizontally and focus the new window."
   (interactive)
@@ -14,24 +42,7 @@
   (interactive)
   (split-window-below)
   (windmove-down))
-(defun delete-window-below ()
-  "Delete window below. (require 'windmove)"
-  (interactive)
-  (windmove-down)
-  (delete-window))
-(defun delete-window-above ()
-  "Delete window above. (require 'windmove)"
-  (interactive)
-  (windmove-up)
-  (delete-window))
-(defun delete-window-left ()
-  (interactive)
-  (windmove-left)
-  (delete-window))
-(defun delete-window-right ()
-  (interactive)
-  (windmove-right)
-  (delete-window))
+
 
 (defun save-desktop-save-buffers-kill-emacs ()
   "Save buffers and current desktop every time when quitting emacs."
@@ -132,15 +143,6 @@
   ;; (insert (format-time-string "%Y-%m-%d %H:%M:%S" (current-time)))
   (insert (format-time-string "%Y-%m-%d %H:%M" (current-time))))
 (insert)
-;; easy comment
-(defun lix/comment-or-uncomment-region (beg end &optional arg)
-  (interactive (if (use-region-p)
-				   (list (region-beginning) (region-end) nil)
-				 (list (line-beginning-position)
-					   (line-beginning-position 2))))
-  (comment-or-uncomment-region beg end arg))
-(global-set-key [remap comment-or-uncomment-region] 'lix/comment-or-uncomment-region)
-(global-set-key [f6] 'comment-or-uncomment-region)
 
 (defun lix/open-r-package ()
   (interactive)
@@ -477,15 +479,6 @@ argument takes the kindows rotate backwards."
 	(eshell)
 	(window-resize (selected-window) height-)))
 
-;; Open projects folder
-(defun lix/goto-projects ()
-  (interactive)
-  (find-file "~/projects/"))
-
-(defun lix/goto-home ()
-  (interactive)
-  (find-file "~"))
-
 (defun lix/restore-desktop ()
   "Load the desktop and enable autosaving."
   (interactive)
@@ -493,35 +486,4 @@ argument takes the kindows rotate backwards."
     (desktop-read)
     (desktop-save-mode 1)))
 
-;;; describe this point lisp only
-(defun describe-foo-at-point ()
-  "Show the documentation of the Elisp function and variable near point.
-	This checks in turn:
-	-- for a function name where point is
-	-- for a variable name where point is
-	-- for a surrounding function call
-	"
-  (interactive)
-  (let (sym)
-	;; sigh, function-at-point is too clever.  we want only the first half.
-	(cond ((setq sym (ignore-errors
-					   (with-syntax-table emacs-lisp-mode-syntax-table
-						 (save-excursion
-						   (or (not (zerop (skip-syntax-backward "_w")))
-							   (eq (char-syntax (char-after (point))) ?w)
-							   (eq (char-syntax (char-after (point))) ?_)
-							   (forward-sexp -1))
-						   (skip-chars-forward "`'")
-						   (let ((obj (read (current-buffer))))
-							 (and (symbolp obj) (fboundp obj) obj))))))
-		   (describe-function sym))
-		  ((setq sym (variable-at-point)) (describe-variable sym))
-		  ;; now let it operate fully -- i.e. also check the
-		  ;; surrounding sexp for a function call.
-		  ((setq sym (function-at-point)) (describe-function sym)))))
-
-
-;;; Remove modeline box
-(defun remove-mode-line-box (&rest args)
-  (set-face-attribute 'mode-line nil :box nil :underline nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil :underline nil))
+(provide 'config-defuns)

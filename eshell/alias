@@ -1,60 +1,51 @@
-alias x exit
-alias ex exit
-
-alias gcn git clone --depth=1 $*
-alias gcnfq proxychains4 git clone --depth=1 $*
-alias gd git diff --color
-alias gsr git svn rebase
-alias gsc git svn dcommit
-alias gsp git stash pop
-alias gs git stash
-alias gbr git branch
-alias gco git checkout
-alias gst git status
-alias grb git rebase
-alias grh git reset --hard
-alias gl git log --graph --abbrev-commit --decorate --date=relative --format=format:%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset) --all
-alias gl2 git log --graph --abbrev-commit --decorate --format=format:%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n' %C(white)%s%C(reset) %C(dim white)- %an%C(reset) --all
-
-alias la ls -lah
-alias ll ls -lh
-alias g git
-alias d deer
-alias s eshell/magit
-alias download youtube-dl $*
-alias fq /usr/local/Cellar/proxychains-ng/4.12_1/bin/proxychains4 $*
-alias yd ~/app/ydcv/ydcv.py $*
-alias rm trash $*
-alias therm rm $*
-alias m tldr $*
-alias qr restart-emacs
-alias qq (evil-quit-all)
-
-alias ffo find-file-other-window $1
-alias fl (ivy-locate)
-alias ff find-file $1
-alias vim find-file $1
-alias falias (find-file "~/.emacs.d/eshell/alias")
-alias gtp (eshell/cd "~/projects/")
-alias sudo *sudo $*
-
-alias srcalias eshell/. ~/.emacs.d/eshell/alias
-
-alias dictwb sdcv -c --use-dict="Random House Webster's Unabridged Dictionary (En-En)" $1
-alias dictoxf sdcv -c --use-dict="牛津简明英汉袖珍辞典" $1
-alias dictoxfc sdcv -c --use-dict="Oxford Collocations Dictionary 2nd Ed. (En-En)" $1
-alias dictwn sdcv -c --use-dict="WordNet® 3.0 (En-En)" $1
-alias dictwbt sdcv -c --use-dict="Merriam-Webster's Collegiate Thesaurus (En-En)" $1
-alias dict21 sdcv -c --use-dict="21世纪英汉汉英双向词典" $1
-alias dictam sdcv -c --use-dict="American Heritage Dictionary 4th Ed. (En-En)" $1
-
-alias ... ../../
-alias .... ../../../
-alias ~ cd ~
-alias ipynb jupyter notebook &
-
-alias up eshell-up $1
-alias pk eshell-up-peek $1
-alias j eshell/j
-alias z eshell-z $1
+alias xgcnf fq git clone --depth=1 $*
+alias xgcn git clone --depth=1 $1
+alias xbci brew cask install $1
+alias xbi brew install $1
 alias src *source $*
+alias z eshell-z $1
+alias j eshell/j
+alias pk eshell-up-peek $1
+alias up eshell-up $1
+alias ipynb jupyter notebook &
+alias ~ cd ~
+alias .... ../../../
+alias ... ../../
+alias dictam sdcv -c --use-dict="American Heritage Dictionary 4th Ed. (En-En)" $1
+alias dict21 sdcv -c --use-dict="21世纪英汉汉英双向词典" $1
+alias dictwbt sdcv -c --use-dict="Merriam-Webster's Collegiate Thesaurus (En-En)" $1
+alias dictwn sdcv -c --use-dict="WordNet® 3.0 (En-En)" $1
+alias dictoxfc sdcv -c --use-dict="Oxford Collocations Dictionary 2nd Ed. (En-En)" $1
+alias dictoxf sdcv -c --use-dict="牛津简明英汉袖珍辞典" $1
+alias dictwb sdcv -c --use-dict="Random House Webster's Unabridged Dictionary (En-En)" $1
+alias srcalias eshell/. ~/.emacs.d/eshell/alias
+alias sudo *sudo $*
+alias gtp (eshell/cd "~/projects/")
+alias falias (find-file "~/.emacs.d/eshell/alias")
+alias vim find-file $1
+alias ff find-file $1
+alias fl (ivy-locate)
+alias ffo find-file-other-window $1
+alias qq (evil-quit-all)
+alias qr restart-emacs
+alias m tldr $*
+alias therm rm $*
+alias rm trash $*
+alias yd ~/app/ydcv/ydcv.py $*
+alias fq /usr/local/Cellar/proxychains-ng/4.12_1/bin/proxychains4 $*
+alias download youtube-dl $*
+alias s eshell/magit
+alias d deer
+alias g git
+alias ll ls -lh
+alias la ls -lah
+alias gl2 git log --graph --abbrev-commit --decorate --format=format:%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n' %C(white)%s%C(reset) %C(dim white)- %an%C(reset) --all
+alias gl git log --graph --abbrev-commit --decorate --date=relative --format=format:%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset) --all
+alias xgcnfq proxychains4 git clone --depth=1 $*
+alias ex exit
+alias x exit
+alias xgs git status
+alias xgcb git checkout -b $1
+alias xga git add $1
+alias xgA git add -A
+alias xgcm git commit -m $1

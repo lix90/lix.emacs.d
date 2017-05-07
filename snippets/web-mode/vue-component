@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: vue components
+# key: vue-cp
+# --
+<template>
+$0
+</template>
+
+<script>
+
+</script>
+
+<style>
+
+</style>

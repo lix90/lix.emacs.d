@@ -3,27 +3,27 @@
 # key: Rmdrevealjs
 # --
 ---
-title: ${1:"标题"}
-subtitle: ${2:"副标题"}
-author: ${3:"李想"}
+title: "${1:标题}"
+subtitle: "${2:副标题}"
+author: "${3:李想}"
 date: "`r Sys.Date()`"
 output:
   revealjs::revealjs_presentation:
-    self_contained: ${4:false}
-    incremental: ${5:true}
-    theme: ${6:serif}
-    highlight: ${7:tango}
-    center: ${8:true}
-    background_transition: ${9:zoom}
-    transition: ${10:default}
-    fig_width: ${11:7}
-    fig_height: ${12:5}
-    mathjax: ${13:local}
-    lib_dir: ${14:libs}
-    reveal_plugins: [${15:"zoom"}]
+    self_contained: false
+    incremental: true
+    theme: serif
+    highlight: tango
+    center: true
+    background_transition: zoom
+    transition: default
+    fig_width: 7
+    fig_height: 5
+    mathjax: local
+    lib_dir: libs
+    reveal_plugins: ["zoom"]
     reveal_options:
-      slideNumber: ${16:true}
-      previewLinks: ${17:true}
+      slideNumber: true
+      previewLinks: true
 ---
 
-$18
+$0

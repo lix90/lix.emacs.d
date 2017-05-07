@@ -2,116 +2,137 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Highlight current line number
-;; (use-package hlinum :ensure t :defer t :disabled t
-;;   :commands hlinum-mode
-;;   :init
-;;   (add-hook 'linum-mode-hook 'hlinum-activate)
-;;   (add-hook 'prog-mode-hook 'linum-mode))
-
 (require 'ansi-color)
 
-(add-hook 'package-menu-mode-hook #'hl-line-mode)
-(add-hook 'buffer-menu-mode-hook #'hl-line-mode)
-(add-hook 'prog-mode-hook #'hl-line-mode)
+;; color I like
+(defconst hl-color "#ffd446")
+(defconst hl-color-dark "#282c34")
+;; line number
+;;(setq linum-relative-format "%4s ")
+(setq linum-format "%4s ")
+;; fringe settings
+(fringe-mode '(0 . 2))
+;; font settings
+(setq-default line-spacing 1)
+(set-face-attribute 'default nil
+                    :family "Source Code Pro" ; Source Code Pro
+                    :height 120
+                    :weight 'normal
+                    :width 'normal)
+
+;; UI basic settings
+(setq-default menu-bar-mode nil)
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
+(when (fboundp 'horizontal-scroll-bar-mode)
+  (horizontal-scroll-bar-mode -1))
+(when is-mac
+  (setq mac-allow-anti-aliasing t))
+(setq-default inhibit-startup-screen t
+              initial-scratch-message nil
+              cursor-in-non-selected-windows nil
+              use-dialog-box nil
+              ring-bell-function 'ignore
+              message-log-max 10000)
+
+;; set cursor face
+(setq-default cursor-type 'bar)
+(set-face-background 'cursor hl-color)
+
+(dolist (hook '(
+                prog-mode-hook
+                web-mode-hook 
+                matlab-mode-hook 
+                ))
+  (add-hook 'hook
+            (lambda()
+              (visual-line-mode +1)
+              (global-visual-line-mode -1) 
+              ;; line number
+              (linum-mode +1)
+              ;; highlight current line
+              (hl-line-mode +1)
+              (set-face-background 'hl-line hl-color-dark)
+              (toggle-truncate-lines +1)
+              )))
+
+;; (eval-after-load 'linum-mode
+;;   (lambda()
+;;     (fringe-mode '(0 . 2))))
+
+(define-fringe-bitmap 'right-curly-arrow
+  [#b00000000
+   #b00000000
+   #b00000000
+   #b00000000
+   #b01110000
+   #b00010000
+   #b00010000
+   #b00000000])
+
+(define-fringe-bitmap 'left-curly-arrow
+  [#b00000000
+   #b00001000
+   #b00001000
+   #b00001110
+   #b00000000
+   #b00000000
+   #b00000000
+   #b00000000])
+
+(require 'uniquify)
+(setq-default uniquify-buffer-name-style 'forward)
+
+(require 'saveplace)
+(setq-default save-place t)
+
+(use-package all-the-icons-dired :ensure all-the-icons :defer t
+  :init
+  (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
 
 ;; Highlight current line number
-(use-package linum-hl-cl-number :load-path "elisp"
-  :init (setq linum-format 'linum-highlight-current-line))
-
-;; (use-package highlight-numbers :ensure t :defer t
-;;   :init (add-hook 'prog-mode-hook #'highlight-numbers-mode))
-
-(use-package hl-todo :ensure t :defer 10
-  :config 
-  (setq hl-todo-keyword-faces
-        '(("HOLD" . "#d0bf8f")
-          ("TODO" . "#cc9393")
-          ("NEXT" . "#dca3a3")
-          ("THEM" . "#dc8cc3")
-          ("PROG" . "#7cb8bb")
-          ("OKAY" . "#7cb8bb")
-          ("DONT" . "#5f7f5f")
-          ("FAIL" . "#8c5353")
-          ("DONE" . "#afd8af")
-          ("FIXME" . "#cc9393")
-          ("XXX"   . "#cc9393")
-          ("XXXX"  . "#cc9393")
-          ("???"   . "#cc9393")))
-;;; global-hl-todo-modeで有効にするメジャーモード(derived-mode) 
-  (setq hl-todo-activate-in-modes
-        '(prog-mode markdown-mode)))
+(use-package hlinum :ensure t :defer t
+  :init
+  (add-hook 'prog-mode-hook #'hlinum-activate)
+  :config
+  (set-face-attribute 'linum-highlight-face nil
+                      :background hl-color-dark
+                      :foreground hl-color
+                      :weight 'bold))
 
 
-(use-package fancy-battery :ensure t :after spaceline :disabled t
-  :defer 10 :config (fancy-battery-mode))
-(use-package powerline :ensure t :if window-system :disabled t
-  :config (setq-default powerline-default-separator 'nil))
-(use-package spaceline :ensure t :disabled t
-  :config (setq-default mode-line-format '("%e" (:eval (spaceline-ml-ati)))))
-(use-package spaceline-custom :after spaceline :load-path "elisp" :disabled t)
-(use-package spaceline-colors :after spaceline-custom  :load-path "elisp" :disabled t
-  :init (add-hook 'after-init-hook 'spaceline-update-faces)
-  :config (advice-add 'load-theme :after 'spaceline-update-faces))
-
-
-(use-package all-the-icons-dired :ensure t :defer t
-  :init (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
 (use-package atom-one-dark-theme :ensure t :defer t)
 (use-package solarized-theme :ensure t :defer t)
 (use-package color-theme-sanityinc-tomorrow :ensure t :defer t)
-(use-package twilight-bright-theme :ensure t :defer t)
+(use-package twilight-bright-theme :ensure t :defer t :disabled t)
 (use-package monokai-theme :ensure t :defer t)
-(use-package spacemacs-common :ensure spacemacs-theme :defer t) 
-(use-package doom-themes :ensure t
+(use-package spacemacs-common :ensure spacemacs-theme :defer t :disabled t) 
+
+(use-package doom-themes :ensure t :defer t
   :config
   (setq doom-enable-bold t
         doom-enable-italic t
         ;; doom-one specific settings
         doom-one-brighter-modeline t
-        doom-one-brighter-comments nil)
-  ;; brighter source buffers 
-  ;;(remove-hook 'find-file-hook 'doom-buffer-mode)
-  ;; brighter minibuffer when active
-  ;; (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
-  ;;(remove-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
-  )
+        doom-one-brighter-comments nil))
 
+(use-package doom-neotree :ensure doom-themes :after neotree
+  :config
+  (setq doom-neotree-line-spacing 1
+        doom-neotree-enable-file-icons t
+        doom-neotree-folder-size 0.8))
 
 ;;; my mode-line-format
 (use-package lix-mode-line :load-path "elisp")
-(require 'doom-neotree)
+
 (advice-add 'load-theme :after 'lix/update-faces)
-(load-theme 'spacemacs-dark t)
+;;(load-theme 'spacemacs-dark t)
+(load-theme 'doom-one t)
 
 (if (not (display-graphic-p))
     (load-theme 'gruvbox t))
-
-(use-package git-gutter+ :ensure t :defer t 
-  :config
-  (add-hook 'prog-mode-hook #'git-gutter+-mode)
-  (set-face-foreground 'git-gutter+-added    "royal blue")
-  (set-face-foreground 'git-gutter+-modified "orange")
-  (set-face-foreground 'git-gutter+-deleted  "hot pink")
-  )
-
-(use-package git-gutter-fringe+ :ensure t :after git-gutter+
-  :if (display-graphic-p) 
-  :init
-  (require 'git-gutter-fringe+)
-  (setq git-gutter-fr+-side 'right-fringe) 
-  (define-fringe-bitmap 'git-gutter-fr+-added
-    ;;[224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
-    [248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248]
-    nil nil 'center)
-  (define-fringe-bitmap 'git-gutter-fr+-modified
-    ;;[224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
-    [248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248]
-    nil nil 'center)
-  (define-fringe-bitmap 'git-gutter-fr+-deleted 
-    ;;[224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
-    [248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248 248]
-    nil nil 'center))
 
 (provide 'config-appearance)
 ;;; config-appearance.el ends here

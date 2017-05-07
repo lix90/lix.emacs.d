@@ -26,105 +26,101 @@
 (defconst package-mirror "emacs-china")
 ;; (defconst package-mirror "original")
 (defconst user-project-directory "~/projects/")
-(defconst is-mac (string-equal system-type "darwin"))
-(defconst user-cache-directory
-  (file-name-as-directory (concat user-emacs-directory ".cache"))
-  "My emacs storage area for persistent files.")
-(make-directory user-cache-directory t)
+(defconst is-mac (string= system-type "darwin"))
 
 (setq package-enable-at-startup nil
-      load-prefer-newer t)
+      ;; load-prefer-newer t ; already in better-default
+      )
 
 (when load-file-name
   (defconst base-path (file-name-directory load-file-name)))
 
-(setq custom-file (concat base-path "custom.el"))
-
+(setq custom-file
+      (concat base-path "custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))
 
 (require 'package)
-(setq package-user-dir (expand-file-name "elpa" user-emacs-directory))
+(setq package-user-dir
+      (expand-file-name "elpa" user-emacs-directory))
 
 (cond
- ((string-equal package-mirror "emacs-china")
+ ((string= package-mirror "emacs-china")
   (setq package-archives
 		'(("org" . "https://elpa.emacs-china.org/org/")
 		  ("gnu" . "https://elpa.emacs-china.org/gnu/")
 		  ("melpa" . "https://elpa.emacs-china.org/melpa/"))))
- ((string-equal package-mirror "original")
+ ((string= package-mirror "original")
   (setq package-archives
 		'(("org"       . "https://orgmode.org/elpa/")
 		  ("gnu"       . "https://elpa.gnu.org/packages/")
 		  ("melpa"     . "https://melpa.org/packages/")))))
 
 (package-initialize nil)
-(when (not package-archive-contents) (package-refresh-contents))
+(when (not package-archive-contents)
+  (package-refresh-contents))
 
-(unless (package-installed-p 'org)
- (package-refresh-contents)
- (package-install 'org))
+;; (unless (package-installed-p 'org)
+;;   (package-refresh-contents)
+;;   (package-install 'org))
 
 (unless (package-installed-p 'use-package)
- (package-refresh-contents)
- (package-install 'use-package))
+  (package-refresh-contents)
+  (package-install 'use-package))
 
+(eval-when-compile
+  (require 'use-package))
 (setq use-package-verbose t)
-
-(eval-when-compile (require 'use-package))
 (require 'diminish)
 (require 'bind-key)
 
 (use-package benchmark-init :ensure t
-  :init (require 'benchmark-init))
-(add-hook
- 'benchmark-init/tree-mode-hook
- '(lambda ()
-    (local-set-key "i" '(lambda () (interactive) (find-file user-init-file)))
-    (local-set-key "s" '(lambda () (interactive) (switch-to-buffer "*scratch*")))
-    (local-set-key "t" 'counsel-load-theme)
-    (local-set-key "f" 'counsel-set-font)
-    (local-set-key "a" 'org-agenda)
-    (local-set-key "p" 'projectile-switch-project)))
+  :init
+  (require 'benchmark-init))
 
-(use-package el-get :ensure t :defer t)
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(defun lix/load-file-alist (list &optional dir-prefix file-suffix)
+  (dolist (tmp list)
+    (let* ((file-name (concat (or dir-prefix "config/config-") tmp (or file-suffix ".el")))
+           (file-path (expand-file-name file-name user-emacs-directory))
+           (parent-dir (file-name-directory file-path)))
+      (unless (or (not parent-dir)
+                  (file-exists-p parent-dir))
+        (make-directory parent-dir))
+      (load-file file-path))))
 
-(use-package paradox :ensure t :defer 30
-  :commands (paradox-list-packages
-             paradox-upgrade-packages)
-  :config
-  (setq paradox-execute-asynchronously t
-        paradox-github-token t))
+(setq file-alist-to-load
+      '("package"
+        "environment"
+        "defuns"
+        "keys"
+        "editing"
+        "programming"
+        "navigation"
+        "file"
+        "appearance"
+        "project"
+        "git"
+        "shell"
+        "javascript"
+        "web"
+        "ess-r"
+        "python"
+        "matlab"
+        "multimode"
+        "org"
+        "markdown"
+        "latex"
+        "lisp"
+        "english"
+        "misc"
+        ;;"php"
+        ;;"cc"
+        ;;"ruby"
+        ;;"java"
+        ;;"sql"
+        ))
 
-(use-package package-utils :ensure t :defer 30
-  :commands (package-utils-upgrade-by-name))
-
-
-(defun local-file-name (file-name)
-  (let* ((file-path (expand-file-name file-name user-emacs-directory))
-         (parent-dir (file-name-directory file-path)))
-    (unless (or (not parent-dir)
-                (file-exists-p parent-dir))
-      (make-directory parent-dir))
-    file-path))
-
-(dolist (tmp '("basic"
-               "appearance"
-               "navigation"
-               "programming"
-               "version-control"
-               "shell"
-               "data-science"
-               "web-development"
-               ;;"evil"
-               "defuns"
-               "keybindings"
-               "writing"
-               "languages"
-               "utilities"))
-  (load-file (local-file-name
-              (concat "config/config-" tmp ".el"))))
+(lix/load-file-alist file-alist-to-load)
 
 (provide 'init)
 ;;; init.el ends here

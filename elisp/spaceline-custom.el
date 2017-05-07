@@ -253,38 +253,38 @@
 ;; Right First Segment ;;
 ;;---------------------;;
 (spaceline-define-segment
-    ati-time "Time"
-    (let* ((hour (string-to-number (format-time-string "%I")))
-           (icon (all-the-icons-wicon (format "time-%s" hour) :v-adjust 0.0)))
-      (concat
-       (propertize (format "%s" icon)
-                   'face `(:height 1 :family ,(all-the-icons-wicon-family) :inherit)
-                   'display '(raise 0))
-       " "
-       (propertize (format-time-string "%H:%M ") 'face `(:height 0.9 :inherit) 'display '(raise 0))))
-    :tight t)
+ ati-time "Time"
+ (let* ((hour (string-to-number (format-time-string "%I")))
+        (icon (all-the-icons-wicon (format "time-%s" hour) :v-adjust 0.0)))
+   (concat
+    (propertize (format "%s" icon)
+                'face `(:height 1 :family ,(all-the-icons-wicon-family) :inherit)
+                'display '(raise 0))
+    " "
+    (propertize (format-time-string "%H:%M ") 'face `(:height 0.9 :inherit) 'display '(raise 0))))
+ :tight t)
 
 (spaceline-define-segment
-    ati-hud "Display position through buffer as an XPM image"
-    (let ((color1 (face-foreground default-face))
-          (height (or powerline-height (frame-char-height)))
-          pmax
-          pmin
-          (ws (window-start))
-          (we (window-end)))
-      (save-restriction
-        (widen)
-        (setq pmax (point-max))
-        (setq pmin (point-min)))
-      (propertize " "
-                  'display (pl/percent-xpm height pmax pmin we ws (* (frame-char-width) 1) color1 nil)
-                  'face default-face))
-    :tight t :when (and active (not (equal "All" (format-mode-line "%p")))) :enabled t)
+ ati-hud "Display position through buffer as an XPM image"
+ (let ((color1 (face-foreground default-face))
+       (height (or powerline-height (frame-char-height)))
+       pmax
+       pmin
+       (ws (window-start))
+       (we (window-end)))
+   (save-restriction
+     (widen)
+     (setq pmax (point-max))
+     (setq pmin (point-min)))
+   (propertize " "
+               'display (pl/percent-xpm height pmax pmin we ws (* (frame-char-width) 1) color1 nil)
+               'face default-face))
+ :tight t :when (and active (not (equal "All" (format-mode-line "%p")))) :enabled t)
 
 (spaceline-define-segment
-    ati-height-modifier "Modifies the height of inactive buffers"
-    (propertize " " 'face '(:height 1.3 :inherit))
-    :tight t :when (not active))
+ ati-height-modifier "Modifies the height of inactive buffers"
+ (propertize " " 'face '(:height 1.3 :inherit))
+ :tight t :when (not active))
 
 (spaceline-define-segment
     ati-buffer-size "Buffer Size"

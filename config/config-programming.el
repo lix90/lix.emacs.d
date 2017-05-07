@@ -4,21 +4,49 @@
 
 ;;; Code:
 
+(use-package whitespace-cleanup-mode :ensure t :defer t
+  :init (add-hook 'prog-mode-hook #'global-whitespace-cleanup-mode))
+
+(use-package aggressive-indent :ensure t :defer t
+  :init (add-hook 'prog-mode-hook #'global-aggressive-indent-mode)
+  :config
+  (add-to-list 'aggressive-indent-excluded-modes '(python-mode
+                                                   haml-mode
+                                                   html-mode)))
+
+(use-package origami :ensure t :defer t)
+
+(use-package dumb-jump :ensure t :defer t
+  :bind (("M-g o" . dumb-jump-go-other-window)
+         ("M-g j" . dumb-jump-go)
+         ("M-g x" . dumb-jump-go-prefer-external)
+         ("M-g z" . dumb-jump-go-prefer-external-other-window)
+         ("M-g q" . dumb-jump-quick-look))
+  :init
+  (setq dumb-jump-selector 'ivy
+        dumb-jump-aggressive nil
+        dumb-jump-prefer-searcher 'ag))
+
 ;;; Parenthesis settings
 (use-package smartparens :ensure t
-  :init (show-smartparens-global-mode t)
+  :init
+  (progn
+    (add-hook 'prog-mode-hook #'show-smartparens-mode)
+    (add-hook 'prog-mode-hook #'smartparens-mode)
+    (add-hook 'markdown-mode-hook #'smartparens-mode))
   :config
   (require 'smartparens-config)
-  (smartparens-global-mode 1)
   (sp-use-smartparens-bindings)
   (sp-local-pair '(emacs-lisp-mode
                    lisp-interaction-mode) "'" nil :actions nil)
   (sp-local-pair '(emacs-lisp-mode
-                   lisp-interaction-mode) "`" nil :actions nil))
+                   lisp-interaction-mode) "`" nil :actions nil)
+  (sp-local-pair '(emacs-lisp-mode
+                   lisp-interaction-mode) "{" nil :actions nil))
 
 (setq show-paren-style 'parenthesis)
 (show-paren-mode t)
-(diminish 'show-paren-mode)
+(diminish 'show-paren-mode "")
 ;; (define-advice show-paren-function (:around (fn) fix-show-paren-function)
 ;;   "Highlight enclosing parens."
 ;;   (cond ((looking-at-p "\\s(") (funcall fn))
@@ -27,7 +55,8 @@
 ;;              (funcall fn)))))
 
 (use-package rainbow-delimiters :ensure t
-  :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :init
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 ;;; Auto-completion settings
 (use-package company :ensure t :defer t
@@ -38,46 +67,36 @@
          ("C-," . company-search-candidates)
          ("C-." . company-filter-candidates))
   :init
-  (global-company-mode t)
+  (add-hook 'prog-mode-hook #'company-mode)
+  :config
   (define-key company-active-map (kbd "RET") nil)
   (define-key company-active-map (kbd "<return>") nil)
   (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
-  :config
   (setq company-idle-delay 0.2
         company-minimum-prefix-length 2
         company-require-match nil
         company-tooltip-limit 10
         company-tooltip-align-annotations t
-        ;;company-begin-commands '(self-insert-command)
-        )
+        company-begin-commands '(self-insert-command))
   ;; set default `company-backends'
-  (setq company-backends
-        '(company-capf
-          (company-abbrev company-dabbrev company-keywords)
-          company-files
-          company-yasnippet
-          ))
+  (setq-default company-backends
+                '(company-capf
+                  (company-abbrev company-dabbrev company-keywords)
+                  company-files
+                  company-yasnippet
+                  ))
   ;; Nicer looking faces
   (custom-set-faces
    '(company-tooltip-common
      ((t (:inherit company-tooltip :weight bold :underline nil))))
    '(company-tooltip-common-selection
      ((t (:inherit company-tooltip-selection :weight bold :underline nil))))))
-(use-package company-flx :ensure t :defer t :after company
-  :init (company-flx-mode t))
-(use-package company-statistics :ensure t :defer t :after company
-  :config (add-hook 'after-init-hook 'company-statistics-mode))
 
-(setq hippie-expand-try-function-list '(try-expand-debbrev
-                                        try-expand-debbrev-all-buffers
-                                        try-expand-debbrev-from-kill
-                                        try-complete-file-name-partially
-                                        try-complete-file-name
-                                        try-expand-all-abbrevs
-                                        try-expand-list
-                                        try-expand-line
-                                        try-complete-lisp-symbol-partially
-                                        try-complete-lisp-symbol))
+(use-package company-flx :ensure t :defer t
+  :init
+  (eval-after-load 'company (company-flx-mode t)))
+
+(use-package company-statistics :ensure t :defer t :after company)
 
 ;;; Snippets settings
 (use-package yasnippet :ensure t :defer t

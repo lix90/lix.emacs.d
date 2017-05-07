@@ -1,87 +1,146 @@
+(use-package general :ensure t :defer t
+  :init
+  (general-create-definer
+   leader-key
+   :keymaps 'global
+   :prefix "H-SPC"))
+
+(use-package god-mode :ensure t :defer t
+  :config
+  (defun lix/update-cursor ()
+    (setq cursor-type (if (or god-local-mode buffer-read-only)
+                          'box
+                        'bar)))
+  (add-hook 'god-mode-enabled-hook 'lix/update-cursor)
+  (add-hook 'god-mode-disabled-hook 'lix/update-cursor))
+(global-set-key (kbd "<escape>") 'god-local-mode)
+
+(use-package which-key :ensure t
+  :init
+  (which-key-setup-minibuffer)
+  (which-key-mode t)
+  :config
+  (setq which-key-popup-type 'side-window
+        which-key-side-window-location 'bottom
+        which-key-side-window-max-height 0.30
+        which-key-side-window-max-width 0.20
+        which-key-max-description-length 25
+        which-key-allow-evil-operators t
+        which-key-sort-order 'which-key-key-order
+        which-key-unicode-correction 3
+        which-key-prefix-prefix "+"
+        which-key-idle-delay 0.15))
+
+(use-package hydra :ensure t :defer t
+  :init
+  (defhydra hydra-zoom (global-map "C-c")
+    "zoom"
+    ("+" text-scale-increase "larger")
+    ("-" text-scale-decrease "smaller")
+    ("0" text-scale-adjust "recover"))
+  (defhydra hydra-adjwin (global-map "C-c")
+    "adjust window"
+    ("<left>" shrink-window-horizontally "shrink horizontally")
+    ("<right>" enlarge-window-horizontally "enlarge horizontally")
+    ("<up>" enlarge-window "enlarge vertically")
+    ("<down>" shrink-window "shrink vertically")
+    ("B" balance-windows "balance")))
+
+;;; thanks for abo-abo
+(defun lix/insert-unicode (unicode-name)
+  "Same as C-x 8 enter UNICODE-NAME."
+  (insert-char (cdr (assoc-string unicode-name (ucs-names)))))
+
+(global-set-key
+ (kbd "C-x 9")
+ (defhydra hydra-unicode (:hint nil)
+   "
+        Unicode  _e_ €  _s_ ZERO WIDTH SPACE
+                 _f_ ♀  _o_ °   _m_ µ
+                 _r_ ♂  _a_ →   _c_ ©
+        "
+   ("e" (lix/insert-unicode "EURO SIGN"))
+   ("r" (lix/insert-unicode "MALE SIGN"))
+   ("f" (lix/insert-unicode "FEMALE SIGN"))
+   ("s" (lix/insert-unicode "ZERO WIDTH SPACE"))
+   ("o" (lix/insert-unicode "DEGREE SIGN"))
+   ("a" (lix/insert-unicode "RIGHTWARDS ARROW"))
+   ("m" (lix/insert-unicode "MICRO SIGN"))
+   ("c" (lix/insert-unicode "©"))))
+
+;; (global-set-key
+;;  (kbd "C-n")
+;;  (defhydra hydra-move
+;;    (:body-pre (next-line))
+;;    "move"
+;;    ("n" next-line)
+;;    ("p" previous-line)
+;;    ("f" forward-char)
+;;    ("b" backward-char)
+;;    ("a" beginning-of-line)
+;;    ("e" move-end-of-line)
+;;    ("v" scroll-up-command)
+;;    ;; Converting M-v to V here by analogy.
+;;    ("V" scroll-down-command)
+;;    ("l" recenter-top-bottom)))
+
+(global-set-key
+ (kbd "C-c m")
+ (defhydra hydra-transpose (:color red)
+   "Transpose"
+   ("c" transpose-chars "characters")
+   ("w" transpose-words "words")
+   ("o" org-transpose-words "Org mode words")
+   ("l" transpose-lines "lines")
+   ("s" transpose-sentences "sentences")
+   ("e" org-transpose-elements "Org mode elements")
+   ("p" transpose-paragraphs "paragraphs")
+   ("t" org-table-transpose-table-at-point "Org mode table")
+   ("q" nil "cancel" :color blue)))
+
 (when is-mac
-  (global-set-key (kbd "<H-backspace>") 'delete-forward-char)
-  ;; Keybindings
-  (global-set-key (kbd "s-=") 'text-scale-increase)
-  (global-set-key (kbd "s--") 'text-scale-decrease)
-  (global-set-key (kbd "s-0") 'text-scale-adjust)
   (global-set-key (kbd "s-q") 'save-buffers-kill-terminal)
-  (global-set-key (kbd "s-v") 'yank) 
   (global-set-key (kbd "s-a") 'mark-whole-buffer)
-  (global-set-key (kbd "s-x") 'kill-region)
   (global-set-key (kbd "s-w") 'delete-window)
   (global-set-key (kbd "s-W") 'delete-frame)
   (global-set-key (kbd "s-z") 'undo-tree-undo)
   (global-set-key (kbd "s-Z") 'undo-tree-redo)
   (global-set-key (kbd "s-s")
-				  (lambda ()
-					(interactive)
-					(call-interactively (key-binding "\C-x\C-s")))))
+                  (lambda ()
+                    (interactive)
+                    (call-interactively (key-binding "\C-x\C-s")))))
 
-;; Show which-key top-level bindings
-;; override evil insert for kill line
-;;(general-define-key :states '(insert) "C-k" 'kill-line)
-
-(global-set-key (kbd "C-,") 'set-mark-command)
-(global-set-key (kbd "C-.") 'comment-or-uncomment-region)
-(global-set-key (kbd "H-i") 'ivy-immediate-done)
-(global-set-key (kbd "H-k") 'which-key-show-top-level)
-(global-set-key (kbd "H-9") 'shrink-window-horizontally)
-(global-set-key (kbd "H-0") 'enlarge-window-horizontally)
-(global-set-key (kbd "H--") 'shrink-window)
-(global-set-key (kbd "H-=") 'enlarge-window)
+;; mark
+(global-set-key (kbd "C-:") 'set-mark-command)
+(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "M-s s") 'isearch-forward-regexp)
+(global-set-key (kbd "M-s r") 'isearch-backward-regexp)
 
 ;; Quick
-(leader-key
- "<SPC>" 'counsel-M-x
- "h" 'ivy-resume
- "i" 'ivy-imenu-anywhere
- "r" 'counsel-recentf
- "M" 'woman
- "." 'quick-commit
- ";" 'comment-or-uncomment-region
- "TAB" 'switch-to-previous-buffer
- "D" 'lix/restore-desktop
- "O" 'counsel-osx-app
- ;; window numbering
- "0" 'winum-select-window-0
- "1" 'winum-select-window-1
- "2" 'winum-select-window-2
- "3" 'winum-select-window-3
- "4" 'winum-select-window-4
- "5" 'winum-select-window-5
- "6" 'winum-select-window-6
- "7" 'winum-select-window-7
- "8" 'winum-select-window-8
- "9" 'winum-select-window-9
- )
+(leader-key "<SPC>" 'counsel-M-x
+            "h" 'ivy-resume
+            "i" 'ivy-imenu-anywhere
+            "k" 'which-key-show-top-level
+            "r" 'counsel-recentf
+            "M" 'woman
+            "." 'quick-commit
+            ";" 'comment-or-uncomment-region
+            "TAB" 'switch-to-previous-buffer
+            "D" 'lix/restore-desktop
+            "O" 'counsel-osx-app
+            ;; window numbering
+            )
 
 ;;; IDE
-
-(defalias 'run-matlab 'matlab-shell)
-(defalias 'run-eshell 'eshell)
-(defalias 'run-shell 'shell)
-(defalias 'run-R 'R)
-(defalias 'run-elisp 'ielm)
-(defalias 'run-clisp 'slime)
-
-(defun run-python2()
-  (interactive)
-  (lix/switch-to-python2)
-  (run-python))
-(defun run-python3()
-  (interactive)
-  (lix/switch-to-python3)
-  (run-python))
-
 (leader-key
  "I" '(:ignore t :which-key "IDE & REPL")
- "Ir" 'run-R 
- "Ie" 'run-eshell
- "Is" 'run-shell
+ "Ir" 'R
+ "Is" 'shell
  "Ij" 'nodejs-repl
- "Ii" 'run-elisp
- "Ic" 'run-clisp
- "Im" 'run-matlab
+ "Ii" 'ielm
+ "Ic" 'slime
+ "Im" 'matlab-shell
  "Ip" 'run-python
  "I2" 'run-python2
  "I3" 'run-python3
@@ -94,15 +153,15 @@
  "ds" 'Stardict)
 
 (leader-key
- "b"  '(:ignore t :which-key "Buffers") 
- "bb" 'ivy-switch-buffer 
+ "b"  '(:ignore t :which-key "Buffers")
+ "bb" 'ivy-switch-buffer
  "bd" 'kill-this-buffer
  "bD" 'kill-buffer-and-window
  "be" 'eval-buffer-until-error
  "bf" 'reveal-in-osx-finder
  "bk" 'kill-buffer
  "bK" 'spacemacs/kill-other-buffers
- "bn" 'spacemacs/new-empty-buffer 
+ "bn" 'spacemacs/new-empty-buffer
  "br" 'revert-buffer
  "bR" 'spacemacs/rename-current-buffer-file
  "bt" 'open-dir-in-iterm
@@ -115,7 +174,7 @@
  "f"  '(:ignore t :which-key "Files")
  "ff" 'counsel-find-file
  "fl" 'counsel-locate
- "fj" 'counsel-file-jump 
+ "fj" 'counsel-file-jump
  "fo" 'crux-open-with
  "fs" 'save-buffer
  "fr" 'counsel-recentf
@@ -138,7 +197,7 @@
  )
 
 (leader-key
- "n" '(:ignore t :which-key "Navigation") 
+ "n" '(:ignore t :which-key "Navigation")
  "n(" 'forward-or-backward-sexp
  ;; Symbol
  "nf" 'sp-forward-symbol
@@ -156,7 +215,7 @@
  "nn" 'sp-next-sexp
  "np" 'sp-previous-sexp
  "nl" 'sp-forward-sexp
- "nh" 'sp-backward-sexp 
+ "nh" 'sp-backward-sexp
  ;; goto
  "n\\" 'goto-last-change)
 
@@ -196,7 +255,7 @@
 
 (leader-key
  "s" '(:ignore t :which-key "Search")
- "sC" '(:ignore t :which-key "Colors") 
+ "sC" '(:ignore t :which-key "Colors")
 
  ;; avy
  "sw" 'avy-goto-word-or-subword-1
@@ -234,17 +293,17 @@
  "ta" 'company-mode
  "t!" 'flycheck-mode
  "th" 'hl-line-mode
- "tn" 'linum-mode 
- "tr" 'rainbow-identifiers-mode 
+ "tn" 'linum-mode
+ "tr" 'rainbow-identifiers-mode
  "tR" 'rainbow-mode
  "tt" 'counsel-load-theme
- "tT" 'lix/toggle-transparency 
+ "tT" 'lix/toggle-transparency
  "tp" 'smartparens-strict-mode
  "tc" 'centered-cursor-mode
  "tC" 'centered-window-mode
- "td" 'distraction-free 
- "tw" 'writeroom-mode 
- "tf" 'flyspell-mode 
+ "td" 'distraction-free
+ "tw" 'writeroom-mode
+ "tf" 'flyspell-mode
  "tF" 'toggle-frame-fullscreen
  "tg" 'git-gutter+-mode
  "tx" 'nocomments-mode
@@ -261,7 +320,7 @@
  "wk" 'delete-window-above
  ;; Split window
  "w|" 'split-window-right-and-focus
- "w-" 'split-window-below-and-focus 
+ "w-" 'split-window-below-and-focus
  "ws" 'evil-window-split
  "wv" 'evil-window-vsplit
  ;; Rotate window
@@ -434,4 +493,5 @@
 
 (eval-after-load 'org '(my-org-config))
 
-(provide 'config-keybindings)
+
+(provide 'config-keys)

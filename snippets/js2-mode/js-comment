@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: JavaScript comments
+# key: /**
+# --
+/**
+ * 从入坑开始就要有保持代码优雅的习惯
+ *
+ * @author alexiangli
+ */

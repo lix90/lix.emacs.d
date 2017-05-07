@@ -1,6 +1,39 @@
 (require 'all-the-icons)
 
 (defvar active (eq (frame-selected-window) (selected-window)))
+(defun lix/highlight-color()
+  (if active "#ff9300" "#ffc16d"))
+
+;;; add some mode icon
+(add-to-list 'all-the-icons-mode-icon-alist
+             '(nodejs-repl-mode all-the-icons-alltheicon "nodejs"
+                                :height 1.3
+                                :v-adjust 0.1
+                                :face all-the-icons-lgreen))
+
+(defun fish-path (path max-len)
+  "Return a potentially trimmed-down version of the directory PATH, replacing
+parent directories with their initial characters to try to get the character
+length of PATH (sans directory slashes) down to MAX-LEN."
+  (let* ((components (split-string (abbreviate-file-name path) "/"))
+         (len (+ (1- (length components))
+                 (reduce '+ components :key 'length)))
+         (str ""))
+    (while (and (> len max-len)
+                (cdr components))
+      (setq str (concat str
+                        (cond ((= 0 (length (car components))) "/")
+                              ((= 1 (length (car components)))
+                               (concat (car components) "/"))
+                              (t
+                               (if (string= "."
+                                            (string (elt (car components) 0)))
+                                   (concat (substring (car components) 0 2)
+                                           "/")
+                                 (string (elt (car components) 0) ?/)))))
+            len (- len (1- (length (car components))))
+            components (cdr components)))
+    (concat str (reduce (lambda (a b) (concat a "/" b)) components))))
 
 (defun mode-line-fill (face reserve)
   "Return empty space using FACE and leaving RESERVE space on the right."
@@ -46,7 +79,7 @@
 (defun lix/get-win-number()
   (when (fboundp 'winum-mode)
     (propertize (format "%c" (+ 9311 (winum-get-number)))
-                'face '(:height 1 :inherit 'all-the-icons-yellow)
+                'face '(:height 1 :inherit all-the-icons-yellow)
                 'display '(raise 0.1))))
 
 ;; projectile
@@ -70,29 +103,30 @@
       (propertize icon
                   'help-echo (format "Major-mode: `%s`" major-mode)
                   'display '(raise -0.1)
-                  'face `(:height 1.1 :family ,(all-the-icons-icon-family-for-buffer) :inherit 'all-the-icons-yellow)))))
+                  'face `(:height 1.1 :family ,(all-the-icons-icon-family-for-buffer) :inherit all-the-icons-yellow)))))
 
 ;; buffer id
 (defun lix/get-buffer-id()
   (if (fboundp 'projectile-project-root)
-      (let* ((buf (or (buffer-file-name) (buffer-name)))
+      (let* ((max-level 25)
+             (buf (or (buffer-file-name) (buffer-name)))
              (proj (ignore-errors (projectile-project-root)))
-             (fname (if (buffer-file-name)
-                        (file-name-nondirectory buf)
-                      (format-mode-line "%b")))
-             (dirname (if (buffer-file-name)
+             (fname (buffer-name))
+             (dirname (if (and proj (buffer-file-name))
                           (cadr (split-string (file-name-directory buf) proj))
-                        "")))
+                        (if (buffer-file-name)
+                            (car (split-string (buffer-file-name) (buffer-name)))
+                          ""))))
         (concat
-         (propertize dirname
+         (propertize (fish-path dirname max-level)
                      'face '(:height 0.8 :inherit)
                      'display '(raise 0.1))
-         (propertize (format "%s" fname)
-                     'face '(:height 0.8 :weight bold :inherit 'all-the-icons-yellow)
+         (propertize fname
+                     'face '(:height 0.8 :weight bold :inherit all-the-icons-yellow)
                      'display '(raise 0.1)
                      'help-echo (format "Major-mode: `%s`" major-mode))))
-    (propertize (format-mode-line "%b ")
-                'face '(:weight bold :height 0.8 :inherit 'all-the-icons-yellow)
+    (propertize (buffer-name)
+                'face '(:weight bold :height 0.8 :inherit all-the-icons-yellow)
                 'display '(raise 0.1))))
 
 ;; current process
@@ -115,7 +149,7 @@
   (propertize (format-mode-line "%3c")
               'face
               (if (>= (current-column) 80)
-                  '(:height 0.8 :weight bold :inherit 'all-the-icons-yellow)
+                  '(:height 0.8 :weight bold :inherit all-the-icons-yellow)
                 '(:height 0.8 :inherit))
               'display '(raise 0.1)))
 
@@ -220,6 +254,25 @@
      " "
      (propertize (format-time-string "%H:%M") 'face `(:height 0.9 :inherit) 'display '(raise 0.1)))))
 
+
+;;;
+(defun lix/get-position-hud()
+  (when (and active (not (equal "All" (format-mode-line "%p"))))
+    (let ((color1 (face-foreground default-face))
+          (height (or powerline-height (frame-char-height)))
+          pmax
+          pmin
+          (ws (window-start))
+          (we (window-end)))
+      (save-restriction
+        (widen)
+        (setq pmax (point-max))
+        (setq pmin (point-min)))
+      (propertize " "
+                  'display (pl/percent-xpm height pmax pmin we ws (* (frame-char-width) 1) color1 nil)
+                  'face default-face))))
+
+;;;
 (setq-default mode-line-format
               (list
                " "
@@ -240,19 +293,19 @@
                ;;"/"
                ;;'(:eval (lix/get-buf-position))
 
-               " "
+               "  "
                '(:eval (lix/get-vc-icon))
-               " "
-               '(:eval (lix/get-flychecker))
-               " "
-               '(:eval (lix/get-flycheck-status))
+               ;;" "
+               ;;'(:eval (lix/get-flychecker))
+               ;;" "
+               ;;'(:eval (lix/get-flycheck-status))
                ;; blank
-               (propertize (mode-line-fill 'mode-line 20) 'face '(:inherit))
+               (propertize (mode-line-fill 'mode-line 8) 'face '(:inherit))
+               ;;
                ;; time
                '(:eval (lix/get-time))
                ;;" "
                ;;'(:eval (lix/get-marked-region))
-
                ))
 
 (defvar lix/mode-line--colors-alist
@@ -276,7 +329,8 @@
     (set-face-attribute face nil
                         :foreground .foreground
                         :background .background
-                        :underline nil))
+                        :underline nil
+                        :font "Source Code Pro for Powerline"))
   (if (not show-paren-mode) (show-paren-mode t)
     (set-face-attribute 'show-paren-match-face nil
                         :weight 'bold
