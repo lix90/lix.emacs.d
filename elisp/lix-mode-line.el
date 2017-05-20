@@ -50,10 +50,10 @@ length of PATH (sans directory slashes) down to MAX-LEN."
   "Function to return the Spaceline formatted GIT Version Control text."
   (let ((branch (mapconcat 'concat (cdr (split-string vc-mode "[:-]")) "-")))
     (concat
-     (propertize (all-the-icons-alltheicon "git") 'face '(:height 0.9 :inherit) 'display '(raise 0.1))
+     (propertize (all-the-icons-alltheicon "git") 'face '(:height 1 :inherit) 'display '(raise 0.1))
      (propertize " ")
      (propertize (format "%s" (all-the-icons-octicon "git-branch"))
-                 'face `(:family ,(all-the-icons-octicon-family) :height 0.8 :inherit)
+                 'face `(:family ,(all-the-icons-octicon-family) :height 1 :inherit)
                  'display '(raise 0.1))
      (propertize (format " %s" branch) 'face `(:height 0.8 :inherit) 'display '(raise 0.1)))))
 
@@ -76,11 +76,48 @@ length of PATH (sans directory slashes) down to MAX-LEN."
     (propertize (format "%s" (apply (cadr result) (cddr result))) 'face `(:family ,(funcall (car result)) :inherit ))))
 
 
-(defun lix/get-win-number()
-  (when (fboundp 'winum-mode)
-    (propertize (format "%c" (+ 9311 (winum-get-number)))
-                'face '(:height 1 :inherit all-the-icons-yellow)
-                'display '(raise 0.1))))
+(defun spaceline--unicode-number (str)
+  "Return a nice unicode representation of a single-digit number STR."
+  (cond
+   ((string= "1" str) "➊")
+   ((string= "2" str) "➋")
+   ((string= "3" str) "➌")
+   ((string= "4" str) "➍")
+   ((string= "5" str) "➎")
+   ((string= "6" str) "➏")
+   ((string= "7" str) "➐")
+   ((string= "8" str) "➑")
+   ((string= "9" str) "➒")
+   ((string= "0" str) "➓")))
+
+;; (defun spaceline--unicode-number (str)
+;;   "Return a nice unicode representation of a single-digit number STR."
+;;   (cond
+;;    ((string= "1" str) "➊")
+;;    ((string= "2" str) "➋")
+;;    ((string= "3" str) "➌")
+;;    ((string= "4" str) "➍")
+;;    ((string= "5" str) "➎")
+;;    ((string= "6" str) "➏")
+;;    ((string= "7" str) "➐")
+;;    ((string= "8" str) "➑")
+;;    ((string= "9" str) "➒")
+;;    ((string= "0" str) "➓")))
+
+(defun lix/get-win-number ()
+  "The current window number. Requires `window-numbering-mode' to be enabled."
+  (when (bound-and-true-p winum-mode)
+    (propertize (let* ((num (winum-get-number))
+                       (str (when num (int-to-string num))))
+                  (format "%c" (spaceline--unicode-number str)))
+                'face '(:heigth 1.2 :inherit all-the-icons-yellow)
+                'display '(raise 0))))
+
+;; (defun lix/get-win-number()
+;;   (when (fboundp 'winum-mode)
+;;     (propertize (format "%c" (+ 9311 (winum-get-number)))
+;;                 'face '(:height 1.1 :inherit all-the-icons-yellow)
+;;                 'display '(raise 0))))
 
 ;; projectile
 (defun lix/get-projectile-proj()
@@ -209,7 +246,7 @@ length of PATH (sans directory slashes) down to MAX-LEN."
               (`no-checker  "⚠ No Checker")
               (`not-checked "✖ Disabled")
               (`errored     "⚠ Error")
-              (`interrupted "⛔ Interrupted")
+              (`interrupted "Interrupted")
               (`suspicious  "")))
            (f (cond
                ((string-match "⚠" text) `(:height 0.9 :foreground ,(face-attribute 'spaceline-flycheck-warning :foreground)))
@@ -248,9 +285,10 @@ length of PATH (sans directory slashes) down to MAX-LEN."
   (let* ((hour (string-to-number (format-time-string "%I")))
          (icon (all-the-icons-wicon (format "time-%s" hour) :v-adjust 0.0)))
     (concat
-     (propertize (format "%s" icon)
-                 'face `(:height 1 :family ,(all-the-icons-wicon-family) :inherit)
-                 'display '(raise 0))
+     (if (display-graphic-p)
+         (propertize (format "%s" icon)
+                     'face `(:height 1.1 :family ,(all-the-icons-wicon-family) :inherit)
+                     'display '(raise 0)))
      " "
      (propertize (format-time-string "%H:%M") 'face `(:height 0.9 :inherit) 'display '(raise 0.1)))))
 
@@ -272,6 +310,31 @@ length of PATH (sans directory slashes) down to MAX-LEN."
                   'display (pl/percent-xpm height pmax pmin we ws (* (frame-char-width) 1) color1 nil)
                   'face default-face))))
 
+(setq lix/flycheck-mode-line
+      '(:eval
+        (pcase flycheck-last-status-change
+          (`not-checked nil)
+          (`no-checker (propertize " -" 'face 'warning))
+          (`running (propertize " ✷" 'face 'success))
+          (`errored (propertize " !" 'face 'error))
+          (`finished
+           (let* ((error-counts (flycheck-count-errors flycheck-current-errors))
+                  (no-errors (cdr (assq 'error error-counts)))
+                  (no-warnings (cdr (assq 'warning error-counts)))
+                  (face (cond (no-errors 'error)
+                              (no-warnings 'warning)
+                              (t 'success))))
+             (propertize (format "[%s/%s]" (or no-errors 0) (or no-warnings 0))
+                         'face face)))
+          (`interrupted " -")
+          (`suspicious '(propertize " ?" 'face 'warning)))))
+
+(defun lix/get-vc ()
+  (when vc-mode
+    (propertize (format "%s" vc-mode)
+                'face `(:height 1 :inherit)
+                'display '(raise 0.1))))
+
 ;;;
 (setq-default mode-line-format
               (list
@@ -283,8 +346,9 @@ length of PATH (sans directory slashes) down to MAX-LEN."
                " "
                '(:eval (lix/get-current-point--line))
                '(:eval (lix/get-current-point--col))
-               "  "
-               '(:eval (lix/get-mode-icon))
+               " "
+               (if (display-graphic-p)
+                   '(:eval (lix/get-mode-icon)))
                " "
                '(:eval (lix/get-buffer-id))
                " "
@@ -293,12 +357,18 @@ length of PATH (sans directory slashes) down to MAX-LEN."
                ;;"/"
                ;;'(:eval (lix/get-buf-position))
 
-               "  "
-               '(:eval (lix/get-vc-icon))
+               " "
+               ;;'(:eval (lix/get-vc-icon))
+               '(:eval (lix/get-vc))
+               ;;'(eval (lix/get-git-stats))
                ;;" "
                ;;'(:eval (lix/get-flychecker))
                ;;" "
                ;;'(:eval (lix/get-flycheck-status))
+               ;;"%1 "
+               ;;lix/flycheck-mode-line
+               ;;"%1 "
+
                ;; blank
                (propertize (mode-line-fill 'mode-line 8) 'face '(:inherit))
                ;;
@@ -329,8 +399,7 @@ length of PATH (sans directory slashes) down to MAX-LEN."
     (set-face-attribute face nil
                         :foreground .foreground
                         :background .background
-                        :underline nil
-                        :font "Source Code Pro for Powerline"))
+                        :underline nil))
   (if (not show-paren-mode) (show-paren-mode t)
     (set-face-attribute 'show-paren-match-face nil
                         :weight 'bold

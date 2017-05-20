@@ -12,10 +12,10 @@
   :commands (nocomments-mode))
 
 ;; Open OSX apps
-(use-package counsel-osx-app :ensure t :defer t
+(use-package counsel-osx-app :ensure t :defer t :if is-mac
   :commands (counsel-osx-app))
 
-(use-package restart-emacs :ensure t :defer 20
+(use-package restart-emacs :ensure t :defer t
   :commands restart-emacs)
 
 

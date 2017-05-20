@@ -1,7 +1,7 @@
 ;;;--------------------
 ;; English Learning
 ;;;--------------------
-(use-package bing-dict :ensure t :defer 20
+(use-package bing-dict :ensure t :defer t
   :init
   (defalias 'Bing-dictionary 'bing-dict-brief)
   :config
@@ -17,7 +17,7 @@
   (global-set-key (kbd "<C-mouse-1>") 'qjp-search-word-at-mouse)
   (global-unset-key (kbd "<C-down-mouse-1>")))
 
-(use-package youdao-dictionary :ensure t :defer 20
+(use-package youdao-dictionary :ensure t :defer t
   :init
   (defalias 'Youdao-dictionary 'youdao-dictionary-search-at-point))
 

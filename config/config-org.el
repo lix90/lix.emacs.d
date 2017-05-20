@@ -36,13 +36,13 @@
   
   (add-hook 'org-mode-hook
             '(lambda()
-               (turn-on-auto-fill)
-               (set-fill-column 78)
+               ;;(turn-on-auto-fill)
+               ;;(set-fill-column 78)
                ;;(flyspell-mode 1)
-               (hl-todo-mode)
+               ;;(hl-todo-mode)
                (imenu-add-to-menubar "Imenu")
                ;;(git-gutter+-mode 0)
-               (org-eldoc-load)
+               ;;(org-eldoc-load)
                (org-bullets-mode t)
                (toc-org-enable)))
   

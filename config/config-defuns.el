@@ -297,11 +297,6 @@ argument takes the kindows rotate backwards."
 			   (set-window-start w2 s1)
 			   (setq i next-i)))))))
 
-(defun rotate-windows-backward (count)
-  "Rotate your windows backward."
-  (interactive "p")
-  (spacemacs/rotate-windows (* -1 count)))
-
 (defun forward-or-backward-sexp (&optional arg)
   "Go to the matching parenthesis character if one is adjacent to point."
   (interactive "^p")
@@ -329,7 +324,7 @@ argument takes the kindows rotate backwards."
   "Regexp used to define buffers that are useful despite matching
   `spacemacs-useless-buffers-regexp'.")
 
-(defun spacemacs/useless-buffer-p (buffer)
+(defun useless-buffer-p (buffer)
   "Determines if a buffer is useful."
   (let ((buf-paren-major-mode (get (with-current-buffer buffer
 									 major-mode)
@@ -345,26 +340,26 @@ argument takes the kindows rotate backwards."
 			   (when (string-match regexp buf-name)
 				 (return t))))))
 
-(defun spacemacs/next-useful-buffer ()
+(defun next-useful-buffer ()
   "Switch to the next buffer and avoid special buffers."
   (interactive)
   (let ((start-buffer (current-buffer)))
 	(next-buffer)
-	(while (and (spacemacs/useless-buffer-p (current-buffer))
+	(while (and (useless-buffer-p (current-buffer))
 				(not (eq (current-buffer) start-buffer)))
 	  (next-buffer))))
 
-(defun spacemacs/previous-useful-buffer ()
+(defun previous-useful-buffer ()
   "Switch to the previous buffer and avoid special buffers."
   (interactive)
   (let ((start-buffer (current-buffer)))
 	(previous-buffer)
-	(while (and (spacemacs/useless-buffer-p (current-buffer))
+	(while (and (useless-buffer-p (current-buffer))
 				(not (eq (current-buffer) start-buffer)))
 	  (previous-buffer))))
 
 ;; from magnars
-(defun spacemacs/rename-current-buffer-file ()
+(defun rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
   (interactive)
   (let ((name (buffer-name))
@@ -388,7 +383,7 @@ argument takes the kindows rotate backwards."
 			   (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 
 ;; from magnars
-(defun spacemacs/delete-current-buffer-file ()
+(defun delete-current-buffer-file ()
   "Removes file connected to current buffer and kills buffer."
   (interactive)
   (let ((filename (buffer-file-name))
@@ -402,7 +397,7 @@ argument takes the kindows rotate backwards."
 		(message "File '%s' successfully removed" filename)))))
 
 ;; found at http://emacswiki.org/emacs/KillingBuffers
-(defun spacemacs/kill-other-buffers ()
+(defun kill-other-buffers ()
   "Kill all other buffers."
   (interactive)
   (when (yes-or-no-p (format "Killing all buffers except \"%s\"? " (buffer-name)))
@@ -410,7 +405,7 @@ argument takes the kindows rotate backwards."
 	(message "Buffers deleted!")))
 
 ;; http://camdez.com/blog/2013/11/14/emacs-show-buffer-file-name/
-(defun spacemacs/show-and-copy-buffer-filename ()
+(defun show-and-copy-buffer-filename ()
   "Show the full path to the current file in the minibuffer."
   (interactive)
   (let ((file-name (buffer-file-name)))
@@ -420,14 +415,14 @@ argument takes the kindows rotate backwards."
 		  (kill-new file-name))
 	  (error "Buffer not visiting a file"))))
 
-(defun spacemacs/new-empty-buffer ()
+(defun new-empty-buffer ()
   "Create a new buffer called untitled(<n>)"
   (interactive)
   (let ((newbuf (generate-new-buffer-name "untitled")))
 	(switch-to-buffer newbuf)))
 
 ;; from https://github.com/gempesaw/dotemacs/blob/emacs/dg-defun.el
-(defun spacemacs/kill-matching-buffers-rudely (regexp &optional internal-too)
+(defun kill-matching-buffers-rudely (regexp &optional internal-too)
   "Kill buffers whose name matches the specified REGEXP. This
   function, unlike the built-in `kill-matching-buffers` does so
   WITHOUT ASKING. The optional second argument indicates whether to
@@ -441,19 +436,19 @@ argument takes the kindows rotate backwards."
 		(kill-buffer buffer)))))
 
 ;; http://stackoverflow.com/a/10216338/4869
-(defun spacemacs/copy-whole-buffer-to-clipboard ()
+(defun copy-whole-buffer-to-clipboard ()
   "Copy entire buffer to clipboard"
   (interactive)
   (clipboard-kill-ring-save (point-min) (point-max)))
 
-(defun spacemacs/copy-clipboard-to-whole-buffer ()
+(defun copy-clipboard-to-whole-buffer ()
   "Copy clipboard and replace buffer"
   (interactive)
   (delete-region (point-min) (point-max))
   (clipboard-yank)
   (deactivate-mark))
 
-(defun spacemacs/copy-file ()
+(defun copy-file ()
   "Write the file under new name."
   (interactive)
   (call-interactively 'write-file))

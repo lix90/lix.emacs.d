@@ -1,7 +1,9 @@
 /auto-save-list/
 /anaconda-mode/
 /backups/
+/desktop/
 /elpa/
+/pyim/
 /el-get/
 /Helm-adaptive-history
 /ido.last
@@ -15,13 +17,14 @@
 /.cache/
 /undo/
 /ac-comphist.dat
+savehist
+tramp
 *.elc
 *~
 .#*
 .DS_Store
 /#ido.last#
 /url/
-/tramp
 /eshell/lastdir
 /eshell/history
 .mc-lists.el
@@ -29,3 +32,5 @@ projectile-bookmarks.eld
 .persistent-scratch
 company-statistics-cache.el
 network-security.data
+._*
+session.*

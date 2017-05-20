@@ -3,19 +3,28 @@
 ;; -----------------------------------
 
 ;;; Code:
+;; 开启文档模式
+(add-hook 'prog-mode-hook #'eldoc-mode)
 
+;; 自动清除空白
 (use-package whitespace-cleanup-mode :ensure t :defer t
-  :init (add-hook 'prog-mode-hook #'global-whitespace-cleanup-mode))
+  :init (add-hook 'prog-mode-hook #'whitespace-cleanup-mode))
 
+;; 暴力缩进
 (use-package aggressive-indent :ensure t :defer t
-  :init (add-hook 'prog-mode-hook #'global-aggressive-indent-mode)
+  :init (add-hook 'prog-mode-hook #'aggressive-indent-mode)
   :config
-  (add-to-list 'aggressive-indent-excluded-modes '(python-mode
-                                                   haml-mode
-                                                   html-mode)))
+  (add-to-list 'aggressive-indent-excluded-modes
+               '(python-mode
+                 haml-mode
+                 html-mode)))
 
+;; origami代码折叠
 (use-package origami :ensure t :defer t)
 
+;; dumb-jump快速跳转
+;; 使用ivy选择
+;; 使用ag搜索
 (use-package dumb-jump :ensure t :defer t
   :bind (("M-g o" . dumb-jump-go-other-window)
          ("M-g j" . dumb-jump-go)
@@ -27,7 +36,7 @@
         dumb-jump-aggressive nil
         dumb-jump-prefer-searcher 'ag))
 
-;;; Parenthesis settings
+;;; smartparens智能括号操作，较难掌握
 (use-package smartparens :ensure t
   :init
   (progn
@@ -54,11 +63,12 @@
 ;;              (ignore-errors (backward-up-list))
 ;;              (funcall fn)))))
 
+;; 多彩括号
 (use-package rainbow-delimiters :ensure t
   :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-;;; Auto-completion settings
+;;; 自动补全
 (use-package company :ensure t :defer t
   :bind (("C-c C-0" . company-complete)
          :map company-active-map
@@ -91,11 +101,9 @@
      ((t (:inherit company-tooltip :weight bold :underline nil))))
    '(company-tooltip-common-selection
      ((t (:inherit company-tooltip-selection :weight bold :underline nil))))))
-
-(use-package company-flx :ensure t :defer t
+(use-package company-flx :ensure t :defer t :after company
   :init
-  (eval-after-load 'company (company-flx-mode t)))
-
+  (company-flx-mode t))
 (use-package company-statistics :ensure t :defer t :after company)
 
 ;;; Snippets settings
@@ -104,7 +112,7 @@
   :config (yas-reload-all))
 
 ;;; Code linter settings
-(use-package flycheck :ensure t :defer t
+(use-package flycheck :ensure t :defer t :if (display-graphic-p)
   :bind (:map flycheck-mode-map
               ("C-c f l" . flycheck-list-errors)
               ("C-c f n" . flycheck-next-error)

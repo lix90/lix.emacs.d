@@ -10,9 +10,8 @@
               next-line-add-newlines nil
               require-final-newline t
               ;;mouse-yank-at-point t ;; alrealy in better-default
-              kill-whole-line t)
-
-(setq-default indent-tabs-mode nil)
+              kill-whole-line t
+              indent-tabs-mode nil)
 
 (setq x-select-enable-clipboard t
       x-select-enable-primary t
@@ -41,12 +40,10 @@
         mac-function-modifier 'hyper
         mac-right-option-modifier 'none))
 
-(add-hook 'after-init-hook #'global-subword-mode)
-(add-hook 'after-init-hook #'delete-selection-mode)
+(global-subword-mode +1)
+(delete-selection-mode +1)
 
-;;;--------------------
-;; Learn hippie-expand
-;;;--------------------
+;; hippie-expand
 (setq hippie-expand-try-function-list
       '(try-expand-debbrev
         try-expand-debbrev-all-buffers
@@ -91,6 +88,7 @@
 ;;(setq display-time-format "%a %b %d | %H:%M |")
 ;;(display-time-mode)
 
+;; 当idle或者光标失焦（lose focus）时，自动保存文件
 (use-package super-save :ensure t :defer t
   :init
   (add-hook 'after-init-hook #'super-save-mode)
@@ -98,6 +96,7 @@
   (setq super-save-auto-save-when-idle t
         auto-save-default nil))
 
+;; 保存历史
 (use-package savehist :ensure t  :defer t
   :init (add-hook 'after-init-hook #'savehist-mode)
   :config
@@ -105,7 +104,8 @@
         savehist-autosave-interval 60
         savehist-file (concat user-emacs-directory "savehist")))
 
-(use-package desktop :ensure t :defer t
+;; 保存桌面
+(use-package desktop :ensure t :defer t :if (display-graphic-p)
   :config
   ;; Automatically save and restore sessions
   (make-directory (concat user-emacs-directory "desktop") t)
@@ -114,7 +114,7 @@
         desktop-base-lock-name "lock"
         desktop-path `(,desktop-dirname)
         desktop-save t
-        desktop-files-not-to-save "^$" ;reload tramp paths
+        desktop-files-not-to-save "^$"
         desktop-load-locked-desktop nil)
   (setq desktop-globals-to-save
         (append '((extended-command-history . 30)
@@ -125,7 +125,8 @@
                   (shell-command-history    . 50)
                   tags-file-name
                   register-alist))
-        desktop-locals-to-save nil))
+        desktop-locals-to-save nil)
+  )
 
 ;; save recent files
 (use-package recentf :ensure t :defer t
@@ -135,16 +136,10 @@
         recentf-max-saved-items 100
         recentf-max-menu-items 25))
 
-
-(use-package pangu-spacing :ensure t :defer t
-  :init
-  (add-hook 'prog-mode-hook #'pangu-spacing-mode)
-  (add-hook 'text-mode-hook #'pangu-spacing-mode))
-
 ;;;--------------------
 ;; anzu tutorial
 ;;;--------------------
-;; 1. query-replace
+;; 1. query-replace 查询、代替
 ;; 2. enter
 ;; 3. y -> act,
 ;;    n -> skip,
@@ -152,10 +147,11 @@
 ;;    N -> skip all,
 ;;    , -> act but not next
 (use-package anzu :ensure t :defer t
-  :init (add-hook 'prog-mode-hook #'global-anzu-mode)
+  :init (add-hook 'prog-mode-hook #'anzu-mode)
   :bind (("M-%" . anzu-query-replace)
          ("C-M-%" . anzu-query-replace-regexp)))
 
+;; 智能mark选区
 (use-package expand-region :ensure t :defer t
   :bind ("C-=" . er/expand-region)
   :init
@@ -168,14 +164,25 @@
              ("s" . er/mark-sentence)
              ("p" . er/mark-paragraph)))
 
+;; learn iedit
+;; 用于批量修改匹配的symbol或者word或者region
+;; 基本用法：
+;; C-;/M-s ; 开启或关闭iedit-mode
+;; 在iedit-mode开启时，通过C-' 可以仅仅显示选中词出现的段落，
+;; 隐藏其他段落
 (use-package iedit :ensure t :defer t
   :init
   (unbind-key "C-;")
   (bind-key* "M-s ;" 'iedit-mode))
 
+;; 使用goto-last-change前往上一次修改的位置
 (use-package goto-last-change :ensure t
   :bind (("M-g l" . goto-last-change)))
 
+;; 需安装the_silver_searcher
+;; gentoo linux: `emerge -avt the_silver_searcher`
+;; macos: `brew install the_silver_searcher`
+;; 可以与projectile进行绑定，在项目中搜索
 (use-package ag :ensure t :defer t
   :init
   (bind-keys :prefix-map lix/ag-search
@@ -185,21 +192,17 @@
              ("f" . ag-files)
              ("F" . ag-project-files)))
 
+;; 快速导航，移动光标至指定行，字符，词等
 (use-package avy :ensure t :defer t
-  :init (bind-keys :prefix-map lix/avy-prefix-map
-                   :prefix "M-s a"
-                   :prefix-docstring "Avy Goto"
-                   ("l" . avy-goto-line)
-                   ("c" . avy-goto-char)
-                   ("C" . avy-goto-char-2)
-                   ("w" . avy-goto-word-0)
-                   ("W" . avy-goto-word-1)))
-
-(use-package ace-pinyin :ensure t :defer t
   :init
-  (progn
-    (add-hook 'after-init-hook #'ace-pinyin-global-mode)
-    (setq ace-pinyin-use-avy t)))
+  (bind-keys :prefix-map lix/avy-prefix-map
+             :prefix "M-s a"
+             :prefix-docstring "Avy Goto"
+             ("l" . avy-goto-line)
+             ("c" . avy-goto-char)
+             ("C" . avy-goto-char-2)
+             ("w" . avy-goto-word-0)
+             ("W" . avy-goto-word-1)))
 
 (use-package embrace :ensure t
   :bind ("C-," . embrace-commander))
@@ -249,60 +252,55 @@
     (add-hook 'hook #'whole-line-or-region-mode)))
 
 (use-package move-text :ensure t :defer t
-  :bind (("H-n" . move-text-down)
-         ("H-p" . move-text-up)))
+  :bind (("C-S-n" . move-text-down)
+         ("C-S-p" . move-text-up)))
 
-(use-package fix-word :ensure t :defer t
-  :bind (("H-u" . fix-word-upcase)
-         ("H-l" . fix-word-downcase)
-         ("H-c" . fix-word-capitalize)))
+(use-package fix-word :ensure t :defer t)
 
 (use-package whitespace :ensure t :defer t
   :config
-  (progn
-    (setq whitespace-style '(face
-                             trailing
-                             lines-tail
-                             space-before-tab
-                             indentation
-                             space-after-tab))
-    (setq whitespace-line-column 80)))
+  (setq whitespace-style
+        '(face
+          trailing
+          lines-tail
+          space-before-tab
+          indentation
+          space-after-tab))
+  (setq whitespace-line-column 80))
 
 (use-package undo-tree :ensure t :defer t
   :init
   (add-hook 'prog-mode-hook #'undo-tree-mode)
   (add-hook 'markdown-mode-hook #'undo-tree-mode)
   :config
-  (progn
-    (setq undo-tree-visualizer-timestamps t
-          undo-tree-visualizer-diff t)
-    (let ((undo-dir (concat user-emacs-directory "undo")))
-      (make-directory undo-dir t)
-      (setq undo-tree-history-directory-alist `((".*" . ,undo-dir))))))
+  (setq undo-tree-visualizer-timestamps t
+        undo-tree-visualizer-diff t)
+  (let ((undo-dir (concat user-emacs-directory "undo")))
+    (make-directory undo-dir t)
+    (setq undo-tree-history-directory-alist `((".*" . ,undo-dir)))))
 
-(use-package hl-todo :ensure t :defer t
+(use-package hl-todo :ensure t :defer t :if (display-graphic-p)
   :config
-  (progn
-    (setq hl-todo-keyword-faces
-          '(("HOLD" . "#d0bf8f")
-            ("TODO" . "#cc9393")
-            ("NEXT" . "#dca3a3")
-            ("THEM" . "#dc8cc3")
-            ("PROG" . "#7cb8bb")
-            ("OKAY" . "#7cb8bb")
-            ("DONT" . "#5f7f5f")
-            ("FAIL" . "#8c5353")
-            ("DONE" . "#afd8af")
-            ("FIXME" . "#cc9393")
-            ("XXX"   . "#cc9393")
-            ("XXXX"  . "#cc9393")
-            ("???"   . "#cc9393")))
+  (setq hl-todo-keyword-faces
+        '(("HOLD" . "#d0bf8f")
+          ("TODO" . "#cc9393")
+          ("NEXT" . "#dca3a3")
+          ("THEM" . "#dc8cc3")
+          ("PROG" . "#7cb8bb")
+          ("OKAY" . "#7cb8bb")
+          ("DONT" . "#5f7f5f")
+          ("FAIL" . "#8c5353")
+          ("DONE" . "#afd8af")
+          ("FIXME" . "#cc9393")
+          ("XXX"   . "#cc9393")
+          ("XXXX"  . "#cc9393")
+          ("???"   . "#cc9393")))
 ;;; global-hl-todo-modeで有効にするメジャーモード(derived-mode)
-    (setq hl-todo-activate-in-modes
-          '(prog-mode
-            markdown-mode))))
+  (setq hl-todo-activate-in-modes
+        '(prog-mode
+          markdown-mode)))
 
-(use-package reveal-in-osx-finder :ensure t :defer t
+(use-package reveal-in-osx-finder :ensure t :defer t :if is-mac
   :bind (("C-x f" . reveal-in-osx-finder)))
 
 (use-package flyspell-popup :ensure t :defer t :after flyspell

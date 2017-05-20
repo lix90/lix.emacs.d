@@ -16,8 +16,8 @@
   ;; Change popup tip face
   ;; TODO make popup tip scrollable
   (set-face-attribute 'popup-tip-face nil
-                      :foreground "#aaaaaa"
-                      :background "#282c32")
+                      :foreground "white"
+                      :background "yellow")
 
   ;; Describe function/variable etc. in popup
   (defun describe-thing-in-popup ()

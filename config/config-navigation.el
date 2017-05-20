@@ -84,8 +84,8 @@
     (recenter))
   (advice-add 'swiper :after #'lix/swiper-recenter))
 
-(use-package smooth-scrolling :ensure t :defer 5
-  :init (add-hook 'after-init-hook #'smooth-scrolling-mode)
+(use-package smooth-scrolling :ensure t :defer t
+  :init (add-hook 'prog-mode-hook #'smooth-scrolling-mode)
   :config
   (setq smooth-scroll-margin 2)
   (setq mouse-wheel-scroll-amount '(1 ((shift) .1) ((control) . nil)))

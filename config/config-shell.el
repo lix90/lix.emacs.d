@@ -21,14 +21,14 @@
 ;; eshell
 ;;;-------------------------
 ;;(use-package eshell-did-you-mean :ensure t :defer t)
-(use-package eshell-up :ensure t :defer t
+(use-package eshell-up :ensure t :defer t :disabled t
   :commands (eshell-up eshell-up-peek)
   :config
   (setq eshell-up-ignore-case nil
         eshell-up-print-parent-dir t))
-(use-package eshell-autojump :ensure t :defer t
+(use-package eshell-autojump :ensure t :defer t :disabled t
   :commands (eshell/j))
-(use-package eshell-z :ensure t :defer t
+(use-package eshell-z :ensure t :defer t :disabled t
   :commands (eshell-z))
 
 (use-package eshell :ensure t :defer t :commands eshell
@@ -131,15 +131,78 @@
           eshell-prompt-function 'epe-theme-lambda)))
 
 ;;; shell
-(setq shell-file-name "/usr/local/bin/bash"
-      explicit-shell-file-name "/usr/local/bin/bash"
-      explicit-bash-args '("--login" "--init-file" "$HOME/.bash_profile" "-i"))
+(setq lix/shell-type "bash")
+(when (or is-mac
+          (string= lix/shell-type "bash"))
+  (setq explicit-bash-args '("--login" "--init-file" "$HOME/.bash_profile" "-i")))
+(setq shell-file-name (if is-mac "/usr/local/bin/bash"
+                        (executable-find lix/shell-type))
+      explicit-shell-file-name (if is-mac "/usr/local/bin/bash"
+                                 (executable-find lix/shell-type)))
 
 ;;; shell-script-mode auto mode configuration
 (add-to-list 'auto-mode-alist '("\\.?zsh\(rc\)?$" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\.?bashrc$" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\.?bash_profile$" . shell-script-mode))
 
+(use-package multi-term
+  :ensure t
+  :defer t
+  :init
+  (setq multi-term-program-switches "--login"))
+
+(use-package terminal-here :ensure t :defer t :disabled t)
+
+
+(use-package shell :ensure t :defer t
+  :config
+  (add-hook 'shell-mode-hook #'company-mode)
+  (use-package comint
+    :config
+    (setq comint-scroll-to-bottom-on-input t ; Always insert at the bottom
+          ;; No duplicates in command history
+          comint-input-ignoredups t))
+
+  (use-package shell-command :ensure t
+    :config (shell-command-completion-mode 1))
+
+  ;; Set up shell (not eshell) mode: https://github.com/monsanto/readline-complete.el/blob/master/readline-complete.el
+  ;; https://stackoverflow.com/questions/37409085/how-to-define-a-default-shell-for-emacs
+  (setq-default explicit-shell-file-name "/bin/bash"
+                shell-file-name explicit-shell-file-name
+                explicit-bash-args '("-c" "export EMACS=; stty echo; bash")
+                comint-process-echoes t)
+  (setenv "ESHELL" shell-file-name)
+
+  (use-package readline-complete
+    :ensure t
+    :init
+    (push 'company-readline company-backends)
+    (add-hook 'rlc-no-readline-hook
+              (lambda ()
+                (company-mode -1))))
+
+  (use-package bash-completion
+    :ensure t
+    :init (bash-completion-setup))
+
+  ;; http://www.joshstaiger.org/archives/2005/07/fixing_garbage.html
+  (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+  (add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on))
+
+(use-package term
+  :disabled t
+  :config
+  (use-package term+
+    :ensure t))
+
+;; Avoid Emacs querying "active processes exist; kill them and exit anyway?", since we are creating an inferior python
+;; process and aspell
+(add-hook 'comint-exec-hook
+          (lambda ()
+            (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)))
+
+(use-package zlc :ensure t :defer t :disabled t)
 
 (provide 'config-shell)
 ;;; config-shell.el ends here

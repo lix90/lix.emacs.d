@@ -3,8 +3,7 @@
 (use-package flx-ido :ensure t :defer t :disabled t
   :init
   (setq ido-enable-flex-matching t)
-  (setq ido-use-faces nil)
-  )
+  (setq ido-use-faces nil))
 
 (use-package dired+ :ensure t :defer t)
 (use-package dired-single :ensure t :defer t)
@@ -26,7 +25,8 @@
             (setq dired-details-hidden-string " ")
             (setq dired-recursive-copies 'always) ; “always” means no asking
             (setq dired-recursive-deletes 'top) ; “top” means ask once
-            (setq insert-directory-program (executable-find "gls"))
+            (setq insert-directory-program (or (executable-find "gls")
+                                               (executable-find "ls")))
             (setq dired-dwim-target t)
             (define-key dired-mode-map (kbd "RET")
               'dired-find-alternate-file) ; was dired-advertised-find-file

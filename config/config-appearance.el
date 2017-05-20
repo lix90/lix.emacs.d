@@ -14,9 +14,12 @@
 (fringe-mode '(0 . 2))
 ;; font settings
 (setq-default line-spacing 1)
+(setq lix/font-height (if is-mac
+                          120
+                        100))
 (set-face-attribute 'default nil
                     :family "Source Code Pro" ; Source Code Pro
-                    :height 120
+                    :height lix/font-height
                     :weight 'normal
                     :width 'normal)
 
@@ -129,10 +132,12 @@
 
 (advice-add 'load-theme :after 'lix/update-faces)
 ;;(load-theme 'spacemacs-dark t)
-(load-theme 'doom-one t)
+(if (display-graphic-p)
+    (load-theme 'doom-one t))
 
+(use-package gruvbox-theme :ensure t :defer t)
 (if (not (display-graphic-p))
-    (load-theme 'gruvbox t))
+    (load-theme 'spacemacs-dark t))
 
 (provide 'config-appearance)
 ;;; config-appearance.el ends here

@@ -12,11 +12,11 @@
   :init (venv-initialize-eshell)
   :config
   (venv-initialize-eshell)
-  (setq venv-location "/Users/lix/anaconda3/envs/"))
+  (setq venv-location (concat (getenv "HOME") "/anaconda3/envs/")))
 
 (use-package pyvenv :ensure t :defer t
   :init
-  (setenv "WORKON_HOME" "/Users/lix/anaconda3/envs/")
+  (setenv "WORKON_HOME" (concat (getenv "HOME") "/anaconda3/envs/"))
   (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
   (defconst python-version "python3")
   (defun lix/echo-python-version()
@@ -24,7 +24,7 @@
     (message (shell-command-to-string "python --version")))
   (defun lix/switch-to-python2 ()
     (interactive)
-    (pyvenv-workon "python2")
+    (pyvenv-workon (if is-mac "python2" "py27"))
     (message "Python2 is running!"))
   (defun lix/switch-to-python3 ()
     (interactive)
@@ -37,15 +37,7 @@
   (defun run-python3()
     (interactive)
     (lix/switch-to-python3)
-    (run-python))
-  (defun lix/toggle-python-version()
-    "Toggle Python Version."
-    (interactive)
-    (let ((pyv (substring (shell-command-to-string "python --version") 7 8)))
-      (when (string= pyv "3")
-        (switch-to-python2))
-      (when (string= pyv "2")
-        (switch-to-python3)))))
+    (run-python)))
 
 (use-package python :ensure t :commands (run-python)
   :mode ("\\.py\\'" . python-mode)

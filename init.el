@@ -88,8 +88,9 @@
         (make-directory parent-dir))
       (load-file file-path))))
 
-(setq file-alist-to-load
+(setq modules-load
       '("package"
+        "base"
         "environment"
         "defuns"
         "keys"
@@ -99,14 +100,17 @@
         "file"
         "appearance"
         "project"
-        "git"
+        "chinese"
+        ))
+
+(setq modules-load-graphic
+      '("git"
         "shell"
         "javascript"
         "web"
         "ess-r"
         "python"
         "matlab"
-        "multimode"
         "org"
         "markdown"
         "latex"
@@ -120,7 +124,9 @@
         ;;"sql"
         ))
 
-(lix/load-file-alist file-alist-to-load)
+(lix/load-file-alist modules-load)
+(when (display-graphic-p)
+  (lix/load-file-alist modules-load-graphic))
 
 (provide 'init)
 ;;; init.el ends here
