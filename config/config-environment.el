@@ -16,7 +16,7 @@
 (setenv "MANPATH" (getenv "MANPATH"))
 (when is-mac
   (setq exec-path '(
-                    "/Users/lix/anaconda3/bin/"
+                    ;;"/Users/lix/anaconda3/bin/"
                     "/usr/local/bin"
                     "/Users/lix/.rvm/gems/ruby-2.3.0/bin"
                     "/Users/lix/.rvm/gems/ruby-2.3.0@global/bin"
@@ -30,7 +30,7 @@
 
 (when (not is-mac)
   (setq exec-path '(
-                    "/home/alexiangli/anaconda3/bin/"
+                    ;;"/home/alexiangli/anaconda3/bin/"
                     "/usr/bin/"
                     "/bin/"
                     "/opt/bin/"
