@@ -8,16 +8,21 @@
 (use-package elpy :ensure t :disabled t
   :init (add-to-list 'company-backends 'elpy-company-backend))
 
-(use-package virtualenvwrapper :ensure t :defer t
+(use-package virtualenvwrapper :ensure t :defer t :disabled t 
   :init (venv-initialize-eshell)
   :config
   (venv-initialize-eshell)
-  (setq venv-location (concat (getenv "HOME") "/anaconda3/envs/")))
+  (setq venv-location (concat (getenv "HOME") "/Envs")))
 
-(use-package pyvenv :ensure t :defer t
+;; Shell native completion is disabled, using fallback
+(setenv "JUPYTER_CONSOLE_TEST" "1")
+(setenv "IPY_TEST_SIMPLE_PROMPT" "1")
+(setenv "WORKON_HOME" (concat (getenv "HOME") "/Envs/"))
+(setq python-shell-completion-native-enable nil)
+;;;;;
+
+(use-package pyvenv :ensure t :defer t :disabled t
   :init
-  (setenv "WORKON_HOME" (concat (getenv "HOME") "/anaconda3/envs/"))
-  (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
   (defconst python-version "python3")
   (defun lix/echo-python-version()
     (interactive)
