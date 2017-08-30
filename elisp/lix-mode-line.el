@@ -104,20 +104,20 @@ length of PATH (sans directory slashes) down to MAX-LEN."
 ;;    ((string= "9" str) "➒")
 ;;    ((string= "0" str) "➓")))
 
-(defun lix/get-win-number ()
-  "The current window number. Requires `window-numbering-mode' to be enabled."
-  (when (bound-and-true-p winum-mode)
-    (propertize (let* ((num (winum-get-number))
-                       (str (when num (int-to-string num))))
-                  (format "%c" (spaceline--unicode-number str)))
-                'face '(:heigth 1.2 :inherit all-the-icons-yellow)
-                'display '(raise 0))))
-
-;; (defun lix/get-win-number()
-;;   (when (fboundp 'winum-mode)
-;;     (propertize (format "%c" (+ 9311 (winum-get-number)))
-;;                 'face '(:height 1.1 :inherit all-the-icons-yellow)
+;; (defun lix/get-win-number ()
+;;   "The current window number. Requires `window-numbering-mode' to be enabled."
+;;   (when (bound-and-true-p winum-mode)
+;;     (propertize (let* ((num (winum-get-number))
+;;                        (str (when num (int-to-string num))))
+;;                   (format "%c" (spaceline--unicode-number str)))
+;;                 'face '(:heigth 1.2 :inherit all-the-icons-yellow)
 ;;                 'display '(raise 0))))
+
+(defun lix/get-win-number()
+  (when (fboundp 'winum-mode)
+    (propertize (format "%c" (+ 9311 (winum-get-number)))
+                'face '(:height 1.1 :inherit all-the-icons-yellow)
+                'display '(raise 0))))
 
 ;; projectile
 (defun lix/get-projectile-proj()

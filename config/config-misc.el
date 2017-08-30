@@ -18,5 +18,6 @@
 (use-package restart-emacs :ensure t :defer t
   :commands restart-emacs)
 
+(use-package vbasense :ensure t :defer t :disabled t)
 
 (provide 'config-misc)

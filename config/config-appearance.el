@@ -15,7 +15,7 @@
 ;; font settings
 (setq-default line-spacing 1)
 (setq lix/font-height (if is-mac
-                          120
+                          130
                         100))
 (set-face-attribute 'default nil
                     :family "Source Code Pro" ; Source Code Pro

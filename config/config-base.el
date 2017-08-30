@@ -22,6 +22,7 @@
   :init
   (which-key-setup-minibuffer)
   (which-key-mode t)
+  ;; (defalias 'display-buffer-in-major-side-window 'window--make-major-side-window)
   :config
   (setq which-key-popup-type 'side-window
         which-key-side-window-location 'bottom
@@ -33,6 +34,7 @@
         which-key-unicode-correction 3
         which-key-prefix-prefix "+"
         which-key-idle-delay 0.15))
+
 
 ;; 一些基本的键位绑定
 (unbind-key "C-SPC")

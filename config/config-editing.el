@@ -172,8 +172,7 @@
 ;; 隐藏其他段落
 (use-package iedit :ensure t :defer t
   :init
-  (unbind-key "C-;")
-  (bind-key* "M-s ;" 'iedit-mode))
+  (bind-key* "C-;" 'iedit-mode))
 
 ;; 使用goto-last-change前往上一次修改的位置
 (use-package goto-last-change :ensure t
@@ -204,6 +203,10 @@
              ("w" . avy-goto-word-0)
              ("W" . avy-goto-word-1)))
 
+;; 基于`expand-region`增加/变更/删除pairs
+;; add
+;; change
+;; delete
 (use-package embrace :ensure t
   :bind ("C-," . embrace-commander))
 
@@ -233,13 +236,16 @@
                ("r" . crux-rename-file-or-buffer)
                ("C" . crux-cleanup-buffer-or-region))))
 
+;; 饥饿删除模式
 (use-package hungry-delete :ensure t :defer t
   :init
   (global-hungry-delete-mode t))
 
+;; 矩形选择
 (use-package phi-rectangle :ensure t :defer t
   :bind (("C-x s" . phi-rectangle-set-mark-command)))
 
+;; 当未选中区域时，仍然可以对行进行操作
 (use-package whole-line-or-region :ensure t :defer t
   :bind (("s-c" . whole-line-or-region-copy-region-as-kill)
          ("s-v" . whole-line-or-region-yank)
@@ -251,10 +257,12 @@
                   markdown-mode-hook))
     (add-hook 'hook #'whole-line-or-region-mode)))
 
+;; 移动文本
 (use-package move-text :ensure t :defer t
   :bind (("C-S-n" . move-text-down)
          ("C-S-p" . move-text-up)))
 
+;; 编程大小写
 (use-package fix-word :ensure t :defer t)
 
 (use-package whitespace :ensure t :defer t

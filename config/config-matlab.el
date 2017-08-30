@@ -22,12 +22,25 @@
             (executable-find "matlab")
             (executable-find "/usr/local/bin/matlab")
             (executable-find "/Applications/MATLAB_R2014b.app/bin/matlab")))
+
      (add-hook 'matlab-mode-hook
                (lambda ()
                  (set (make-local-variable 'company-backends)
                       '(company-matlab
                         company-matlab-shell
-                        company-files))))
+                        company-files))
+                 (company-mode +1)
+                 (yas-minor-mode +1)
+                 (smartparens-mode +1)))
+
+     (add-hook 'matlab-shell-mode-hook
+               (lambda()
+                 (set (make-local-variable 'company-backends)
+                      '(company-matlab
+                        company-matlab-shell
+                        company-files))
+                 (company-mode +1)
+                 (smartparens-mode +1)))
      ;;(add-hook 'matlab-mode-hook 'company-mode)
      ;;(add-hook 'matlab-mode-hook 'smartparens-mode)
      ;; (add-to-list 'company-backends 'company-matlab-shell)

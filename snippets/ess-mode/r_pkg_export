@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: r package export
+# key: @exp
+# --
+##' @export

@@ -55,13 +55,15 @@
   (add-hook 'ess-mode-hook
             (lambda()
               (smartparens-mode t)
-              (yas-minor-mode t)))
+              (yas-minor-mode t)
+              (company-mode t)))
   (add-hook 'inferior-ess-mode-hook
             (lambda()
-              (smartparens-mode +1)
+              (smartparens-mode t)
               (global-hl-line-mode -1)
               (global-linum-mode -1)
-              (fringe-mode '(8 . 2))))
+              (fringe-mode '(8 . 2))
+              (company-mode t)))
 
   (defun ess-browse-vignette ()
     (interactive)

@@ -25,8 +25,6 @@ tramp
 .DS_Store
 /#ido.last#
 /url/
-/eshell/lastdir
-/eshell/history
 .mc-lists.el
 projectile-bookmarks.eld
 .persistent-scratch
@@ -34,3 +32,8 @@ company-statistics-cache.el
 network-security.data
 ._*
 session.*
+**/.tern-port
+/meghanada/
+/semanticdb/
+/eshell/history
+/eshell/lastdir

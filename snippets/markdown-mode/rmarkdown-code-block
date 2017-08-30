@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: r markdown block
+# key: rblk
+# --
+```{r $1}
+$0
+```
