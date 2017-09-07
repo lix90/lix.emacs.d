@@ -34,14 +34,14 @@
 (use-package gitconfig-mode :ensure t :defer t)
 (use-package gitattributes-mode :ensure t :defer t)
 
-(use-package git-gutter+ :ensure t :defer t
+(use-package git-gutter+ :ensure t :defer t :disabled t
   :config
   (add-hook 'prog-mode-hook #'git-gutter+-mode)
   (set-face-foreground 'git-gutter+-added    "royal blue")
   (set-face-foreground 'git-gutter+-modified hl-color)
   (set-face-foreground 'git-gutter+-deleted  "hot pink"))
 
-(use-package git-gutter-fringe+ :ensure t :after git-gutter+ :defer t
+(use-package git-gutter-fringe+ :ensure t :after git-gutter+ :defer t :disabled t
   :if (display-graphic-p)
   :config
   (require 'git-gutter-fringe+)

@@ -120,7 +120,6 @@
 
 (use-package shell-switcher :ensure t :defer t
   :commands (shell-switcher-switch-buffer))
-(leader-key "Iw" 'shell-switcher-switch-buffer)
 
 (use-package eshell-prompt-extras :ensure t :after eshell
   :config
@@ -145,14 +144,9 @@
 (add-to-list 'auto-mode-alist '("\\.?bashrc$" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\.?bash_profile$" . shell-script-mode))
 
-(use-package multi-term
-  :ensure t
-  :defer t
+(use-package multi-term :ensure t :defer t
   :init
   (setq multi-term-program-switches "--login"))
-
-(use-package terminal-here :ensure t :defer t :disabled t)
-
 
 (use-package shell :ensure t :defer t
   :config
@@ -174,8 +168,7 @@
                 comint-process-echoes t)
   (setenv "ESHELL" shell-file-name)
 
-  (use-package readline-complete
-    :ensure t
+  (use-package readline-complete :ensure t
     :init
     (push 'company-readline company-backends)
     (add-hook 'rlc-no-readline-hook
@@ -190,19 +183,11 @@
   (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
   (add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on))
 
-(use-package term
-  :disabled t
-  :config
-  (use-package term+
-    :ensure t))
-
 ;; Avoid Emacs querying "active processes exist; kill them and exit anyway?", since we are creating an inferior python
 ;; process and aspell
 (add-hook 'comint-exec-hook
           (lambda ()
             (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)))
-
-(use-package zlc :ensure t :defer t :disabled t)
 
 (provide 'config-shell)
 ;;; config-shell.el ends here

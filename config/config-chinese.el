@@ -1,11 +1,9 @@
 ;; 中文输入
-(setq default-input-method "chinese-pyim")
-(global-set-key (kbd "C-\\") 'toggle-input-method)
 
-(use-package chinese-pyim :ensure t :defer t
-  :init
-  (require 'chinese-pyim)
+(use-package pyim :ensure t :defer t :disabled t
   :config
+  (setq default-input-method "pyim")
+  (global-set-key (kbd "C-\\") 'toggle-input-method)
   (setq pyim-default-scheme 'quanpin)
   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 * 无痛* 中英文切换 :-)
   ;; 我自己使用的中英文动态切换规则是：
@@ -34,9 +32,8 @@
   ;;  ("C-;" . pyim-delete-word-from-personal-buffer))
   )
 
-
-(use-package chinese-pyim-basedict :ensure t :after chinese-pyim
-  :config (chinese-pyim-basedict-enable))
+(use-package pyim-basedict :ensure t :after pyim :disabled t
+  :config (pyim-basedict-enable))
 
 ;; 五笔用户使用 wbdict 词库
 ;; (use-package chinese-pyim-wbdict

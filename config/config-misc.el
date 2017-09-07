@@ -20,4 +20,8 @@
 
 (use-package vbasense :ensure t :defer t :disabled t)
 
+(use-package bing-dict :ensure t :defer t)
+(use-package youdao-dictionary :ensure t :defer t)
+(use-package wotd :ensure t :defer t)
+
 (provide 'config-misc)

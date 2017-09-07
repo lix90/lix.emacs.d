@@ -89,22 +89,13 @@
       (load-file file-path))))
 
 (setq modules-load
-      '("package"
-        "base"
-        "environment"
+      '("best"
         "defuns"
-        "keys"
-        "editing"
-        "programming"
-        "navigation"
-        "file"
-        "appearance"
-        "project"
-        "chinese"
         ))
 
 (setq modules-load-graphic
       '("git"
+        "chinese"
         "shell"
         ;;"javascript"
         ;;"web"

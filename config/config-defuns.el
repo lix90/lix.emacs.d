@@ -1,9 +1,3 @@
-;;; Useful functions
-
-;;; private configuration el file
-;; alias
-(defalias 'close-all 'lix/util-close-all-buffers)
-
 ;;; describe this point lisp only
 (defun describe-foo-at-point ()
   "Show the documentation of the Elisp function and variable near point.
@@ -31,130 +25,6 @@
           ;; surrounding sexp for a function call.
           ((setq sym (function-at-point)) (describe-function sym)))))
 
-
-(defun split-window-right-and-focus ()
-  "Split the window horizontally and focus the new window."
-  (interactive)
-  (split-window-right)
-  (windmove-right))
-(defun split-window-below-and-focus ()
-  "Split the window vertically and focus the new window."
-  (interactive)
-  (split-window-below)
-  (windmove-down))
-
-
-(defun save-desktop-save-buffers-kill-emacs ()
-  "Save buffers and current desktop every time when quitting emacs."
-  (interactive)
-  (desktop-save-in-desktop-dir)
-  (save-buffers-kill-emacs))
-
-
-
-;;; User defined function
-(defun lix/dos-2-unix ()
-  "Not exactly but it's easier to remember"
-  (interactive)
-  (set-buffer-file-coding-system 'unix 't))
-
-(defun lix/goto-wiki-content ()
-  (interactive)
-  (find-file "~/github/wiki/content/"))
-
-;; open folders
-(defun lix/goto-config ()
-  "Open emacs config directory."
-  (interactive)
-  (find-file "~/.emacs.d/config/"))
-
-(defun lix/open-init.el ()
-  "Open init.el."
-  (interactive)
-  (find-file "~/.emacs.d/init.el"))
-
-(defun lix/open-custom.el()
-  (interactive)
-  (find-file "~/.emacs.d/custom.el"))
-
-(defun lix/goto-hexo-root ()
-  "Open hexo root directory."
-  (interactive)
-  (find-file "~/github/hexo-blog/"))
-
-
-(defun lix/goto-hexo-source-draft ()
-  "Open hexo draft directory."
-  (interactive)
-  (find-file "~/github/hexo-blog/source/_drafts/"))
-
-(defun lix/open-hexo-source-post ()
-  "Open hexo draft directory."
-  (interactive)
-  (find-file "~/github/hexo-blog/source/_posts/"))
-
-
-(defun lix/open-jirengu-me ()
-  "Open jirengu repository."
-  (interactive)
-  (find-file "~/jirengu/jrg-renwu9/homework/李想/"))
-
-(defun lix/file-hexo-source-about ()
-  "Open hexo about."
-  (interactive)
-  (find-file "~/projects/hexo-blog/source/about/index.md"))
-
-;; create new post
-(defun lix/open-hexo-create-post ()
-  "Create and open post file."
-  (interactive)
-  (setq fn (read-string "Enter file name:"))
-  ;; (shell-command
-  ;;  (format "cd ~/github/hexo-blog/ && hexo new post \"%s\"" fn))
-  (setq time (format-time-string "%Y-%m-%d" (current-time)))
-  (find-file
-   (format "~/projects/hexo-blog/source/_posts/%s-%s.md" time fn))
-  (yas-insert-snippet)
-  )
-
-(defun lix/open-hexo-create-draft ()
-  "Create and open draft file."
-  (interactive)
-  (setq fn (read-string "Enter file name:"))
-  (setq time (format-time-string "%Y-%m-%d" (current-time)))
-  (find-file
-   (format "~/projects/hexo-blog/source/_drafts/%s-%s.md" time fn))
-  (yas-insert-snippet)
-  )
-
-(defun lix/file-note-temp ()
-  "Open note temp file."
-  (interactive)
-  (find-file "~/github/temp.md"))
-
-;; kill all buffers
-(defun lix/util-close-all-buffers ()
-  (interactive)
-  (mapc 'kill-buffer (buffer-list)))
-
-;; insert data
-(defun lix/insert-date ()
-  (interactive)
-  ;; (insert (format-time-string "%Y-%m-%d %H:%M:%S" (current-time)))
-  (insert (format-time-string "%Y-%m-%d %H:%M" (current-time))))
-(insert)
-
-(defun lix/open-r-package ()
-  (interactive)
-  "Open r site-package."
-  (find-file "/usr/local/lib/R/3.3/site-library/"))
-
-(defun lix/look-up-stardict ()
-  (interactive)
-  (eshell-other-window)
-  (eshell-send-input nil nil nil (read-string "Please enter:")))
-(defalias 'Stardict 'lix/look-up-stardict)
-
 (defun lix/toggle-transparency ()
   (interactive)
   (let ((alpha (frame-parameter nil 'alpha)))
@@ -167,10 +37,6 @@
 			  100)
 		 '(70 . 50) '(100 . 100)))))
 
-
-;;------------------------------------------------------------------------------
-;; functions
-;;------------------------------------------------------------------------------
 (defun switch-to-previous-buffer ()
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
@@ -179,75 +45,6 @@
   "Make sure the directory of `buffer-file-name' exists."
   (make-directory (file-name-directory buffer-file-name) t))
 
-(defun org-block-wrap ()
-  "Make a template at point."
-  (interactive)
-  (if (org-at-table-p)
-	  (call-interactively 'org-table-rotate-recalc-marks)
-	(let* ((choices '(
-					  ("a" . "ASCII")
-					  ("c" . "COMMENT")
-					  ("C" . "CENTER")
-					  ("e" . "EXAMPLE")
-					  ("E" . "SRC emacs-lisp")
-					  ("h" . "HTML")
-					  ("l" . "LaTeX")
-					  ("n" . "NOTES")
-					  ("q" . "QUOTE")
-					  ("s" . "SRC")
-					  ("v" . "VERSE")
-					  ))
-		   (key
-			(key-description
-			 (vector
-			  (read-key
-			   (concat (propertize "Template type: " 'face 'minibuffer-prompt)
-					   (mapconcat (lambda (choice)
-									(concat (propertize (car choice) 'face 'font-lock-type-face)
-											": "
-											(cdr choice)))
-								  choices
-								  ", ")))))))
-	  (let ((result (assoc key choices)))
-		(when result
-		  (let ((choice (cdr result)))
-			(cond
-			 ((region-active-p)
-			  (let ((start (region-beginning))
-					(end (region-end)))
-				(goto-char end)
-				(insert "#+END_" choice "\n")
-				(goto-char start)
-				(insert "#+BEGIN_" choice "\n")))
-			 (t
-			  (insert "#+BEGIN_" choice "\n")
-			  (save-excursion (insert "#+END_" choice))))))))))
-
-(defun formatted-copy ()
-  "Export region to HTML, and copy it to the clipboard."
-  (interactive)
-  (save-window-excursion
-	(let* ((buf (org-export-to-buffer 'html "*Formatted Copy*" nil nil t t))
-		   (html (with-current-buffer buf (buffer-string))))
-	  (with-current-buffer buf
-		(shell-command-on-region
-		 (point-min)
-		 (point-max)
-		 "textutil -stdin -format html -convert rtf -stdout | pbcopy"))
-	  (kill-buffer buf))))
-
-(global-set-key (kbd "H-w") 'formatted-copy)
-
-(defun org-remove-headlines (backend)
-  "Remove headlines with :no_title: tag."
-  (org-map-entries (lambda () (let ((beg (point)))
-								(outline-next-visible-heading 1)
-								(backward-char)
-								(delete-region beg (point))))
-				   "no_export" tree)
-  (org-map-entries (lambda () (delete-region (point-at-bol) (point-at-eol)))
-				   "no_title"))
-
 (defun move-file ()
   "Write this file to a new location, and delete the old one."
   (interactive)
@@ -255,18 +52,6 @@
 	(call-interactively #'write-file)
 	(when old-location
 	  (delete-file old-location))))
-
-(defun last-search-buffer ()
-  "open last helm-ag or hgrep buffer."
-  (interactive)
-  (cond ((get-buffer "*helm ag results*")
-		 (switch-to-buffer-other-window "*helm ag results*"))
-		((get-buffer "*helm-ag*")
-		 (helm-resume "*helm-ag*"))
-		((get-buffer "*hgrep*")
-		 (switch-to-buffer-other-window "*hgrep*"))
-		(t
-		 (message "No previous search buffer found"))))
 
 (defun rotate-windows (count)
   "Rotate your windows.
@@ -459,22 +244,7 @@ argument takes the kindows rotate backwards."
   (goto-char (point-min))
   (while t (eval (read (current-buffer)))))
 
-;; Function creating a eshell buffer with fixed frame height
-(defun lix/eshell-buffer (&optional height)
-  "Create a eshell buffer with fixed height."
-  (interactive)
-  (setq height 10)
-  (let ((orig-win-height (window-height)))
-	(when (>= orig-win-height (* height 2))
-	  (split-window-below height)
-	  (other-window)))
-  (let ((newbuf (get-buffer-create "*eshell*"))
-		(height-win (window-height))
-		(height- (- height (window-height))))
-	(eshell)
-	(window-resize (selected-window) height-)))
-
-(defun lix/restore-desktop ()
+(defun restore-desktop ()
   "Load the desktop and enable autosaving."
   (interactive)
   (let ((desktop-load-locked-desktop "ask"))
