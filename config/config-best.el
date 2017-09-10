@@ -62,8 +62,8 @@
 (setenv "PATH" (mapconcat 'identity exec-path ":"))
 
 
-;;;======================================================================
 ;;; 设置emacs内置参数
+;;;======================================================================
 (setq-default
  ;; 取消文件锁
  create-lockfiles nil
@@ -80,7 +80,7 @@
  ;; 80栏宽, 当超过栏宽时，自动折叠行
  fill-column 80
  ;; 下一行时插入新一行
- next-line-add-newlines t
+ next-line-add-newlines nil
  ;; 自动添加新行至文件结尾
  require-final-newline t
  ;; 鼠标粘贴在光标处
@@ -104,9 +104,8 @@
       (remq 'process-kill-buffer-query-function
             kill-buffer-query-functions))
 
-;;; ----------------------------------------------------------------------
-;;; macos系统的设置与功能增强
-;;;
+;;; MacOS系统的设置与功能增强
+;;;============================================================
 
 (when is-mac
   (setq
@@ -124,17 +123,14 @@
 ;; 在osx-finder中打开
 (use-package reveal-in-osx-finder :ensure t :defer t :if is-mac)
 
-;;; ----------------------------------------------------------------------
-;;; emacs内置mode设置
+;;; Emacs内置mode设置
+;;;============================================================
 ;;
 ;; 切词模式
 (global-subword-mode +1)
 (diminish 'subword-mode)
 ;; 删除选择
 (delete-selection-mode +1)
-;; 内置时间mode设定
-;; (setq display-time-format "%a %b %d | %H:%M |")
-;; (display-time-mode +1)
 ;; 开启文档模式
 (add-hook 'prog-mode-hook #'eldoc-mode)
 (diminish 'eldoc-mode)
@@ -199,13 +195,17 @@
 ;;; 视觉效果
 ;;; ----------------------------------------------------------------------
 ;;;
+
+;; 内置时间mode设定
+(setq display-time-format "%Y-%m-%d/%H:%M")
+(display-time-mode +1)
 (require 'ansi-color)
-(setq-default ansi-color-for-comint-mode +1)
+;; (setq-default ansi-color-for-comint-mode +1)
 ;; 颜色设定
 (defconst hl-color "#ffd446")
 (defconst hl-color-dark "#282c34")
 ;; fringe
-(fringe-mode '(0 . 2))
+(fringe-mode '(4 . 4))
 ;; 字体高度
 (setq my/font-height (if is-mac 130 100)
       my/font-name "Source Code Pro")
@@ -312,10 +312,16 @@
         doom-themes-enable-italic t
         doom-themes-one-brighter-modeline t
         doom-themes-one-brighter-comments nil))
+(use-package gruvbox-theme :ensure t :defer t)
+(use-package tango-plus-theme :ensure t :defer t)
+(use-package leuven-theme :ensure t :defer t)
+(use-package tangotango-theme :ensure t :defer t)
+(use-package solarized-theme :ensure t :defer t)
+(use-package monokai-theme :ensure t :defer t)
 ;;; 切换主题
 ;;; https://github.com/habamax/.emacs.d/blob/master/lisp/haba-appearance.el
-(defvar *my-theme-dark* 'doom-one)
-(defvar *my-theme-light* 'leuven)
+(defvar *my-theme-dark* 'solarized-dark)
+(defvar *my-theme-light* 'solarized-light)
 (defvar *my-current-theme* *my-theme-dark*)
 
 ;; disable other themes before loading new one
