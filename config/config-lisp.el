@@ -8,6 +8,7 @@
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (add-to-list (make-local-variable 'company-backends)
-                         'company-elisp)))
+                         'company-elisp)
+            (flycheck-mode +1)))
 
 (provide 'config-lisp)

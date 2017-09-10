@@ -1,17 +1,17 @@
-;;;-----------------------------------------------------------------------------
-;;; org
-;;;-----------------------------------------------------------------------------
+;;; config-org.el --- Configuration for org-mode:
 
-(use-package org-eldoc :load-path "elisp" :after org)
+;;; Commentary:
+
+;;; Code:
 
 (use-package org :ensure t :defer t
+  :diminish org-indent-mode
   :mode ("\\.org$" . org-mode)
   :config
-  ;; Allow's electric-pair-mode to surround things with = and ~ in org-mode
-  (setq org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
-
-  (modify-syntax-entry ?~ "(~" org-mode-syntax-table)
-  (modify-syntax-entry ?= "(=" org-mode-syntax-table)
+  (setq org-todo-keywords
+        '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+  ;; (modify-syntax-entry ?~ "(~" org-mode-syntax-table)
+  ;; (modify-syntax-entry ?= "(=" org-mode-syntax-table)
   ;; don't underline indents
   (defface org-dont-underline-indents '((t :underline nil))
     "Avoid underlining of indentation.")
@@ -20,19 +20,29 @@
     (add-to-list 'org-font-lock-extra-keywords '("^[[:space:]]+" 0 'org-dont-underline-indents t) 'append))
   (add-hook 'org-font-lock-set-keywords-hook #'org-dont-underline-indents 'append)
 
-  (setq org-src-fontify-natively t ;; better looking source code
-        org-return-follows-link t ;; make RET follow links
-        org-hide-emphasis-markers t  ;; hide markers
-        org-pretty-entities t ;; make latex look good
-        org-fontify-quote-and-verse-blocks nil ;; make quotes stand out
-        org-table-export-default-format "orgtbl-to-csv" ;; export for org-tables to csv
-        org-ellipsis "↴"  ;; nicer elipses
-        org-confirm-babel-evaluate nil  ;; evaluate src block without confirmation
-        org-startup-indented t ;; start in indent mode
-                                        ; org-src-preserve-indentation nil
-                                        ; org-edit-src-content-indentation t
-        org-imenu-depth 4
-        imenu-auto-rescan t)
+  (setq
+   ;; better looking source code
+   org-src-fontify-natively t
+   ;; make RET follow links
+   org-return-follows-link t
+   ;; hide markers
+   org-hide-emphasis-markers t
+   ;; make latex look good
+   org-pretty-entities t
+   ;; make quotes stand out
+   org-fontify-quote-and-verse-blocks nil
+   ;; export for org-tables to csv
+   org-table-export-default-format "orgtbl-to-csv" 
+   ;; nicer elipses
+   org-ellipsis "↴"
+   ;; evaluate src block without confirmation
+   org-confirm-babel-evaluate nil
+   ;; start in indent mode
+   org-startup-indented t 
+   ;; org-src-preserve-indentation nil
+   ;; org-edit-src-content-indentation t
+   org-imenu-depth 4
+   imenu-auto-rescan t)
   
   (add-hook 'org-mode-hook
             '(lambda()

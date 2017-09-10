@@ -1,4 +1,27 @@
-;;; describe this point lisp only
+;;; config-defuns.el --- Personal utility functions:
+
+;;; Commentary:
+
+;;; Code:
+
+(defun set-eol-conversion (new-eol)
+  "Specify new end-of-line conversion NEW-EOL for the buffer's file
+   coding system. This marks the buffer as modified."
+  (interactive "SEnd-of-line conversion for visited file: \n")
+  ;; Check for valid user input.
+  (unless (or (string-equal new-eol "unix")
+              (string-equal new-eol "dos")
+              (string-equal new-eol "mac"))
+    (error "Invalid EOL type, %s" new-eol))
+  (if buffer-file-coding-system
+      (let ((new-coding-system (coding-system-change-eol-conversion
+                                buffer-file-coding-system new-eol)))
+        (set-buffer-file-coding-system new-coding-system))
+    (let ((new-coding-system (coding-system-change-eol-conversion
+                              'undecided new-eol)))
+      (set-buffer-file-coding-system new-coding-system)))
+  (message "EOL conversion now %s" new-eol))
+
 (defun describe-foo-at-point ()
   "Show the documentation of the Elisp function and variable near point.
     This checks in turn:
@@ -25,7 +48,7 @@
           ;; surrounding sexp for a function call.
           ((setq sym (function-at-point)) (describe-function sym)))))
 
-(defun lix/toggle-transparency ()
+(defun my/toggle-transparency ()
   (interactive)
   (let ((alpha (frame-parameter nil 'alpha)))
 	(set-frame-parameter
