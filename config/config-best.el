@@ -1,11 +1,15 @@
-;;; package --- Summary
+;;; package --- Summary:
+
+;;; -*- coding: utf-8 -*-
+
 ;;; Commentary:
 
 ;;; Code:
 
-;;;----------------------------------------------------------------------------
 ;;; 包管理
-;;;----------------------------------------------------------------------------
+;;;=======
+(use-package package-utils :ensure t :defer t)
+
 (use-package el-get :ensure t :defer t :disabled t
   :init (setq el-get-verbose t))
 (use-package paradox :ensure t :defer 30 :disabled t
@@ -14,11 +18,13 @@
   :config (setq paradox-execute-asynchronously t
                 paradox-github-token t))
 ;; (setq paradox-github-token "d02fae45dd7c0c4845b56635d78448c63d7a7035")
-(use-package package-utils :ensure t :defer 30)
 
-;;;----------------------------------------------------------------------------
+;;; emacs server
+;;;==============
+;; (server-mode +1)
+
 ;;; 环境设定
-;;;----------------------------------------------------------------------------
+;;;=========
 (use-package exec-path-from-shell :ensure t :defer t :disabled t
   :if (memq window-system '(mac ns))
   :init
@@ -49,7 +55,6 @@
                     "/Users/lix/.rvm/bin"
                     "/Users/lix/go/bin"
                     )))
-
 (when (not is-mac)
   (setq exec-path '(
                     "/usr/local/bin"
@@ -59,11 +64,18 @@
                     "/opt/bin"
                     "~/.local/bin"
                     )))
-
 (setenv "PATH" (mapconcat 'identity exec-path ":"))
 
-;;; 设置emacs内置参数
-;;;======================================================================
+;;; 设置UTF-8编码方式
+;;;===================
+(set-language-environment 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-selection-coding-system 'utf-8)
+(set-locale-environment "en.UTF-8")
+(prefer-coding-system 'utf-8)
+;; disable CJK coding/encoding
+(setq utf-translate-cjk-mode nil)
+
 (setq-default
  ;; 取消文件锁
  create-lockfiles nil
@@ -105,7 +117,7 @@
             kill-buffer-query-functions))
 
 ;;; MacOS系统的设置与功能增强
-;;;============================================================
+;;;=========================
 
 (when is-mac
   (setq
@@ -121,13 +133,15 @@
         mac-right-option-modifier 'none))
 
 ;; 在osx-finder中打开
-(use-package reveal-in-osx-finder :ensure t :defer t :if is-mac)
+(use-package reveal-in-osx-finder :ensure t :defer t
+  :if (and is-mac (display-graphic-p)))
 
 ;;; 切词模式
-;;;========
+;;;=========
 (use-package subword :defer t
   :diminish subword-mode
-  :init (add-hook 'after-init-hook #'global-subword-mode))
+  :init
+  (add-hook 'after-init-hook #'global-subword-mode))
 
 ;;; 删除选择
 ;;;========
@@ -146,9 +160,10 @@
 ;;; 保存历史
 ;;;=========
 (use-package savehist :ensure t  :defer t
+  :diminish savehist-mode
+  :if (display-graphic-p)
   :init
   (add-hook 'after-init-hook #'savehist-mode)
-  (diminish 'savehist-mode)
   :config
   (setq savehist-additional-variables '(search ring regexp-search-ring)
         savehist-autosave-interval 60
@@ -203,18 +218,22 @@
 
 ;;; 视觉效果
 ;;;=========
-(add-hook 'prog-mode-hook (lambda()
-                            (line-number-mode +1)
-                            (column-number-mode +1)))
+(add-hook 'prog-mode-hook
+          (lambda()
+            (line-number-mode +1)
+            (column-number-mode +1)))
+
 ;; 高亮行
 (setq hl-line-sticky-flag nil)
 (global-hl-line-mode +1)
 (diminish 'hl-line-mode)
 
-(setq visual-fill-column-width 85)
-(global-visual-fill-column-mode +1)
-(global-visual-line-mode +1)
-(diminish 'visual-line-mode)
+;; (setq visual-fill-column-width 85)
+;; (global-visual-fill-column-mode +1)
+;; (global-visual-line-mode +1)
+;; (diminish 'visual-line-mode)
+(add-hook 'minibuffer-setup-hook (lambda () (visual-line-mode -1)))
+(add-hook 'text-mode-hook #'turn-on-visual-line-mode)
 
 (use-package linum :defer t
   :init
@@ -302,6 +321,7 @@
    #b00000000
    #b00000000
    #b00000000])
+
 ;;;----------------------------------------------------------------------
 ;;; 主题
 ;;; - doom-themes
@@ -351,7 +371,6 @@
   (set-face-attribute 'mode-line-inactive nil
                       :underline nil
                       :box nil))
-
 (bind-key* "C-<f9>" 'my/toggle-theme)
 (my/toggle-theme)
 
@@ -361,14 +380,14 @@
 ;;;----------------------------------------------------------------------
 ;;; 使用god-mode方便导航
 (use-package god-mode :ensure t :defer t
+  :diminish god-mode
   :config
-  (defun lix/update-cursor ()
+  (defun my/update-cursor ()
     (setq cursor-type
           (if (or god-local-mode buffer-read-only) 'box 'bar)))
-  (add-hook 'god-mode-enabled-hook 'lix/update-cursor)
-  (add-hook 'god-mode-disabled-hook 'lix/update-cursor))
+  (add-hook 'god-mode-enabled-hook 'my/update-cursor)
+  (add-hook 'god-mode-disabled-hook 'my/update-cursor))
 (global-set-key (kbd "<escape>") 'god-local-mode)
-(diminish 'god-mode)
 
 ;; 窗口导航
 (use-package windmove :ensure t :defer t
@@ -398,8 +417,8 @@
     (delete-window)))
 
 ;; 使用goto-last-change前往上一次修改的位置
-(use-package goto-last-change :ensure t
-  :bind (("M-g l" . goto-last-change)))
+(use-package goto-last-change :ensure t :defer t
+  :bind (("M-g b" . goto-last-change)))
 
 ;; 快速导航，移动光标至指定行，字符，词等
 (use-package avy :ensure t :defer t
@@ -417,24 +436,20 @@
          ("M-g x" . dumb-jump-go-prefer-external)
          ("M-g z" . dumb-jump-go-prefer-external-other-window)
          ("M-g q" . dumb-jump-quick-look))
-  :init
+  :config
   (setq dumb-jump-selector 'ivy
         dumb-jump-aggressive nil
         dumb-jump-prefer-searcher 'ag))
 
 (use-package smooth-scrolling :ensure t :defer t
-  :init (add-hook 'prog-mode-hook #'smooth-scrolling-mode)
+  :diminish smooth-scrolling-mode
   :config
   (setq smooth-scroll-margin 2)
   (setq mouse-wheel-scroll-amount '(1 ((shift) .1) ((control) . nil)))
   (setq mouse-wheel-progressive-speed nil))
 
-;;; ----------------------------------------------------------------------
-
-;;; ----------------------------------------------------------------------
-;;; 工具增强
-;;;
 ;;; 功能更加强劲的minibar
+;;;=====================
 (use-package which-key :ensure t :defer t
   :diminish which-key-mode
   :init
@@ -445,13 +460,11 @@
   (setq which-key-popup-type 'side-window
         which-key-side-window-location 'bottom
         which-key-side-window-max-height 0.30
-        which-key-side-window-max-width 0.20
-        which-key-max-description-length 25
-        which-key-allow-evil-operators t
+        ;; which-key-side-window-max-width 0.20
+        which-key-max-description-length 20
         which-key-sort-order 'which-key-key-order
-        which-key-unicode-correction 3
-        which-key-prefix-prefix "+"
-        which-key-idle-delay 0.15))
+        which-key-idle-delay 0.1
+        which-key-compute-remaps t))
 
 ;; 通过general可以拓展更多的快捷键
 ;; 但是暂时想简化使用，故暂时不使用
@@ -467,7 +480,7 @@
   :diminish undo-tree-mode
   :init
   (add-hook 'prog-mode-hook #'undo-tree-mode)
-  (add-hook 'markdown-mode-hook #'undo-tree-mode)
+  (add-hook 'text-mode-hook #'undo-tree-mode)
   :config
   (setq undo-tree-visualizer-timestamps t
         undo-tree-visualizer-diff t)
@@ -495,11 +508,9 @@
   :config
   (setq super-save-auto-save-when-idle t
         auto-save-default nil))
-(diminish 'super-save-mode)
 
-;;;----------------------------------------------------------------------------
 ;;; 标记mark
-;;;
+;;;==========
 ;; 智能标记
 (use-package expand-region :ensure t :defer t
   :bind ("C-=" . er/expand-region)
@@ -532,7 +543,6 @@
   :init (add-hook 'prog-mode-hook #'anzu-mode)
   :bind (("M-%" . anzu-query-replace)
          ("C-M-%" . anzu-query-replace-regexp)))
-(diminish 'anzu-mode)
 
 ;; iedit指南：
 ;; 用于批量修改匹配的symbol或者word或者region
@@ -625,10 +635,9 @@
 (use-package smartparens :ensure t :defer t
   :diminish smartparens-mode
   :init
-  (progn
-    (add-hook 'prog-mode-hook #'show-smartparens-mode)
-    (add-hook 'prog-mode-hook #'smartparens-mode)
-    (add-hook 'markdown-mode-hook #'smartparens-mode))
+  (add-hook 'prog-mode-hook #'show-smartparens-mode)
+  (add-hook 'prog-mode-hook #'smartparens-mode)
+  (add-hook 'markdown-mode-hook #'smartparens-mode)
   :config
   (require 'smartparens-config)
   (sp-use-smartparens-bindings)
@@ -641,7 +650,7 @@
 
 (setq show-paren-style 'parenthesis)
 (show-paren-mode t)
-(diminish 'show-paren-mode "")
+(diminish 'show-paren-mode)
 ;; (define-advice show-paren-function (:around (fn) fix-show-paren-function)
 ;;   "Highlight enclosing parens."
 ;;   (cond ((looking-at-p "\\s(") (funcall fn))
@@ -651,12 +660,11 @@
 
 ;; 多彩括号
 (use-package rainbow-delimiters :ensure t :defer t
-  :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :init
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-;;; ----------------------------------------------------------------------
 ;;; 自动补全与代码片段
-;;; ----------------------------------------------------------------------
-
+;;;=================
 ;; 设置hippie-expand尝试函数
 (use-package hippie-exp :ensure t :defer t
   :bind ("M-/" . hippie-expand)
@@ -694,6 +702,8 @@
                   text-mode-hook))
     (add-hook 'hook #'abbrev-mode)))
 
+(use-package dabbrev :defer t)
+
 (use-package company :ensure t :defer t
   :diminish company-mode
   :bind (("C-c C-0" . company-complete)
@@ -704,7 +714,6 @@
          ("C-." . company-filter-candidates))
   :init
   (add-hook 'prog-mode-hook #'company-mode)
-  (diminish 'company-mode)
   :config
   (unbind-key "RET" company-active-map)
   (unbind-key "<return>" company-active-map)
@@ -743,10 +752,8 @@
   (yas-reload-all)
   (add-hook 'prog-mode-hook #'yas-minor-mode))
 
-;;; ----------------------------------------------------------------------
 ;;; 代码调试
-;;; ----------------------------------------------------------------------
-
+;;;=========
 ;;; Code linter settings
 (use-package flycheck :ensure t :defer t :if (display-graphic-p)
   :diminish flycheck-mode
@@ -834,11 +841,9 @@
   (use-package dired+ :ensure t :defer t)
   (use-package dired-single :ensure t :defer t)
   (use-package dired-details :ensure t :defer t)
-  (use-package dired-details+ :defer t :defer t)
-  )
+  (use-package dired-details+ :ensure t :defer t))
 
 (use-package neotree :ensure t
-  :commands (neotree-toggle)
   :bind (("<f7>" . neotree-toggle)
          :map neotree-mode-map
          ("RET" . neotree-enter)
@@ -898,7 +903,6 @@
     (progn
       (text-scale-adjust 0)
       (text-scale-decrease 1)))
-
   (add-hook 'neo-after-create-hook
             (lambda (_)
               ;;(call-interactively 'lix/text-scale-twice)
