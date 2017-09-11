@@ -6,6 +6,9 @@
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-map (ansi-color-make-color-map) t)
+ '(ansi-color-names-vector
+   ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
+ '(bmkp-last-as-first-bookmark-file "/home/lix/.emacs.d/.cache/.emacs-bookmarks.el")
  '(compilation-message-face (quote default))
  '(cua-global-mark-cursor-color "#2aa198")
  '(cua-normal-cursor-color "#839496")
@@ -14,9 +17,12 @@
  '(custom-enabled-themes (quote (spacemacs-dark)))
  '(custom-safe-themes
    (quote
-    ("365d9553de0e0d658af60cff7b8f891ca185a2d7ba3fc6d29aadba69f5194c7f" "611e38c2deae6dcda8c5ac9dd903a356c5de5b62477469133c89b2785eb7a14d" "b81bfd85aed18e4341dbf4d461ed42d75ec78820a60ce86730fc17fc949389b2" "2e973a84accb627f603f309fc13938daa227055d2a6528c80a9b7a9e2dd8da6b" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9f3181dc1fabe5d58bbbda8c48ef7ece59b01bed606cfb868dd147e8b36af97c" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
+    ("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "7f4b67cb8aff9eb76ef818b3e41ed5f03581799f8e31899c93ec85b0ef049ceb" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9f3181dc1fabe5d58bbbda8c48ef7ece59b01bed606cfb868dd147e8b36af97c" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
  '(fci-rule-character-color "#d9d9d9")
  '(fci-rule-color "#373b41" t)
+ '(global-hl-line-mode t)
+ '(global-visual-fill-column-mode t)
+ '(global-visual-line-mode t)
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
  '(highlight-symbol-colors
    (--map
@@ -45,13 +51,14 @@
  '(hl-sexp-background-color "#efebe9")
  '(ibuffer-deletion-face (quote diredp-deletion-file-name))
  '(ibuffer-marked-face (quote diredp-flag-mark))
+ '(line-number-mode nil)
  '(magit-diff-use-overlays nil)
  '(nrepl-message-colors
    (quote
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
  '(package-selected-packages
    (quote
-    (youdao-dictionary writeroom-mode shell-switcher git-timemachine embrace find-file-in-project projectile swiper avy sqlup-mode sql-indent go-eldoc go-snippets company-go go-mode visual-basic-mode vbasense realgud meghanada google-c-style autodisass-java-bytecode ensime scala-mode chinese-pyim shell-command terminal-here multi-term bash-completion emacs-bash-completion readline-complete gruvbox-theme gruvbox zlc fcitx flx-ido vue-mode emoji ag virtualenvwrapper eshell-prompt-extras god-mode origami dumb-jump dump-jump anzu pangu-spacing wotd ace-pinyin fill-column-indicator doom-theme sml-modeline paren-face monokai-theme monokai use-package el-get paradox package-utils neotree dired-single dired dired+ diredful dired-details counsel-projectile yasnippet company company-statistics company-flx company-tern company-ess company-auctex company-anaconda iedit better-defaults winum twilight-bright-theme color-theme-molokai color-theme-sanityinc-tomorrow spacemacs-theme solarized-theme indium tern less-css-mode angular-snippets angular-mode react-snippets js2-refactor emmet-mode pug-mode php-eldoc nodejs-repl web-beautify yaml-mode rainbow-mode scss-mode json-mode js2-mode lorem-ipsum company-web web-mode goto-last-change counsel-osx-app dash-at-point aggressive-fill-paragraph nocomments-mode bookmark+ ess polymode key-combo ess-smart-underscore em-prompt em-cmpl eshell-z eshell-autojump eshell-up eshell-did-you-mean gitattributes-mode gitconfig-mode gitignore-mode git-gutter indent-tools yafolding flycheck avy-flycheck slime elisp-slim-nav preview smooth-scrolling dired-details+ super-save imenu-anywhere flyspell-popup atom-one-dark-theme nameless popwin uniquify benchmark-init flycheck-pos-tip all-the-icons-dired all-the-icons mode-icons htmlize centered-cursor-mode eclim persistent-scratch restart-emacs markdown-toc markdown-mode latex-preview-pane auctex anaconda-mode help-fns+ bing-dict evil-magit magit-gitflow magit which-key counsel flx rainbow-delimiters smartparens ace-jump-mode phi-rectangle crux move-text fix-word hungry-delete phi-search multiple-cursors whole-line-or-region expand-region undo-tree whitespace-cleanup-mode aggressive-indent exec-path-from-shell)))
+    (ox-pandoc toc-org org-bullets pyvenv color-theme-sanityinc-solarized tangotango-theme tango-plus-theme gruvbox-themes dichromacy markdown-mode+ edit-indirect company-shell company-anaconda pyim sqlup-mode sql-indent go-eldoc go-snippets company-go go-mode visual-basic-mode vbasense realgud meghanada google-c-style autodisass-java-bytecode ensime scala-mode terminal-here multi-term bash-completion emacs-bash-completion readline-complete gruvbox-theme gruvbox zlc fcitx flx-ido vue-mode emoji ag virtualenvwrapper eshell-prompt-extras god-mode origami dumb-jump dump-jump anzu pangu-spacing wotd ace-pinyin fill-column-indicator doom-theme sml-modeline paren-face monokai-theme monokai use-package el-get paradox package-utils neotree dired-single dired dired+ diredful dired-details counsel-projectile yasnippet company company-statistics company-flx company-tern company-ess company-auctex iedit better-defaults winum twilight-bright-theme color-theme-molokai color-theme-sanityinc-tomorrow spacemacs-theme solarized-theme indium tern less-css-mode angular-snippets angular-mode react-snippets js2-refactor emmet-mode pug-mode php-eldoc nodejs-repl web-beautify yaml-mode rainbow-mode scss-mode json-mode js2-mode lorem-ipsum company-web web-mode goto-last-change counsel-osx-app dash-at-point aggressive-fill-paragraph nocomments-mode bookmark+ ess polymode key-combo em-prompt em-cmpl eshell-z eshell-autojump eshell-up eshell-did-you-mean gitattributes-mode gitconfig-mode gitignore-mode git-gutter indent-tools yafolding flycheck avy-flycheck slime elisp-slim-nav preview smooth-scrolling dired-details+ super-save imenu-anywhere flyspell-popup atom-one-dark-theme nameless popwin uniquify benchmark-init flycheck-pos-tip all-the-icons-dired all-the-icons mode-icons htmlize centered-cursor-mode eclim persistent-scratch restart-emacs markdown-toc markdown-mode latex-preview-pane auctex help-fns+ bing-dict evil-magit magit-gitflow magit which-key counsel flx rainbow-delimiters smartparens ace-jump-mode phi-rectangle crux move-text fix-word hungry-delete phi-search multiple-cursors whole-line-or-region expand-region undo-tree whitespace-cleanup-mode aggressive-indent exec-path-from-shell)))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(term-default-bg-color "#002b36")

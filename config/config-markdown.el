@@ -1,27 +1,24 @@
-;;; markdown
+;;; config-markdown.el --- Configuration for writing markdown:
+
+;;; Commentary:
+
+;;; Code:
 (use-package markdown-mode :ensure t :defer t
   :mode (("\\.markdown$" . markdown-mode)
          ("\\.md$"       . markdown-mode)
          ("\\.txt$" . markdown-mode))
   :config
-  ;; markdown hooks
-  (add-hook 'markdown-mode-hook
-            '(lambda()
-               ;; (linum-mode)
-               ;; (mmm-mode +1)
-               ;;(centered-cursor-mode)
-               ;;(flyspell-mode 1)
-               ;;(pandoc-mode)
-               (yas-minor-mode t)
-               (hl-todo-mode t)))
+  (use-package markdown-mode+ :ensure t :defer t)
+  (add-hook 'markdown-mode-hook #'yas-minor-mode)
   (setq markdown-command "pandoc"
         markdown-enable-math t
         markdown-footnote-location "end"
-        markdown-nested-imenu-heading-index t)
-  ;;(add-hook 'markdown-mode-hook #'my-markdown-config)
-  )
+        markdown-nested-imenu-heading-index t))
 
-(use-package writeroom-mode :ensure t
+;;; 在markdown模式下，C-c ' 通过另外一个buffer来编辑源代码块
+(use-package edit-indirect :ensure t :defer t)
+
+(use-package writeroom-mode :ensure t :defer t
   :commands (writeroom-mode)
   :config
   (defun distraction-free ()
@@ -30,3 +27,4 @@
     (writeroom-mode)))
 
 (provide 'config-markdown)
+;;; config-markdown.el ends here

@@ -1,2 +1,0 @@
-* Blogs                                                              :elfeed:
-** https://blog.yitianshijie.net/feed/                              :chinese:

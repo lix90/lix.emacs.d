@@ -21,29 +21,34 @@
 ;;; Commentary:
 
 ;;; Code:
+
+;; 对旧的CL库提供兼容性支持
 (require 'cl)
 
-(defconst package-mirror "emacs-china")
-;; (defconst package-mirror "original")
-(defconst user-project-directory "~/projects/")
 (defconst is-mac (string= system-type "darwin"))
 
-(setq package-enable-at-startup nil
-      ;; load-prefer-newer t ; already in better-default
-      )
-
+;; 在启动时不自动加载安装的包
+(setq package-enable-at-startup nil)
+;; 加载较新的文件
+(setq load-prefer-newer t)
+;; 设定根路径
 (when load-file-name
   (defconst base-path (file-name-directory load-file-name)))
 
-(setq custom-file
-      (concat base-path "custom.el"))
+;;; 指定custom.el文件路径
+(setq custom-file (concat base-path "custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))
 
+;;; 指定包下载路径
 (require 'package)
 (setq package-user-dir
       (expand-file-name "elpa" user-emacs-directory))
 
+;;;----------------------------------------------------------------------
+;;; 镜像管理
+(defconst package-mirror "emacs-china")
+;; (defconst package-mirror "original")
 (cond
  ((string= package-mirror "emacs-china")
   (setq package-archives
@@ -72,13 +77,45 @@
   (require 'use-package))
 (setq use-package-verbose t)
 (require 'diminish)
+
+;;;----------------------------------------------------------------------
+;;; bind-key指南
+;;
+;; 添加单个键
+;;   (bind-key "C-c x" 'my-ctrl-c-x-command)
+;; 以覆盖的方式添加键
+;;   (bind-key* "<C-return>" 'other-window)
+;; 添加单个键至特定的keymap：
+;;   (bind-key "C-c x" 'my-ctrl-c-x-command some-other-mode-map)
+;; 取消键的绑定
+;;   (unbind-key "C-c x" some-other-mode-map)
+;; 添加多个键至特定的map
+;;    (bind-keys :map dired-mode-map
+;;               ("o" . dired-omit-mode)
+;;               ("a" . some-custom-dired-function))
+;; 根据前缀键设定keymap
+;;    (bind-keys :prefix-map my-customize-prefix-map
+;;               :prefix "C-c c"
+;;               ("f" . customize-face)
+;;               ("v" . customize-variable))
+;; 以覆盖的方式添加多个键
+;;    (bind-keys*
+;;     ("C-o" . other-window)
+;;     ("C-M-n" . forward-page)
+;;     ("C-M-p" . backward-page))
+;; 查看用户自定义的键
+;;   M-x describe-personal-keybindings
 (require 'bind-key)
 
-(use-package benchmark-init :ensure t
-  :init
-  (require 'benchmark-init))
+(use-package benchmark-init :ensure t :defer t :disabled t
+  :init (require 'benchmark-init))
 
-(defun lix/load-file-alist (list &optional dir-prefix file-suffix)
+;;; 创建 .cache文件夹
+(defconst user-cache-directory (concat user-emacs-directory ".cache"))
+(make-directory user-cache-directory t)
+
+;;; 配置模块加载函数
+(defun my/load-file-alist (list &optional dir-prefix file-suffix)
   (dolist (tmp list)
     (let* ((file-name (concat (or dir-prefix "config/config-") tmp (or file-suffix ".el")))
            (file-path (expand-file-name file-name user-emacs-directory))
@@ -88,85 +125,28 @@
         (make-directory parent-dir))
       (load-file file-path))))
 
-(setq modules-load
-      '("best"
-        "defuns"
-        ))
-
+;;; 定义加载模块
+(setq modules-load '("best" "defuns"))
 (setq modules-load-graphic
-      '("git"
-        "chinese"
-        "shell"
-        ;;"javascript"
-        ;;"web"
-        "ess-r"
-        "python"
-        ;;"matlab"
-        "scala"
-        ;;"org"
-        "markdown"
-        ;;"latex"
+      '(;; tools
+        "git" "chinese" "shell" "misc"
         "lisp"
-        ;;"english"
-        "misc"
-        ;;"php"
-        ;;"cc"
+        ;; languages
+        ;;"javascript" "web" "php"
+        ;; "cc"
         ;; "ruby"
-        ;;"java"
+        ;; "java"
         "sql"
+        "ess-r" "python" "scala"
+        ;;"matlab"
+        "org" "markdown"
+        ;;"latex"
         ))
 
-(lix/load-file-alist modules-load)
+;;; 加载模块
+(my/load-file-alist modules-load)
 (when (display-graphic-p)
-  (lix/load-file-alist modules-load-graphic))
-
-(dolist (imode '(
-                 abbrev-mode
-                 blink-cursor-mode
-                 delete-selection-mode
-                 electric-indent-mode
-                 which-key-mode
-                 smartparens-mode
-                 show-smartparens-mode
-                 show-paren-mode
-                 whitespace-cleanup-mode
-                 smooth-scrolling-mode
-                 pangu-spacing-mode
-                 line-number-mode
-                 ace-pinyin-mode
-                 ace-pinyin-global-mode
-                 aggressive-indent-mode
-                 anzu-mode
-                 auto-composition-mode
-                 auto-compression-mode
-                 company-mode
-                 company-flx-mode
-                 diff-auto-refine-mode
-                 file-name-shadow-mode
-                 font-lock-mode
-                 global-font-lock-mode
-                 eldoc-mode
-                 global-eldoc-mode
-                 hungry-delete-mode
-                 global-hungry-delete-mode
-                 subword-mode
-                 global-subword-mode
-                 ivy-mode
-                 mouse-wheel-mode
-                 override-global-mode
-                 projectile-mode
-                 rainbow-delimiters-mode
-                 recentf-mode
-                 save-place-mode
-                 savehist-mode
-                 shell-dirtrack-mode
-                 super-save-mode
-                 tooltip-mode
-                 transient-mark-mode
-                 undo-tree-mode
-                 ))
-  (diminish imode))
+  (my/load-file-alist modules-load-graphic))
 
 (provide 'init)
 ;;; init.el ends here
-(put 'erase-buffer 'disabled nil)

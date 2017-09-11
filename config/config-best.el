@@ -1,14 +1,19 @@
-;;;-----------------------------------------------------------------------------
+;;; package --- Summary
+;;; Commentary:
+
+;;; Code:
+
+;;;----------------------------------------------------------------------------
 ;;; 包管理
-;;;-----------------------------------------------------------------------------
+;;;----------------------------------------------------------------------------
 (use-package el-get :ensure t :defer t :disabled t
   :init (setq el-get-verbose t))
-(use-package paradox :ensure t :defer 30
+(use-package paradox :ensure t :defer 30 :disabled t
   :commands (paradox-list-packages
              paradox-upgrade-packages)
   :config (setq paradox-execute-asynchronously t
                 paradox-github-token t))
-(setq paradox-github-token "d02fae45dd7c0c4845b56635d78448c63d7a7035")
+;; (setq paradox-github-token "d02fae45dd7c0c4845b56635d78448c63d7a7035")
 (use-package package-utils :ensure t :defer 30)
 
 ;;;----------------------------------------------------------------------------
@@ -57,32 +62,8 @@
 
 (setenv "PATH" (mapconcat 'identity exec-path ":"))
 
-;;; ----------------------------------------------------------------------
-;;; 将常用的命令绑定快捷键，不断增加
-(global-set-key (kbd "C-<up>") 'backward-sexp)
-(global-set-key (kbd "C-<down>") 'forward-sexp)
-
-(global-set-key (kbd "M-s s") 'isearch-forward-regexp)
-(global-set-key (kbd "M-s r") 'isearch-backward-regexp)
-
-(use-package hydra :ensure t :defer t
-  :init
-  (defhydra hydra-zoom (global-map "C-c")
-    "zoom"
-    ("+" text-scale-increase "larger")
-    ("-" text-scale-decrease "smaller")
-    ("0" text-scale-adjust "recover"))
-  (defhydra hydra-adjwin (global-map "C-c")
-    "adjust window"
-    ("<left>" shrink-window-horizontally "shrink horizontally")
-    ("<right>" enlarge-window-horizontally "enlarge horizontally")
-    ("<up>" enlarge-window "enlarge vertically")
-    ("<down>" shrink-window "shrink vertically")
-    ("B" balance-windows "balance")))
-
-;;;-----------------------------------------------------------------------------
-;;;-----------------------------------------------------------------------------
 ;;; 设置emacs内置参数
+;;;======================================================================
 (setq-default
  ;; 取消文件锁
  create-lockfiles nil
@@ -92,33 +73,39 @@
  make-backup-files nil
  ;; tab为4个空格宽度
  tab-width 4
+ ;; 搜索和匹配时忽略大小写
  case-fold-search t
+ ;; 当前buffer的默认路径
  default-directory "~"
+ ;; 80栏宽, 当超过栏宽时，自动折叠行
  fill-column 80
+ ;; 下一行时插入新一行
  next-line-add-newlines nil
+ ;; 自动添加新行至文件结尾
  require-final-newline t
- ;;mouse-yank-at-point t ;; alrealy in better-default
+ ;; 鼠标粘贴在光标处
+ mouse-yank-at-point t ;; alrealy in better-default
+ ;; kill整行
  kill-whole-line t
+ ;; 锁紧不适用tab符号
  indent-tabs-mode nil
+ ;; 开启剪切板
  x-select-enable-clipboard t
+ select-enable-clipboard t
  x-select-enable-primary t
+ select-enable-primary t
  save-interprogram-paste-before-kill t
  apropos-do-all t
- mouse-yank-at-point t
- require-final-newline t
+ ;; 提醒
  visible-bell t
- load-prefer-newer t
- ediff-window-setup-function 'ediff-setup-windows-plain
- save-place-file (concat user-emacs-directory "places"))
-
+ ediff-window-setup-function 'ediff-setup-windows-plain)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq kill-buffer-query-functions
       (remq 'process-kill-buffer-query-function
             kill-buffer-query-functions))
 
-;;; ----------------------------------------------------------------------
-;;; macos系统的设置与功能增强
-;;;
+;;; MacOS系统的设置与功能增强
+;;;============================================================
 
 (when is-mac
   (setq
@@ -127,7 +114,7 @@
    ;; 垃圾箱路径
    trash-directory "~/.Trash"
    ns-pop-up-frames nil
-   ns-use-native-fullscreen nil)
+   ns-use-native-fullscreen t)
   (setq mac-option-modifier 'super
         mac-command-modifier 'meta
         mac-function-modifier 'hyper
@@ -136,63 +123,28 @@
 ;; 在osx-finder中打开
 (use-package reveal-in-osx-finder :ensure t :defer t :if is-mac)
 
-;;; ----------------------------------------------------------------------
-;;; emacs内置mode设置
-;;
-;; 切词模式
-(global-subword-mode +1)
-(diminish 'global-subword-mode)
-;; 删除选择
+;;; 切词模式
+;;;========
+(use-package subword :defer t
+  :diminish subword-mode
+  :init (add-hook 'after-init-hook #'global-subword-mode))
+
+;;; 删除选择
+;;;========
 (delete-selection-mode +1)
 (diminish 'delete-selection-mode)
-;; 内置时间mode设定
-;; (setq display-time-format "%a %b %d | %H:%M |")
-;; (display-time-mode +1)
-;; 开启文档模式
-(add-hook 'prog-mode-hook #'eldoc-mode)
-(diminish 'eldoc-mode)
 
-;;;-----------------------------------------------------------------------------
-;; hippie-expand
-;;;-----------------------------------------------------------------------------
-;; 设置hippie-expand尝试函数
-(global-set-key (kbd "M-/") 'hippie-expand)
-(setq hippie-expand-try-function-list
-      '(try-expand-debbrev
-        try-expand-debbrev-all-buffers
-        try-expand-debbrev-from-kill
-        try-complete-file-name-partially
-        try-complete-file-name
-        try-expand-all-abbrevs
-        try-expand-list
-        try-expand-line
-        try-complete-lisp-symbol-partially
-        try-complete-lisp-symbol))
+;;; 开启文档模式
+;;;============
+(use-package eldoc :defer t
+  :diminish eldoc-mode
+  :init (add-hook 'prog-mode-hook #'eldoc-mode)
+  :config
+  (setq eldoc-idle-delay 0.2
+        eldoc-echo-area-use-multiline-p t))
 
-;;;-----------------------------------------------------------------------------
-;; abbrev mode
-;;;-----------------------------------------------------------------------------
-;; C-x a abbrev key map
-;; C-x ' expand abbrev
-;; You can use abbrev for:
-;; * Long English words, e.g. “comm” for “communication”.
-;; * Programing language function templates.
-;; * emoji, such as “omg” for
-;; * math symbols such as “ra” for →
-;; * Templates, such as license header.
-;; * Address, url, telephone number, company name, etc.
-(dolist (hook (list
-               prog-mode-hook
-               text-mode-hook
-               ))
-  (add-hook 'hook #'abbrev-mode))
-(setq save-abbrevs 'silently)
-(setq abbrev-file-name
-      (concat user-emacs-directory "emacs_abbre.el"))
-
-;;;-----------------------------------------------------------------------------
-;;;-----------------------------------------------------------------------------
 ;;; 保存历史
+;;;=========
 (use-package savehist :ensure t  :defer t
   :init
   (add-hook 'after-init-hook #'savehist-mode)
@@ -200,14 +152,15 @@
   :config
   (setq savehist-additional-variables '(search ring regexp-search-ring)
         savehist-autosave-interval 60
-        savehist-file (concat user-emacs-directory "savehist")))
+        savehist-file (concat user-emacs-directory ".cache/.savehist")))
 
 ;; 保存桌面
-(use-package desktop :ensure t :defer t :if (display-graphic-p)
+(use-package desktop :defer t :if (display-graphic-p)
+  :init (add-hook 'after-init-hook #'desktop-save-mode)
   :config
   ;; Automatically save and restore sessions
-  (make-directory (concat user-emacs-directory "desktop") t)
-  (setq desktop-dirname (concat user-emacs-directory "desktop")
+  (make-directory (concat user-emacs-directory ".cache/desktop") t)
+  (setq desktop-dirname (concat user-emacs-directory ".cache/desktop")
         desktop-base-file-name "emacs.desktop"
         desktop-base-lock-name "lock"
         desktop-path `(,desktop-dirname)
@@ -225,41 +178,72 @@
                   register-alist))
         desktop-locals-to-save nil))
 
-;; 保存最近打开的文件
-(use-package recentf :ensure t :defer t
+;;; 保存最近打开的文件
+(use-package recentf :defer t
+  :diminish recentf-mode
   :init
   (add-hook 'after-init-hook #'recentf-mode)
-  (diminish 'recentf-mode)
   :config
-  (setq recentf-save-file (concat user-emacs-directory "recentf")
+  (setq recentf-save-file (concat user-emacs-directory ".cache/.recentf")
         recentf-max-saved-items 100
         recentf-max-menu-items 25))
 
-;; saveplace
 ;; 自动地保存文件位置，下次自动跳转到保存的位置
-(require 'saveplace)
-(setq-default save-place t)
-(diminish 'saveplace)
-;; uniquify
-;; 让两个同样文件名的文件具有唯一的buffer名
-(require 'uniquify)
-(setq-default uniquify-buffer-name-style 'forward)
+(use-package saveplace :ensure t :defer t
+  :init
+  (add-hook 'after-init-hook #'save-place-mode)
+  :config
+  (setq save-place-file
+        (concat user-emacs-directory ".cache/.saveplace")))
 
-;;; ----------------------------------------------------------------------
+;; 让两个同样文件名的文件具有唯一的buffer名
+(use-package uniquify :defer t
+  :init
+  (setq uniquify-buffer-name-style 'forward))
+
 ;;; 视觉效果
-;;; ----------------------------------------------------------------------
-;;;
+;;;=========
+(add-hook 'prog-mode-hook (lambda()
+                            (line-number-mode +1)
+                            (column-number-mode +1)))
+;; 高亮行
+(setq hl-line-sticky-flag nil)
+(global-hl-line-mode +1)
+(diminish 'hl-line-mode)
+
+(setq visual-fill-column-width 85)
+(global-visual-fill-column-mode +1)
+(global-visual-line-mode +1)
+(diminish 'visual-line-mode)
+
+(use-package linum :defer t
+  :init
+  (setq linum-format "%4s ")
+  (setq linum-relative-format "%4s "))
+(use-package hlinum :ensure t :defer t
+  :init
+  (add-hook 'prog-mode-hook #'hlinum-activate)
+  :config
+  (set-face-attribute 'linum-highlight-face nil
+                      :background (face-attribute 'linum :background)
+                      :foreground (face-attribute 'mode-line :background)
+                      :weight 'bold))
+
+;; 时间
+(use-package time :defer t
+  :init
+  (add-hook 'after-init-hook #'display-time-mode)
+  (setq display-time-format "%Y-%m-%d/%H:%M"))
+
 (require 'ansi-color)
-(setq-default ansi-color-for-comint-mode +1)
-;; 颜色设定
-(defconst hl-color "#ffd446")
-(defconst hl-color-dark "#282c34")
+;; (setq-default ansi-color-for-comint-mode +1)
+
 ;; fringe
-(fringe-mode '(0 . 2))
-;; 字体高度
+(fringe-mode '(8 . 8))
+
+;;; 字体
 (setq my/font-height (if is-mac 130 100)
       my/font-name "Source Code Pro")
-;; 设置字体
 (set-face-attribute 'default nil
                     :family my/font-name
                     :height my/font-height
@@ -295,34 +279,9 @@
  ring-bell-function 'ignore
  ;; 消息日志行数
  message-log-max 10000
- ;; 行号设定
- linum-format "%4s "
  ;; 光标类型
  cursor-type 'bar
  )
-;; 相对行号
-;;(setq linum-relative-format "%4s ")
-;; 设定光标背景色
-(set-face-background 'cursor hl-color)
-
-(dolist (hook '(prog-mode-hook
-                web-mode-hook
-                matlab-mode-hook))
-  (add-hook 'hook
-            (lambda()
-              (visual-line-mode +1)
-              (global-visual-line-mode -1)
-              ;; line number
-              (linum-mode +1)
-              ;; highlight current line
-              (hl-line-mode +1)
-              (set-face-background 'hl-line hl-color-dark)
-              (toggle-truncate-lines +1)
-              )))
-(diminish 'visual-line-mode)
-(diminish 'global-visual-line-mode)
-(diminish 'linum-mode)
-(diminish 'hl-line-mode)
 
 (define-fringe-bitmap 'right-curly-arrow
   [#b00000000
@@ -343,38 +302,63 @@
    #b00000000
    #b00000000
    #b00000000])
-
-
-;; 高亮行号
-(use-package hlinum :ensure t :defer t
-  :init
-  (add-hook 'prog-mode-hook #'hlinum-activate)
-  :config
-  (set-face-attribute 'linum-highlight-face nil
-                      :background hl-color-dark
-                      :foreground hl-color
-                      :weight 'bold))
-
-;;; ----------------------------------------------------------------------
+;;;----------------------------------------------------------------------
 ;;; 主题
-;;; ----------------------------------------------------------------------
-;;; GUI主题：doom-themes
+;;; - doom-themes
+;;; - lenven
+;;;----------------------------------------------------------------------
 (use-package doom-themes :ensure t :defer t
-  :if (display-graphic-p)
   :config
-  (setq doom-enable-bold t
-        doom-enable-italic t
-        doom-one-brighter-modeline t
-        doom-one-brighter-comments nil))
-(if (display-graphic-p)
-    (load-theme 'doom-one t))
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t
+        doom-themes-one-brighter-modeline t
+        doom-themes-one-brighter-comments nil))
+(use-package gruvbox-theme :ensure t :defer t)
+(use-package tango-plus-theme :ensure t :defer t)
+(use-package leuven-theme :ensure t :defer t)
+(use-package tangotango-theme :ensure t :defer t)
+(use-package solarized-theme :ensure t :defer t)
+(use-package monokai-theme :ensure t :defer t)
+;;; 切换主题
+;;; https://github.com/habamax/.emacs.d/blob/master/lisp/haba-appearance.el
+(defvar *my-theme-dark* 'solarized-dark)
+(defvar *my-theme-light* 'leuven)
+(defvar *my-current-theme* *my-theme-dark*)
 
-;;; ----------------------------------------------------------------------
-;;; 第三方包设定
-;;;
-;;; 1. 导航
+;; disable other themes before loading new one
+(defadvice load-theme (before theme-dont-propagate activate)
+  "Disable theme before loading new one."
+  (mapc #'disable-theme custom-enabled-themes))
+
+(defun my/next-theme (theme)
+  (if (eq theme 'default)
+      (disable-theme *my-current-theme*)
+    (progn
+      (load-theme theme t)))
+  (setq *my-current-theme* theme))
+
+(defun my/toggle-theme ()
+  (interactive)
+  (cond ((eq *my-current-theme* *my-theme-dark*)
+         (my/next-theme *my-theme-light*))
+        ((eq *my-current-theme* *my-theme-light*)
+         (my/next-theme 'default))
+        ((eq *my-current-theme* 'default)
+         (my/next-theme *my-theme-dark*)))
+  (set-face-attribute 'mode-line nil
+                      :underline nil
+                      :box nil)
+  (set-face-attribute 'mode-line-inactive nil
+                      :underline nil
+                      :box nil))
+
+(bind-key* "C-<f9>" 'my/toggle-theme)
+(my/toggle-theme)
+
+;;;----------------------------------------------------------------------
+;;; 导航
 ;;; - God-mode
-;;; ----------------------------------------------------------------------
+;;;----------------------------------------------------------------------
 ;;; 使用god-mode方便导航
 (use-package god-mode :ensure t :defer t
   :config
@@ -386,7 +370,7 @@
 (global-set-key (kbd "<escape>") 'god-local-mode)
 (diminish 'god-mode)
 
-;; navigate windows & delete windows
+;; 窗口导航
 (use-package windmove :ensure t :defer t
   :init
   (windmove-default-keybindings)
@@ -420,18 +404,13 @@
 ;; 快速导航，移动光标至指定行，字符，词等
 (use-package avy :ensure t :defer t
   :init
-  (bind-keys :prefix-map lix/avy-prefix-map
-             :prefix "M-s a"
-             :prefix-docstring "Avy Goto"
-             ("l" . avy-goto-line)
-             ("c" . avy-goto-char)
-             ("C" . avy-goto-char-2)
-             ("w" . avy-goto-word-0)
-             ("W" . avy-goto-word-1)))
+  (bind-keys ("M-g l" . avy-goto-line)
+             ("M-g c" . avy-goto-char)
+             ("M-g C" . avy-goto-char-2)
+             ("M-g w" . avy-goto-word-0)
+             ("M-g W" . avy-goto-word-1)))
 
 ;; dumb-jump快速跳转
-;; 使用ivy选择
-;; 使用ag搜索
 (use-package dumb-jump :ensure t :defer t
   :bind (("M-g o" . dumb-jump-go-other-window)
          ("M-g j" . dumb-jump-go)
@@ -456,7 +435,8 @@
 ;;; 工具增强
 ;;;
 ;;; 功能更加强劲的minibar
-(use-package which-key :ensure t
+(use-package which-key :ensure t :defer t
+  :diminish which-key-mode
   :init
   (which-key-setup-minibuffer)
   (which-key-mode t)
@@ -483,47 +463,22 @@
 ;;    :prefix (if is-mac "H-SPC"
 ;;              "s-SPC")))
 
-(use-package crux :ensure t :defer t
-  :bind (("C-a" . crux-move-beginning-of-line)
-         ("C-S-k" . crux-kill-whole-line))
-  :commands (crux-smart-open-line
-             crux-smart-open-line-above
-             crux-kill-whole-line)
-  :init
-  (progn
-    (bind-keys :prefix-map lix/manipulate-line
-               :prefix "C-o"
-               :prefix-docstring "Open line"
-               ("o" . open-line)
-               ("j" . join-line)
-               ("s" . split-line)
-               ("d" . crux-smart-open-line)
-               ("a" . crux-smart-open-line-above))
-    (bind-keys :prefix-map lix/crux-helper
-               :prefix "C-c c"
-               :prefix-docstring "Crux Helper Functions"
-               ("K" . crux-kill-other-buffers)
-               ("n" . crux-create-scratch-buffer)
-               ("b" . crux-find-shell-init-file)
-               ("e" . crux-find-user-init-file)
-               ("r" . crux-rename-file-or-buffer)
-               ("C" . crux-cleanup-buffer-or-region))))
-
 (use-package undo-tree :ensure t :defer t
+  :diminish undo-tree-mode
   :init
   (add-hook 'prog-mode-hook #'undo-tree-mode)
   (add-hook 'markdown-mode-hook #'undo-tree-mode)
   :config
   (setq undo-tree-visualizer-timestamps t
         undo-tree-visualizer-diff t)
-  (let ((undo-dir (concat user-emacs-directory "undo")))
+  (let ((undo-dir (concat user-emacs-directory ".cache/undo")))
     (make-directory undo-dir t)
     (setq undo-tree-history-directory-alist `((".*" . ,undo-dir)))))
-(diminish 'undo-tree-mode)
-;;; ----------------------------------------------------------------------
+
 ;;; 文件编辑
-;;
-;; 设定写文件时的时间戳
+;;;----------------------------------------------------------------------
+;;;
+;;; 设定写文件时的时间戳
 (use-package time-stamp :ensure t :defer t
   :config
   (setq time-stamp-active t          ; do enable time-stamps
@@ -531,9 +486,10 @@
         time-stamp-format "Last modified on %04y-%02m-%02d %02H:%02M:%02S (%U)")
   (add-hook 'write-file-hooks #'time-stamp))
 
-;; 文件自动保存
-;; 当idle或者光标失焦（lose focus）时，自动保存文件
+;;; 文件自动保存
+;;; 当idle或者光标失焦（lose focus）时，自动保存文件
 (use-package super-save :ensure t :defer t
+  :diminish super-save-mode
   :init
   (add-hook 'after-init-hook #'super-save-mode)
   :config
@@ -556,13 +512,14 @@
              ("e" . er/mark-email)
              ("s" . er/mark-sentence)
              ("p" . er/mark-paragraph)))
-
-(global-set-key (kbd "C-:") 'set-mark-command)
+(use-package phi-rectangle :ensure t :defer t
+  :bind (("C-x s" . phi-rectangle-set-mark-command)))
+(bind-key "C-S-M" 'set-mark-command)
 ;;; ----------------------------------------------------------------------
 ;;; 搜索与替换工具
 ;;;
 ;;
-;; anzu tutorial
+;; anzu指南
 ;; 1. query-replace 查询、代替
 ;; 2. enter
 ;; 3. y -> act,
@@ -571,17 +528,17 @@
 ;;    N -> skip all,
 ;;    , -> act but not next
 (use-package anzu :ensure t :defer t
+  :diminish anzu-mode
   :init (add-hook 'prog-mode-hook #'anzu-mode)
   :bind (("M-%" . anzu-query-replace)
          ("C-M-%" . anzu-query-replace-regexp)))
 (diminish 'anzu-mode)
 
-;; learn iedit
+;; iedit指南：
 ;; 用于批量修改匹配的symbol或者word或者region
-;; 基本用法：
 ;; C-;/M-s ; 开启或关闭iedit-mode
-;; 在iedit-mode开启时，通过C-' 可以仅仅显示选中词出现的段落，
-;; 隐藏其他段落
+;; 在iedit-mode开启时，通过C-' 可以仅仅显示选中词出现的段落，隐藏其他段落
+;; 在iedit模式时，编辑一个选区将同时改变其他选取，也就是说，可以当做多光标模式使用
 (use-package iedit :ensure t :defer t
   :init
   (bind-key* "C-;" 'iedit-mode))
@@ -592,7 +549,7 @@
 ;; 可以与projectile进行绑定，在项目中搜索
 (use-package ag :ensure t :defer t
   :init
-  (bind-keys :prefix-map lix/ag-search
+  (bind-keys :prefix-map ag-search
              :prefix "M-s f"
              :prefix-docstring "Ag Search"
              ("p" . ag-project)
@@ -600,17 +557,35 @@
              ("F" . ag-project-files)))
 
 ;;;----------------------------------------------------------------------=
-;; swiper使用指南
+;; swiper指南
 ;; 1. C-s带开搜索窗口
 ;; 2. 输入搜索字段
 ;; 3. C-' 使用avy定位行
 ;; 4. M-q 替换搜索字段（query-replace）
-(use-package swiper :ensure t :defer t :ensure counsel
+
+;;; ivy指南
+;;;
+;;; 在ivy模式时
+;;; - 确认可以按Enter或者C-m
+;;; - 完成或者补全按TAB或者C-j
+;;; - 立即完成（不使用自动匹配）按C-M-j
+;;; - 调度动作按M-o，动作根据不同模式变化
+;;; - 调用avy进行搜索跳转光标，按C-'
+;;;
+;;; counsel指南
+;;;
+(use-package swiper :ensure t :defer t
+  :diminish ivy-mode
   :commands (ivy-resume counsel-M-x counsel-find-file)
   :bind (("M-x" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)
          ("C-s" . counsel-grep-or-swiper)
-         ("C-c i" . ivy-immediate-done)
+         ("C-x C-f" . counsel-find-file)
+         ("C-x C-j" . counsel-file-jump)
+         ("C-x C-r" . counsel-recentf)
+         ("M-s l" . counsel-find-library)
+         ("M-s F" . counsel-faces)
+         ("C-h S" . counsel-info-lookup-symbol)
+         ("M-s u" . counsel-unicode-char)
          ("M-s p" . counsel-ag))
   :init
   (add-hook 'after-init-hook #'ivy-mode)
@@ -640,11 +615,15 @@
 (use-package imenu-anywhere :ensure t :after ivy
   :bind ("M-s i" . ivy-imenu-anywhere))
 
-;;;----------------------------------------------------------------------
+(use-package counsel-projectile :ensure t :defer t
+  :bind (("C-x C-p" . counsel-projectile-find-file)))
+
+;;; ----------------------------------------------------------------------
 ;;; 括号的操作与编辑
 ;;;
 ;;; smartparens智能括号操作，较难掌握
-(use-package smartparens :ensure t
+(use-package smartparens :ensure t :defer t
+  :diminish smartparens-mode
   :init
   (progn
     (add-hook 'prog-mode-hook #'show-smartparens-mode)
@@ -671,14 +650,52 @@
 ;;              (funcall fn)))))
 
 ;; 多彩括号
-(use-package rainbow-delimiters :ensure t
-  :init
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+(use-package rainbow-delimiters :ensure t :defer t
+  :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 ;;; ----------------------------------------------------------------------
 ;;; 自动补全与代码片段
 ;;; ----------------------------------------------------------------------
+
+;; 设置hippie-expand尝试函数
+(use-package hippie-exp :ensure t :defer t
+  :bind ("M-/" . hippie-expand)
+  :config
+  (setq hippie-expand-try-function-list
+        '(try-expand-debbrev
+          try-expand-debbrev-all-buffers
+          try-expand-debbrev-from-kill
+          try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-all-abbrevs
+          try-expand-list
+          try-expand-line
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol)))
+
+;;;-----------------------------------------------------------------------------
+;; abbrev mode
+;;;-----------------------------------------------------------------------------
+;; C-x a abbrev key map
+;; C-x ' expand abbrev
+;; You can use abbrev for:
+;; * Long English words, e.g. “comm” for “communication”.
+;; * Programing language function templates.
+;; * emoji, such as “omg” for
+;; * math symbols such as “ra” for →
+;; * Templates, such as license header.
+;; * Address, url, telephone number, company name, etc.
+(use-package abbrev :defer t
+  :config
+  (setq save-abbrevs 'silently)
+  (setq abbrev-file-name
+        (concat user-emacs-directory ".cache/.abbrev" ))
+  (dolist (hook '(prog-mode-hook
+                  text-mode-hook))
+    (add-hook 'hook #'abbrev-mode)))
+
 (use-package company :ensure t :defer t
+  :diminish company-mode
   :bind (("C-c C-0" . company-complete)
          :map company-active-map
          ("C-n" . company-select-next)
@@ -689,9 +706,9 @@
   (add-hook 'prog-mode-hook #'company-mode)
   (diminish 'company-mode)
   :config
-  (define-key company-active-map (kbd "RET") nil)
-  (define-key company-active-map (kbd "<return>") nil)
-  (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
+  (unbind-key "RET" company-active-map)
+  (unbind-key "<return>" company-active-map)
+  (bind-key "<tab>" #'company-complete-selection company-active-map)
   (setq company-idle-delay 0.2
         company-minimum-prefix-length 2
         company-require-match nil
@@ -699,12 +716,12 @@
         company-tooltip-align-annotations t
         company-begin-commands '(self-insert-command))
   ;; set default `company-backends'
-  (setq-default company-backends
-                '(company-capf
-                  (company-abbrev company-dabbrev company-keywords)
-                  company-files
-                  company-yasnippet
-                  ))
+  (setq company-backends
+        '(company-capf
+          (company-abbrev company-dabbrev company-keywords)
+          company-files
+          company-yasnippet
+          ))
   ;; Nicer looking faces
   (custom-set-faces
    '(company-tooltip-common
@@ -713,14 +730,18 @@
      ((t (:inherit company-tooltip-selection :weight bold :underline nil))))))
 (use-package company-flx :ensure t :defer t :after company
   :init
-  (company-flx-mode t))
-(use-package company-statistics :ensure t :defer t :after company)
+  (add-hook 'company-mode-hook #'company-flx-mode))
+(use-package company-statistics :ensure t :defer t :after company
+  :init
+  (setq company-statistics-file
+        (concat user-emacs-directory ".cache/.company-statistics" )))
 
 ;;; Snippets settings
 (use-package yasnippet :ensure t :defer t
-  :init (add-hook 'prog-mode-hook #'yas-minor-mode)
-  :config (yas-reload-all))
-(diminish 'yas-minor-mode)
+  :diminish yas-minor-mode
+  :config
+  (yas-reload-all)
+  (add-hook 'prog-mode-hook #'yas-minor-mode))
 
 ;;; ----------------------------------------------------------------------
 ;;; 代码调试
@@ -728,6 +749,7 @@
 
 ;;; Code linter settings
 (use-package flycheck :ensure t :defer t :if (display-graphic-p)
+  :diminish flycheck-mode
   :bind (:map flycheck-mode-map
               ("C-c f l" . flycheck-list-errors)
               ("C-c f n" . flycheck-next-error)
@@ -762,35 +784,58 @@
 (use-package flycheck-pos-tip :ensure t :defer t :after flycheck
   :init (setq-default tooltip-delay 0.2))
 
-;;; ----------------------------------------------------------------------
+;;;----------------------------------------------------------------------
 ;;; 文件管理
-;;; ----------------------------------------------------------------------
+;;;----------------------------------------------------------------------
+;;; doc-view mode
+(use-package doc-view :defer t
+  :config
+  (bind-keys :map doc-view-mode-map
+             ("C-o" . counsel-osx-app)))
+
+;;; ido
+(use-package ido :defer t
+  :config
+  (setq ido-save-directory-list-file
+        (concat user-emacs-directory ".cache/.ido_last" )))
+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-(use-package dired+ :ensure t :defer t)
-(use-package dired-single :ensure t :defer t)
-(use-package dired-details+ :defer t :ensure dired-details)
-(bind-key* "C-S-d" 'kill-word)
-(bind-keys :prefix-map lix/dired-map
-           :prefix "M-d"
-           :prefix-docstring "Dired Map"
-           ("j" . dired-jump)
-           ("d" . ido-dired))
-(add-hook 'dired-mode-hook
-          (lambda ()
-            (put 'dired-find-alternate-file 'disabled nil)
-            (dired-hide-details-mode t)
-            (hl-line-mode t)
-            ;; allow dired to delete or copy dir
-            (setq dired-details-hidden-string " ")
-            (setq dired-recursive-copies 'always) ; “always” means no asking
-            (setq dired-recursive-deletes 'top) ; “top” means ask once
-            (setq insert-directory-program (or (executable-find "gls")
-                                               (executable-find "ls")))
-            (setq dired-dwim-target t)
-            (define-key dired-mode-map (kbd "RET")
-              'dired-find-alternate-file) ; was dired-advertised-find-file
-            (define-key dired-mode-map (kbd "^")
-              (lambda () (interactive) (find-alternate-file "..")))))
+;;; bookmark & bookmark+
+;;; 列出当前的书签列表 C-x r l
+(use-package bookmark
+  :config
+  (setq bookmark-default-file
+        (concat user-emacs-directory ".cache/.emacs-bookmarks.el" )))
+(use-package bookmark+ :defer t
+  :config
+  (setq bmkp-bmenu-state-file
+        (concat user-emacs-directory ".cache/.emacs-bmk-bmenu-state.el")
+        bmkp-bmenu-commands-file
+        (concat user-emacs-directory ".cache/.emacs.bmk-bmenu-commands.el")))
+
+(use-package dired
+  :config
+  (put 'dired-find-alternate-file 'disabled nil)
+  ;; allow dired to delete or copy dir
+  ;; “always” means no asking
+  (setq dired-recursive-copies 'always)
+  ;; “top” means ask once
+  (setq dired-recursive-deletes 'top)
+  (setq insert-directory-program
+        (or (executable-find "gls")
+            (executable-find "ls")))
+  (setq dired-dwim-target t)
+  (define-key dired-mode-map (kbd "RET")
+    'dired-find-alternate-file)
+  ;; was dired-advertised-find-file
+  (define-key dired-mode-map (kbd "^")
+    (lambda () (interactive) (find-alternate-file "..")))
+  ;;; 其他dired拓展功能的包
+  (use-package dired+ :ensure t :defer t)
+  (use-package dired-single :ensure t :defer t)
+  (use-package dired-details :ensure t :defer t)
+  (use-package dired-details+ :defer t :defer t)
+  )
 
 (use-package neotree :ensure t
   :commands (neotree-toggle)
@@ -909,52 +954,54 @@
       (neo-global--attach))))
 
 (use-package projectile :ensure t :defer t
+  :diminish projectile-mode
+  :init (add-hook 'after-init-hook #'projectile-mode)
   :config
-  (projectile-global-mode +1)
-  (diminish 'projectile-mode)
-  (setq projectile-switch-project-action 'neotree-projectile-action))
+  (setq projectile-cache-file
+        (concat user-emacs-directory ".cache/.projectile" )
+        projectile-known-projects-file
+        (concat user-emacs-directory ".cache/.projectile-bookmarks" )))
 
-(use-package counsel-projectile :ensure t :defer t
-  :init
-  (counsel-projectile-on))
-
-(use-package find-file-in-project :ensure t :defer t)
 
 ;;; ----------------------------------------------------------------------
 ;;; 其他小工具
 ;;; ----------------------------------------------------------------------
 ;; 基于`expand-region`增加/变更/删除pairs
-;; add
-;; change
-;; delete
+;; - add
+;; - change
+;; - delete
 (use-package embrace :ensure t
   :bind ("C-," . embrace-commander))
 
 ;; 饥饿删除模式
 (use-package hungry-delete :ensure t :defer t
-  :init
-  (global-hungry-delete-mode t))
+  :diminish hungry-delete-mode
+  :init (global-hungry-delete-mode +1))
 
-;; 矩形选择
-(use-package phi-rectangle :ensure t :defer t
-  :bind (("C-x s" . phi-rectangle-set-mark-command)))
-
-;; 当未选中区域时，仍然可以对行进行操作
-(use-package whole-line-or-region :ensure t :defer t
-  :bind (("s-c" . whole-line-or-region-copy-region-as-kill)
-         ("s-v" . whole-line-or-region-yank)
-         ("s-x" . whole-line-or-region-kill-region)
+(use-package whole-line-or-region :ensure t :defer t :disabled t
+  :diminish whole-line-or-region-mode
+  :bind (("M-w" . whole-line-or-region-copy-region-as-kill)
+         ("C-y" . whole-line-or-region-yank)
          ("C-." . whole-line-or-region-comment-dwim))
-  :config
-  (dolist (hook '(prog-mode-hook
-                  text-mode-hook
-                  markdown-mode-hook))
-    (add-hook 'hook #'whole-line-or-region-mode)))
+  :init (whole-line-or-region-global-mode +1))
+
+(use-package crux :ensure t :defer t
+  :bind (("C-a" . crux-move-beginning-of-line))
+  :init
+  (bind-keys :prefix-map Manipulate-line
+             :prefix "C-o"
+             :prefix-docstring "Open line"
+             ("o" . open-line)
+             ("j" . join-line)
+             ("s" . split-line)
+             ("d" . crux-smart-open-line)
+             ("a" . crux-smart-open-line-above)
+             ("k" . crux-kill-whole-line)))
 
 ;; 移动文本
 (use-package move-text :ensure t :defer t
-  :bind (("C-S-n" . move-text-down)
-         ("C-S-p" . move-text-up)))
+             :bind (("C-S-n" . move-text-down)
+                    ("C-S-p" . move-text-up)))
 
 ;; 编程大小写
 (use-package fix-word :ensure t :defer t)
@@ -972,19 +1019,56 @@
 
 ;; 自动清除空白
 (use-package whitespace-cleanup-mode :ensure t :defer t
+  :diminish whitespace-cleanup-mode
   :init (add-hook 'prog-mode-hook #'whitespace-cleanup-mode))
 
 ;; 暴力缩进
 (use-package aggressive-indent :ensure t :defer t
-  :init
-  (add-hook 'prog-mode-hook #'aggressive-indent-mode)
-  (diminish 'aggressive-indent-mode)
+  :diminish aggressive-indent-mode
+  :init (add-hook 'prog-mode-hook #'aggressive-indent-mode)
   :config
   (add-to-list 'aggressive-indent-excluded-modes
                '(python-mode
                  haml-mode
                  html-mode)))
 
+;;; ----------------------------------------------------------------------
+;;; 设定快捷键
+;;;
+;;; 常用快捷键记录
+;;; - kill括号
+;;;
+(bind-key* "C-S-d" 'kill-word)
+(bind-key* "M-s s" 'isearch-forward-regexp)
+(bind-key* "M-s S" 'isearch-backward-regexp)
+(bind-key* "M-s l" 'counsel-find-library)
+(bind-key* "M-s I" 'imenu)
+;;;
+;;; 按组来设定快捷键
+(use-package hydra :ensure t :defer t
+  :init
+  (defhydra hydra-zoom (global-map "C-c")
+    "zoom"
+    ("+" text-scale-increase "larger")
+    ("-" text-scale-decrease "smaller")
+    ("0" text-scale-adjust "recover"))
+  (defhydra hydra-adjwin (global-map "C-c")
+    "adjust window"
+    ("<left>" shrink-window-horizontally "shrink horizontally")
+    ("<right>" enlarge-window-horizontally "enlarge horizontally")
+    ("<up>" enlarge-window "enlarge vertically")
+    ("<down>" shrink-window "shrink vertically")
+    ("B" balance-windows "balance")))
 
+;;; 模式开关
+(bind-keys :prefix "C-x 7"
+           :prefix-map my/toggle-toggle
+           ("l" . linum-mode)
+           ("L" . hlinum-mode)
+           ("h" . hl-line-mode)
+           ("v" . global-visual-line-mode)
+           ("c" . global-visual-fill-column-mode)
+           ("t" . my/toggle-theme))
 
 (provide 'config-best)
+;;; config-best.el ends here

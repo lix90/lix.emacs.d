@@ -1,44 +1,26 @@
-;;;-------------------------
-;; with editor
-;;;-------------------------
-(use-package with-editor :ensure t :defer t
-  :init
-  (define-key (current-global-map)
-    [remap async-shell-command] 'with-editor-async-shell-command)
-  (define-key (current-global-map)
-    [remap shell-command] 'with-editor-shell-command)
-  :config
-  (progn
-    (add-hook 'shell-mode-hook  #'with-editor-export-editor)
-    (add-hook 'term-exec-hook   #'with-editor-export-editor)
-    (add-hook 'eshell-mode-hook #'with-editor-export-editor)
-    (add-hook 'shell-mode-hook #'with-editor-export-git-editor)
-    (add-hook 'eshell-mode-hook #'with-editor-export-git-editor)
-    ))
+;;; package --- Summary:
 
+;;; Commentary:
 
-;;;-------------------------
-;; eshell
-;;;-------------------------
-;;(use-package eshell-did-you-mean :ensure t :defer t)
-(use-package eshell-up :ensure t :defer t :disabled t
-  :commands (eshell-up eshell-up-peek)
-  :config
-  (setq eshell-up-ignore-case nil
-        eshell-up-print-parent-dir t))
-(use-package eshell-autojump :ensure t :defer t :disabled t
-  :commands (eshell/j))
-(use-package eshell-z :ensure t :defer t :disabled t
-  :commands (eshell-z))
+;;; Code;
 
-(use-package eshell :ensure t :defer t :commands eshell
+;;; WOMAN shell命令文档
+;;;============================================================
+(autoload 'woman "woman"
+  "Decode and browse a UN*X man page." t)
+(autoload 'woman-find-file "woman"
+  "Find, decode and browse a specific UN*X man-page file." t)
+
+;;; eshell配置
+;;;============================================================
+(use-package eshell :defer t :no-require t
   :config
   (setq eshell-highlight-prompt t
         eshell-buffer-shorthand t
         eshell-cmpl-ignore-case t
         eshell-cmpl-cycle-completions nil
         eshell-history-size 500
-        eshell-buffer-maximum-lines 12000 ; auto truncate after 12k lines
+        eshell-buffer-maximum-lines 12000
         eshell-hist-ignoredups t
         eshell-error-if-no-glob t
         eshell-glob-case-insensitive t
@@ -47,45 +29,21 @@
         eshell-aliases-file (concat user-emacs-directory "eshell/alias")
         eshell-banner-message ""
         eshell-bad-command-tolerance 3)
-  ;; Visual commands
-  (setq eshell-visual-commands '("vi" "screen" "top" "less" "more" "lynx"
-                                 "ncftp" "pine" "tin" "trn" "elm" "vim"
-                                 "nmtui" "alsamixer" "htop" "el" "elinks")
+  (setq eshell-visual-commands
+        '("vi" "screen" "top" "less" "more" "lynx"
+          "ncftp" "pine" "tin" "trn" "elm" "vim"
+          "nmtui" "alsamixer" "htop" "el" "elinks")
         eshell-visual-subcommands '(("git" "log" "diff" "show")))
-
-  (defun my/truncate-eshell-buffers ()
-    "Truncates all eshell buffers"
-    (interactive)
-    (save-current-buffer
-      (dolist (buffer (buffer-list t))
-        (set-buffer buffer)
-        (when (eq major-mode 'eshell-mode)
-          (eshell-truncate-buffer)))))
-  ;; After being idle for 5 seconds, truncate all the eshell-buffers if
-  ;; needed. If this needs to be canceled, you can run `(cancel-timer
-  ;; my/eshell-truncate-timer)'
-
-  (setq my/eshell-truncate-timer
-        (run-with-idle-timer 5 t #'my/truncate-eshell-buffers))
-
-  (when (not (functionp 'eshell/rgrep))
-    (defun eshell/rgrep (&rest args)
-      "Use Emacs grep facility instead of calling external grep."
-      (eshell-grep "rgrep" args t)))
-
   (add-hook 'eshell-mode-hook
             (lambda ()
-              (semantic-mode nil)
-              (hl-line-mode nil)
+              (global-hl-line-mode -1)
               (set (make-local-variable 'company-backends)
                    '(company-files))
-              (company-mode t)
-              ;;(eshell-did-you-mean-setup)
-              (eshell-cmpl-initialize))))
-
-;; npm don't display prompt correctly under emacs eshell
-;; http://stackoverflow.com/questions/13185729/npm-dont-display-prompt-correctly-under-emacs-eshell
-(setenv "NODE_NO_READLINE" "1")
+              (company-mode +1)
+              (eshell-cmpl-initialize)))
+  ;; 尝试解决在eshell中npm命令的结果显式乱码
+  ;; http://stackoverflow.com/questions/13185729/npm-dont-display-prompt-correctly-under-emacs-eshell
+  (setenv "NODE_NO_READLINE" "1"))
 
 ;; Stripping stray ANSI escape sequences from eshell
 ;; https://emacs.stackexchange.com/questions/18457/stripping-stray-ansi-escape-sequences-from-eshell
@@ -105,89 +63,78 @@
 
 (defun my-eshell-nuke-ansi-escapes ()
   (my-nuke-ansi-escapes eshell-last-output-start eshell-last-output-end))
-
 (add-hook 'eshell-output-filter-functions 'my-eshell-nuke-ansi-escapes t)
 
-;;; clear buffer, alternative to eshell/clear
-(defun eshell/clr()
-  "Clear the eshell buffer."
-  (let ((inhibit-read-only t))
-    (erase-buffer)
-    ;;(eshell-send-input)
-    ))
-
-;;(use-package eshell-config :load-path "elisp")
-
-(use-package shell-switcher :ensure t :defer t
-  :commands (shell-switcher-switch-buffer))
-
-(use-package eshell-prompt-extras :ensure t :after eshell
+;;; shell配置
+;;;============================================================
+(use-package shell :defer t
   :config
-  (progn
-    (venv-initialize-eshell)
-    (autoload 'epe-theme-lambda "eshell-prompt-extras")
-    (setq eshell-highlight-prompt nil
-          eshell-prompt-function 'epe-theme-lambda)))
-
-;;; shell
-(setq lix/shell-type "bash")
-(when (or is-mac
-          (string= lix/shell-type "bash"))
-  (setq explicit-bash-args '("--login" "--init-file" "$HOME/.bash_profile" "-i")))
-(setq shell-file-name (if is-mac "/usr/local/bin/bash"
-                        (executable-find lix/shell-type))
-      explicit-shell-file-name (if is-mac "/usr/local/bin/bash"
-                                 (executable-find lix/shell-type)))
-
-;;; shell-script-mode auto mode configuration
-(add-to-list 'auto-mode-alist '("\\.?zsh\(rc\)?$" . shell-script-mode))
-(add-to-list 'auto-mode-alist '("\\.?bashrc$" . shell-script-mode))
-(add-to-list 'auto-mode-alist '("\\.?bash_profile$" . shell-script-mode))
-
-(use-package multi-term :ensure t :defer t
-  :init
-  (setq multi-term-program-switches "--login"))
-
-(use-package shell :ensure t :defer t
-  :config
-  (add-hook 'shell-mode-hook #'company-mode)
-  (use-package comint
-    :config
-    (setq comint-scroll-to-bottom-on-input t ; Always insert at the bottom
-          ;; No duplicates in command history
-          comint-input-ignoredups t))
-
-  (use-package shell-command :ensure t
-    :config (shell-command-completion-mode 1))
-
-  ;; Set up shell (not eshell) mode: https://github.com/monsanto/readline-complete.el/blob/master/readline-complete.el
-  ;; https://stackoverflow.com/questions/37409085/how-to-define-a-default-shell-for-emacs
-  (setq-default explicit-shell-file-name "/bin/bash"
-                shell-file-name explicit-shell-file-name
-                explicit-bash-args '("-c" "export EMACS=; stty echo; bash")
-                comint-process-echoes t)
+  (add-hook 'shell-mode-hook (lambda() (global-hl-line-mode -1)))
+  (setq explicit-shell-file-name "bash"
+        shell-file-name explicit-shell-file-name
+        explicit-bash-args '("-c" "export EMACS=; stty echo; bash")
+        comint-process-echoes t
+        explicit-bash-args '("--login" "--init-file" "$HOME/.bash_profile" "-i"))
   (setenv "ESHELL" shell-file-name)
-
-  (use-package readline-complete :ensure t
-    :init
-    (push 'company-readline company-backends)
-    (add-hook 'rlc-no-readline-hook
-              (lambda ()
-                (company-mode -1))))
-
-  (use-package bash-completion
-    :ensure t
-    :init (bash-completion-setup))
-
   ;; http://www.joshstaiger.org/archives/2005/07/fixing_garbage.html
   (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
-  (add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on))
+  (add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on)
+  (add-hook 'shell-mode-hook #'company-mode))
 
-;; Avoid Emacs querying "active processes exist; kill them and exit anyway?", since we are creating an inferior python
-;; process and aspell
-(add-hook 'comint-exec-hook
-          (lambda ()
-            (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)))
+;;; shell切换
+;;; C-x 4 ' 在另外的窗口打开shell
+;;; C-x 4 s 在当前窗口打开shell
+(use-package shell-switcher :ensure t :defer t
+  :bind (("C-x 4 '" . shell-switcher-switch-buffer-other-window)
+         ("C-x 4 s" . shell-switcher-new-shell))
+  :config
+  (setq shell-switcher-new-shell-function 'shell-switcher-make-shell)
+  (setq shell-switcher-ansi-term-shell (if is-mac "/usr/local/bin/bash" "/bin/bash"))
+  (unbind-key "C-'" shell-switcher-mode-map)
+  (unbind-key "C-M-'" shell-switcher-mode-map))
+
+;;; 编辑shell脚本
+(use-package sh-script
+  :mode (("\\.?zshrc$" . shell-script-mode)
+         ("\\.?bashrc$" . shell-script-mode)
+         ("\\.?bash_profile$" . shell-script-mode)
+         ("\\.profile$" . shell-script-mode)
+         ("\\.?alias$" . shell-script-mode)
+         ("\\.?aliases$" . shell-script-mode)))
+
+(use-package company-shell :ensure t :defer t :after sh-script
+  :config
+  (add-to-list 'company-backends
+               '(company-shell company-shell-env company-fish-shell)))
+
+;;; COMINT
+;;;============================================================
+(use-package comint :defer t
+  :config
+  (setq
+   ;; 总是在底端插入命令
+   comint-scroll-to-bottom-on-input t
+   ;; 命令历史去重
+   comint-input-ignoredups t)
+  ;; Avoid Emacs querying "active processes exist;
+  ;; kill them and exit anyway?", since we are creating
+  ;; an inferior python process and aspell
+  (add-hook 'comint-exec-hook
+            (lambda ()
+              (set-process-query-on-exit-flag
+               (get-buffer-process (current-buffer)) nil))))
+
+;;; TRAMP：与远程主机交互
+;;;============================================================
+;;; 基本使用：
+;;; C-x C-f /remotehost:filename RET
+;;; (or /method:user@remotehost:filename)
+;;;  C-x C-f /su::/etc/hosts
+;;;  C-x C-f /sudo::/etc/hosts
+(use-package tramp :defer t
+  :config
+  (setq tramp-default-method "ssh")
+  (setenv "SHELL" (if is-mac "/usr/local/bin/bash" "/bin/bash")))
 
 (provide 'config-shell)
 ;;; config-shell.el ends here

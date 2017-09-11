@@ -1,53 +1,38 @@
-;;; Python configuration
-;; helper packages
+;;; package --- Summary:
 
-(use-package anaconda-mode :ensure t :defer t)
+;;; Commentary:
 
-(use-package company-anaconda :ensure t :defer t)
+;;; Code:
 
-(use-package elpy :ensure t :disabled t
-  :init (add-to-list 'company-backends 'elpy-company-backend))
-
-(use-package virtualenvwrapper :ensure t :defer t :disabled t 
-  :init (venv-initialize-eshell)
-  :config
-  (venv-initialize-eshell)
-  (setq venv-location (concat (getenv "HOME") "/Envs")))
-
-;; Shell native completion is disabled, using fallback
-(setenv "JUPYTER_CONSOLE_TEST" "1")
-(setenv "IPY_TEST_SIMPLE_PROMPT" "1")
-(setenv "WORKON_HOME" (concat (getenv "HOME") "/Envs/"))
-(setq python-shell-completion-native-enable nil)
-;;;;;
-
-(use-package pyvenv :ensure t :defer t :disabled t
-  :init
-  (defconst python-version "python3")
-  (defun lix/echo-python-version()
-    (interactive)
-    (message (shell-command-to-string "python --version")))
-  (defun lix/switch-to-python2 ()
-    (interactive)
-    (pyvenv-workon (if is-mac "python2" "py27"))
-    (message "Python2 is running!"))
-  (defun lix/switch-to-python3 ()
-    (interactive)
-    (pyvenv-workon "..")
-    (message "Python3 is running!"))
-  (defun run-python2()
-    (interactive)
-    (lix/switch-to-python2)
-    (run-python))
-  (defun run-python3()
-    (interactive)
-    (lix/switch-to-python3)
-    (run-python)))
-
-(use-package python :ensure t :commands (run-python)
+(use-package python :ensure t :defer t
+  :commands (run-python)
   :mode ("\\.py\\'" . python-mode)
   ;; (remove-hook 'python-mode-hook #'python-setup-shell)
+  :init
+  (setq python-shell-completion-native-enable nil)
+  (setenv "JUPYTER_CONSOLE_TEST" "1")
+  (setenv "IPY_TEST_SIMPLE_PROMPT" "1") 
   :config
+  (setq mode-name "Python"
+        tab-width 4
+        fill-column 80
+        comment-inline-offset 2
+        python-indent-offset 4
+        python-shell-interpreter "ipython"
+        python-shell-interpreter-args "-i")
+
+  ;; python拓展功能包
+  ;;  + anaconda-mode
+  ;;  + company-anaconda
+  (use-package company-anaconda :ensure t :defer t
+    :init
+    (add-to-list 'company-backends #'company-anaconda))
+  (use-package anaconda-mode :ensure t :defer t
+    :diminish anaconda-mode
+    :init
+    (setq anaconda-mode-installation-directory
+          (expand-file-name ".cache/anaconda-mode" user-emacs-directory)))
+
   (defun python-send-line ()
     (interactive)
     (save-excursion 
@@ -57,13 +42,7 @@
                 (point)
                 (line-end-position)) 
                "\n"))))
-  (setq mode-name "Python"
-        tab-width 4
-        fill-column 80
-        comment-inline-offset 2
-        python-indent-offset 4
-        python-shell-interpreter "ipython"
-        python-shell-interpreter-args "-i")
+  
   (when (version< emacs-version "24.5")
     ;; auto-indent on colon doesn't work well with if statement
     ;; should be fixed in 24.5 and above
@@ -88,11 +67,14 @@
             (lambda ()
               (set (make-local-variable 'company-backends)
                    '((company-anaconda company-dabbrev-code)
-                     company-dabbrev))))
+                     company-dabbrev))
+              (smartparens-mode +1)))
   (add-hook 'inferior-python-mode-hook
             (lambda ()
-              (setq indent-tabs-mode t)
+              (indent-tabs-mode nil)
               (smartparens-mode t))))
+
+(use-package pyvenv :ensure t :defer t)
 
 ;; (use-package ein :ensure t :defer t
 ;;   :config

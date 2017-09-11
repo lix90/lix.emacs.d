@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: if then
+# key: ifthen
+# --
+if [ ${1} ]; then
+   ${2}
+fi
+$0

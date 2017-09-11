@@ -1,10 +1,9 @@
-;; 中文输入
-
-(use-package pyim :ensure t :defer t :disabled t
+;;; 中文输入
+(use-package pyim :ensure t :defer t
+  :init
+  (setq default-input-method "pyim"
+        pyim-default-scheme 'quanpin)
   :config
-  (setq default-input-method "pyim")
-  (global-set-key (kbd "C-\\") 'toggle-input-method)
-  (setq pyim-default-scheme 'quanpin)
   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 * 无痛* 中英文切换 :-)
   ;; 我自己使用的中英文动态切换规则是：
   ;; 1. 光标只有在注释里面时，才可以输入中文。
@@ -32,7 +31,7 @@
   ;;  ("C-;" . pyim-delete-word-from-personal-buffer))
   )
 
-(use-package pyim-basedict :ensure t :after pyim :disabled t
+(use-package pyim-basedict :ensure t :after pyim
   :config (pyim-basedict-enable))
 
 ;; 五笔用户使用 wbdict 词库
@@ -41,6 +40,7 @@
 ;;   :config (chinese-pyim-wbdict-gbk-enable))
 
 (use-package ace-pinyin :ensure t :defer t
+  :diminish ace-pinyin-mode
   :init
   (diminish 'ace-pinyin-mode)
   (diminish 'ace-pinyin-global-mode)
@@ -48,6 +48,7 @@
   (setq ace-pinyin-use-avy t))
 
 (use-package pangu-spacing :ensure t :defer t
+  :diminish pangu-spacing-mode
   :init
   (add-hook 'prog-mode-hook #'pangu-spacing-mode)
   (add-hook 'text-mode-hook #'pangu-spacing-mode))

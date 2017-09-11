@@ -202,7 +202,6 @@ ff _config.yml
 gcn https://github.com/tankywoo/yasimple themes/yasimple
 ff _config.yml 
 pip install ghp-import
-fab deploy
 git remote -v
 ls
 ls -a
@@ -216,7 +215,6 @@ git remote remove
 git remote remove origin
 git remote -v
 git remote add origin https://github.com/lix90/wiki.git
-fab deploy
 fab --help
 fab -v
 fab
@@ -247,13 +245,11 @@ pip uninstall simiki
 which simiki
 fab -l
 pip2 install ghp-import
-fab deploy
 ls
 ls output
 ls themes
 ls themes/yasimple
 simiki p
-fab deploy
 git status
 git remote -v
 git branch
@@ -285,7 +281,6 @@ ls
 fab commit
 git status
 ls
-fab deploy
 ff _config.yml 
 ls
 ls themes
@@ -393,7 +388,6 @@ pip2 install -U simiki
 simiki update
 simiki p
 fab commit
-fab deploy
 pip2 list markdown
 pip2 info
 pip2 search
@@ -431,7 +425,7 @@ src activate python2
 which activate
 src "activate python2"
 src deactivate
- *source activate python2
+*source activate python2
 which activate
 activate
 fab -l
@@ -454,7 +448,6 @@ git add .
 git status
 fab commit
 git deploy
-fab deploy
 git remote -v
 git branch -a
 git checkout gh-pages
@@ -462,7 +455,6 @@ ls
 git pull
 ls
 git checkout master
-fab deploy
 ls
 simiki p
 simiki g
@@ -490,11 +482,12 @@ fab -l
 simiki g
 simiki p
 fab commit
-fab deploy
 simiki g
-fab deploy
 simiki g
 simiki p
 simiki g
 simiki p -w
 fab deploy
+ls
+ll
+.
