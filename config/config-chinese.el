@@ -42,6 +42,8 @@
 
 (use-package ace-pinyin :ensure t :defer t
   :init
+  (diminish 'ace-pinyin-mode)
+  (diminish 'ace-pinyin-global-mode)
   (add-hook 'after-init-hook #'ace-pinyin-global-mode)
   (setq ace-pinyin-use-avy t))
 

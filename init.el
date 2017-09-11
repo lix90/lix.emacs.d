@@ -120,5 +120,53 @@
 (when (display-graphic-p)
   (lix/load-file-alist modules-load-graphic))
 
+(dolist (imode '(
+                 abbrev-mode
+                 blink-cursor-mode
+                 delete-selection-mode
+                 electric-indent-mode
+                 which-key-mode
+                 smartparens-mode
+                 show-smartparens-mode
+                 show-paren-mode
+                 whitespace-cleanup-mode
+                 smooth-scrolling-mode
+                 pangu-spacing-mode
+                 line-number-mode
+                 ace-pinyin-mode
+                 ace-pinyin-global-mode
+                 aggressive-indent-mode
+                 anzu-mode
+                 auto-composition-mode
+                 auto-compression-mode
+                 company-mode
+                 company-flx-mode
+                 diff-auto-refine-mode
+                 file-name-shadow-mode
+                 font-lock-mode
+                 global-font-lock-mode
+                 eldoc-mode
+                 global-eldoc-mode
+                 hungry-delete-mode
+                 global-hungry-delete-mode
+                 subword-mode
+                 global-subword-mode
+                 ivy-mode
+                 mouse-wheel-mode
+                 override-global-mode
+                 projectile-mode
+                 rainbow-delimiters-mode
+                 recentf-mode
+                 save-place-mode
+                 savehist-mode
+                 shell-dirtrack-mode
+                 super-save-mode
+                 tooltip-mode
+                 transient-mark-mode
+                 undo-tree-mode
+                 ))
+  (diminish imode))
+
 (provide 'init)
 ;;; init.el ends here
+(put 'erase-buffer 'disabled nil)

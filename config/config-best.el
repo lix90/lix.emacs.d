@@ -11,9 +11,9 @@
 (setq paradox-github-token "d02fae45dd7c0c4845b56635d78448c63d7a7035")
 (use-package package-utils :ensure t :defer 30)
 
-;;;-----------------------------------------------------------------------------
+;;;----------------------------------------------------------------------------
 ;;; 环境设定
-;;;-----------------------------------------------------------------------------
+;;;----------------------------------------------------------------------------
 (use-package exec-path-from-shell :ensure t :defer t :disabled t
   :if (memq window-system '(mac ns))
   :init
@@ -52,14 +52,15 @@
                     "/bin"
                     "/usr/bin"
                     "/opt/bin"
+                    "~/.local/bin"
                     )))
 
 (setenv "PATH" (mapconcat 'identity exec-path ":"))
 
 ;;; ----------------------------------------------------------------------
 ;;; 将常用的命令绑定快捷键，不断增加
-
-
+(global-set-key (kbd "C-<up>") 'backward-sexp)
+(global-set-key (kbd "C-<down>") 'forward-sexp)
 
 (global-set-key (kbd "M-s s") 'isearch-forward-regexp)
 (global-set-key (kbd "M-s r") 'isearch-backward-regexp)
@@ -140,13 +141,16 @@
 ;;
 ;; 切词模式
 (global-subword-mode +1)
+(diminish 'global-subword-mode)
 ;; 删除选择
 (delete-selection-mode +1)
+(diminish 'delete-selection-mode)
 ;; 内置时间mode设定
 ;; (setq display-time-format "%a %b %d | %H:%M |")
 ;; (display-time-mode +1)
 ;; 开启文档模式
 (add-hook 'prog-mode-hook #'eldoc-mode)
+(diminish 'eldoc-mode)
 
 ;;;-----------------------------------------------------------------------------
 ;; hippie-expand
@@ -185,11 +189,14 @@
 (setq save-abbrevs 'silently)
 (setq abbrev-file-name
       (concat user-emacs-directory "emacs_abbre.el"))
+
 ;;;-----------------------------------------------------------------------------
 ;;;-----------------------------------------------------------------------------
 ;;; 保存历史
 (use-package savehist :ensure t  :defer t
-  :init (add-hook 'after-init-hook #'savehist-mode)
+  :init
+  (add-hook 'after-init-hook #'savehist-mode)
+  (diminish 'savehist-mode)
   :config
   (setq savehist-additional-variables '(search ring regexp-search-ring)
         savehist-autosave-interval 60
@@ -220,7 +227,9 @@
 
 ;; 保存最近打开的文件
 (use-package recentf :ensure t :defer t
-  :init (add-hook 'after-init-hook #'recentf-mode)
+  :init
+  (add-hook 'after-init-hook #'recentf-mode)
+  (diminish 'recentf-mode)
   :config
   (setq recentf-save-file (concat user-emacs-directory "recentf")
         recentf-max-saved-items 100
@@ -230,6 +239,7 @@
 ;; 自动地保存文件位置，下次自动跳转到保存的位置
 (require 'saveplace)
 (setq-default save-place t)
+(diminish 'saveplace)
 ;; uniquify
 ;; 让两个同样文件名的文件具有唯一的buffer名
 (require 'uniquify)
@@ -309,6 +319,10 @@
               (set-face-background 'hl-line hl-color-dark)
               (toggle-truncate-lines +1)
               )))
+(diminish 'visual-line-mode)
+(diminish 'global-visual-line-mode)
+(diminish 'linum-mode)
+(diminish 'hl-line-mode)
 
 (define-fringe-bitmap 'right-curly-arrow
   [#b00000000
@@ -370,6 +384,7 @@
   (add-hook 'god-mode-enabled-hook 'lix/update-cursor)
   (add-hook 'god-mode-disabled-hook 'lix/update-cursor))
 (global-set-key (kbd "<escape>") 'god-local-mode)
+(diminish 'god-mode)
 
 ;; navigate windows & delete windows
 (use-package windmove :ensure t :defer t
@@ -504,7 +519,7 @@
   (let ((undo-dir (concat user-emacs-directory "undo")))
     (make-directory undo-dir t)
     (setq undo-tree-history-directory-alist `((".*" . ,undo-dir)))))
-
+(diminish 'undo-tree-mode)
 ;;; ----------------------------------------------------------------------
 ;;; 文件编辑
 ;;
@@ -524,11 +539,25 @@
   :config
   (setq super-save-auto-save-when-idle t
         auto-save-default nil))
+(diminish 'super-save-mode)
 
-;;;-----------------------------------------------------------------------------
+;;;----------------------------------------------------------------------------
 ;;; 标记mark
-(global-set-key (kbd "C-:") 'set-mark-command)
+;;;
+;; 智能标记
+(use-package expand-region :ensure t :defer t
+  :bind ("C-=" . er/expand-region)
+  :init
+  (bind-keys :prefix-map lix/expand-region-map
+             :prefix "M-s e"
+             :prefix-docstring "Expand Region"
+             ("f" . er/mark-defun)
+             ("c" . er/mark-comment)
+             ("e" . er/mark-email)
+             ("s" . er/mark-sentence)
+             ("p" . er/mark-paragraph)))
 
+(global-set-key (kbd "C-:") 'set-mark-command)
 ;;; ----------------------------------------------------------------------
 ;;; 搜索与替换工具
 ;;;
@@ -545,6 +574,7 @@
   :init (add-hook 'prog-mode-hook #'anzu-mode)
   :bind (("M-%" . anzu-query-replace)
          ("C-M-%" . anzu-query-replace-regexp)))
+(diminish 'anzu-mode)
 
 ;; learn iedit
 ;; 用于批量修改匹配的symbol或者word或者region
@@ -569,11 +599,12 @@
              ("f" . ag-files)
              ("F" . ag-project-files)))
 
-(use-package imenu-anywhere :ensure t :after ivy
-  :bind ("M-s i" . ivy-imenu-anywhere))
-
-(use-package flx :ensure t :defer t)
-
+;;;----------------------------------------------------------------------=
+;; swiper使用指南
+;; 1. C-s带开搜索窗口
+;; 2. 输入搜索字段
+;; 3. C-' 使用avy定位行
+;; 4. M-q 替换搜索字段（query-replace）
 (use-package swiper :ensure t :defer t :ensure counsel
   :commands (ivy-resume counsel-M-x counsel-find-file)
   :bind (("M-x" . counsel-M-x)
@@ -581,7 +612,8 @@
          ("C-s" . counsel-grep-or-swiper)
          ("C-c i" . ivy-immediate-done)
          ("M-s p" . counsel-ag))
-  :init (add-hook 'after-init-hook #'ivy-mode)
+  :init
+  (add-hook 'after-init-hook #'ivy-mode)
   :config
   (setq ivy-re-builders-alist
         '((ivy-switch-buffer . ivy--regex-plus)
@@ -591,12 +623,24 @@
         ivy-use-virtual-buffers t
         ivy-display-style 'fancy)
   ;;advise swiper to recenter on exit
-  (defun lix/swiper-recenter (&rest args)
+  (defun my/swiper-recenter (&rest args)
     "recenter display after swiper"
     (recenter))
-  (advice-add 'swiper :after #'lix/swiper-recenter))
+  (advice-add 'swiper :after #'my/swiper-recenter))
 
-;;; ----------------------------------------------------------------------
+;; 提供模糊搜索
+(use-package flx :ensure t :defer t)
+
+;;;----------------------------------------------------------------------
+;;; imenu使用指南
+;;;
+;;; imenu
+;;; 能够分析当前缓冲区中的定义，并生成索引。
+;;; 对于结构化文档，它生成标题和章节的大纲。
+(use-package imenu-anywhere :ensure t :after ivy
+  :bind ("M-s i" . ivy-imenu-anywhere))
+
+;;;----------------------------------------------------------------------
 ;;; 括号的操作与编辑
 ;;;
 ;;; smartparens智能括号操作，较难掌握
@@ -643,6 +687,7 @@
          ("C-." . company-filter-candidates))
   :init
   (add-hook 'prog-mode-hook #'company-mode)
+  (diminish 'company-mode)
   :config
   (define-key company-active-map (kbd "RET") nil)
   (define-key company-active-map (kbd "<return>") nil)
@@ -675,6 +720,7 @@
 (use-package yasnippet :ensure t :defer t
   :init (add-hook 'prog-mode-hook #'yas-minor-mode)
   :config (yas-reload-all))
+(diminish 'yas-minor-mode)
 
 ;;; ----------------------------------------------------------------------
 ;;; 代码调试
@@ -865,6 +911,7 @@
 (use-package projectile :ensure t :defer t
   :config
   (projectile-global-mode +1)
+  (diminish 'projectile-mode)
   (setq projectile-switch-project-action 'neotree-projectile-action))
 
 (use-package counsel-projectile :ensure t :defer t
@@ -929,7 +976,9 @@
 
 ;; 暴力缩进
 (use-package aggressive-indent :ensure t :defer t
-  :init (add-hook 'prog-mode-hook #'aggressive-indent-mode)
+  :init
+  (add-hook 'prog-mode-hook #'aggressive-indent-mode)
+  (diminish 'aggressive-indent-mode)
   :config
   (add-to-list 'aggressive-indent-excluded-modes
                '(python-mode
