@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: header
+# key: #+header
+# --
+#+TITLE: $1
+#+AUTHOR: $2
+#+DATE: `(insert-date-and-time)`
+
+$0

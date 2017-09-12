@@ -341,7 +341,7 @@
 (use-package monokai-theme :ensure t :defer t)
 ;;; 切换主题
 ;;; https://github.com/habamax/.emacs.d/blob/master/lisp/haba-appearance.el
-(defvar *my-theme-dark* 'solarized-dark)
+(defvar *my-theme-dark* 'doom-tomorrow-night)
 (defvar *my-theme-light* 'leuven)
 (defvar *my-current-theme* *my-theme-dark*)
 
@@ -750,7 +750,9 @@
   :diminish yas-minor-mode
   :config
   (yas-reload-all)
-  (add-hook 'prog-mode-hook #'yas-minor-mode))
+  (add-hook 'prog-mode-hook #'yas-minor-mode)
+  (add-hook 'text-mode-hook #'yas-minor-mode)
+  (add-to-list 'warning-suppress-types '(yasnippet backquote-change)))
 
 ;;; 代码调试
 ;;;=========
@@ -1047,6 +1049,9 @@
 (bind-key* "M-s S" 'isearch-backward-regexp)
 (bind-key* "M-s l" 'counsel-find-library)
 (bind-key* "M-s I" 'imenu)
+(bind-key "C-S-B" 'backward-sexp)
+(bind-key "C-S-F" 'forward-sexp)
+
 ;;;
 ;;; 按组来设定快捷键
 (use-package hydra :ensure t :defer t
