@@ -12,5 +12,10 @@
   (add-hook 'sql-interactive-mode-hook 'sqlup-mode)
   (add-to-list 'sqlup-blacklist "type"))
 
+;; (use-package sqli :ensure t :defer t)
+;; https://truongtx.me/2014/08/23/setup-emacs-as-an-sql-database-client
+;; https://github.com/tmtxt/.emacs.d/blob/master/config/tmtxt-sql.el
+(use-package edbi :ensure t :defer t)
+
 (provide 'config-sql)
 ;;; config-sql.el ends here

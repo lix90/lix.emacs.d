@@ -341,8 +341,8 @@
 (use-package monokai-theme :ensure t :defer t)
 ;;; 切换主题
 ;;; https://github.com/habamax/.emacs.d/blob/master/lisp/haba-appearance.el
-(defvar *my-theme-dark* 'doom-tomorrow-night)
-(defvar *my-theme-light* 'leuven)
+(defvar *my-theme-dark* 'doom-molokai)
+(defvar *my-theme-light* 'leuven-dark)
 (defvar *my-current-theme* *my-theme-dark*)
 
 ;; disable other themes before loading new one
@@ -372,7 +372,6 @@
                       :underline nil
                       :box nil))
 (bind-key* "C-<f9>" 'my/toggle-theme)
-(my/toggle-theme)
 
 ;;;----------------------------------------------------------------------
 ;;; 导航
@@ -751,8 +750,7 @@
   :config
   (yas-reload-all)
   (add-hook 'prog-mode-hook #'yas-minor-mode)
-  (add-hook 'text-mode-hook #'yas-minor-mode)
-  (add-to-list 'warning-suppress-types '(yasnippet backquote-change)))
+  (add-hook 'text-mode-hook #'yas-minor-mode))
 
 ;;; 代码调试
 ;;;=========
