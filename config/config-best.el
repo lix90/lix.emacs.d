@@ -233,7 +233,7 @@
 ;; (global-visual-line-mode +1)
 ;; (diminish 'visual-line-mode)
 (add-hook 'minibuffer-setup-hook (lambda () (visual-line-mode -1)))
-(add-hook 'text-mode-hook #'turn-on-visual-line-mode)
+;; (add-hook 'text-mode-hook #'turn-on-visual-line-mode)
 
 (use-package linum :defer t
   :init
@@ -830,6 +830,7 @@
   (setq dired-recursive-copies 'always)
   ;; “top” means ask once
   (setq dired-recursive-deletes 'top)
+  (setq dired-listing-switches "-alh")
   (setq insert-directory-program
         (or (executable-find "gls")
             (executable-find "ls")))
@@ -843,7 +844,10 @@
   (use-package dired+ :ensure t :defer t)
   (use-package dired-single :ensure t :defer t)
   (use-package dired-details :ensure t :defer t)
-  (use-package dired-details+ :ensure t :defer t))
+  (use-package dired-details+ :ensure t :defer t)
+  (use-package dired-k :ensure t :defer t)
+  (require 'dired+)
+  (add-hook 'dired-initial-position-hook #'dired-k))
 
 (use-package neotree :ensure t
   :bind (("<f7>" . neotree-toggle)
@@ -1075,8 +1079,8 @@
            ("l" . linum-mode)
            ("L" . hlinum-mode)
            ("h" . hl-line-mode)
-           ("v" . global-visual-line-mode)
-           ("c" . global-visual-fill-column-mode)
+           ("v" . visual-line-mode)
+           ("c" . visual-fill-column-mode)
            ("t" . my/toggle-theme))
 
 (provide 'config-best)
