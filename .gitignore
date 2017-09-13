@@ -37,3 +37,4 @@ session.*
 /semanticdb/
 /eshell/history
 /eshell/lastdir
+.edbi-ds-history

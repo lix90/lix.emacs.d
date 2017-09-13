@@ -54,6 +54,7 @@
                     "/Users/lix/.rvm/gems/ruby-2.3.0@global/bin"
                     "/Users/lix/.rvm/bin"
                     "/Users/lix/go/bin"
+                    "/usr/local/mysql/bin"
                     )))
 (when (not is-mac)
   (setq exec-path '(
@@ -342,7 +343,7 @@
 ;;; 切换主题
 ;;; https://github.com/habamax/.emacs.d/blob/master/lisp/haba-appearance.el
 (defvar *my-theme-dark* 'doom-molokai)
-(defvar *my-theme-light* 'leuven-dark)
+(defvar *my-theme-light* 'leuven)
 (defvar *my-current-theme* *my-theme-dark*)
 
 ;; disable other themes before loading new one
@@ -736,13 +737,18 @@
      ((t (:inherit company-tooltip :weight bold :underline nil))))
    '(company-tooltip-common-selection
      ((t (:inherit company-tooltip-selection :weight bold :underline nil))))))
+
 (use-package company-flx :ensure t :defer t :after company
   :init
   (add-hook 'company-mode-hook #'company-flx-mode))
+
 (use-package company-statistics :ensure t :defer t :after company
   :init
   (setq company-statistics-file
         (concat user-emacs-directory ".cache/.company-statistics" )))
+
+;;; alternatives
+(use-package auto-complete :ensure t :defer t)
 
 ;;; Snippets settings
 (use-package yasnippet :ensure t :defer t
