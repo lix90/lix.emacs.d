@@ -107,6 +107,8 @@
   (add-to-list 'company-backends
                '(company-shell company-shell-env company-fish-shell)))
 
+(use-package quickrun :ensure t :defer t)
+
 ;;; COMINT
 ;;;============================================================
 (use-package comint :defer t
