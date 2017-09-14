@@ -150,3 +150,4 @@
 
 (provide 'init)
 ;;; init.el ends here
+(put 'erase-buffer 'disabled nil)

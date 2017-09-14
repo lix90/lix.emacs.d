@@ -64,6 +64,7 @@
                     "/usr/bin"
                     "/opt/bin"
                     "~/.local/bin"
+                    "/usr/lib/oracle/12.2/client64/bin"
                     )))
 (setenv "PATH" (mapconcat 'identity exec-path ":"))
 
@@ -344,7 +345,7 @@
 ;;; https://github.com/habamax/.emacs.d/blob/master/lisp/haba-appearance.el
 (defvar *my-theme-dark* 'doom-molokai)
 (defvar *my-theme-light* 'leuven)
-(defvar *my-current-theme* *my-theme-dark*)
+(defvar *my-current-theme* *my-theme-light*)
 
 ;; disable other themes before loading new one
 (defadvice load-theme (before theme-dont-propagate activate)
@@ -373,6 +374,7 @@
                       :underline nil
                       :box nil))
 (bind-key* "C-<f9>" 'my/toggle-theme)
+(my/toggle-theme)
 
 ;;;----------------------------------------------------------------------
 ;;; 导航
@@ -460,7 +462,7 @@
   (setq which-key-popup-type 'side-window
         which-key-side-window-location 'bottom
         which-key-side-window-max-height 0.30
-        ;; which-key-side-window-max-width 0.20
+        which-key-side-window-max-width 0.20
         which-key-max-description-length 20
         which-key-sort-order 'which-key-key-order
         which-key-idle-delay 0.1
@@ -515,7 +517,7 @@
 (use-package expand-region :ensure t :defer t
   :bind ("C-=" . er/expand-region)
   :init
-  (bind-keys :prefix-map lix/expand-region-map
+  (bind-keys :prefix-map expand-region-map
              :prefix "M-s e"
              :prefix-docstring "Expand Region"
              ("f" . er/mark-defun)
@@ -586,17 +588,20 @@
 ;;;
 (use-package swiper :ensure t :defer t
   :diminish ivy-mode
-  :commands (ivy-resume counsel-M-x counsel-find-file)
   :bind (("M-x" . counsel-M-x)
          ("C-s" . counsel-grep-or-swiper)
-         ("C-x C-f" . counsel-find-file)
-         ("C-x C-j" . counsel-file-jump)
-         ("C-x C-r" . counsel-recentf)
-         ("M-s l" . counsel-find-library)
-         ("M-s F" . counsel-faces)
-         ("C-h S" . counsel-info-lookup-symbol)
-         ("M-s u" . counsel-unicode-char)
-         ("M-s p" . counsel-ag))
+         ("M-s f" . counsel-find-file)
+         ("M-s j" . counsel-file-jump)
+         ("M-s p" . counsel-ag)
+         ("M-s r" . counsel-recentf)
+         ("M-s b" . counsel-bookmark)
+         ("M-s y" . counsel-yank-pop)
+         ("M-s C-a" . counsel-linux-app)
+         ("M-s C-i" . counsel-imenu)
+         ("M-s C-l" . counsel-find-library)
+         ("M-s C-f" . counsel-faces)
+         ("M-s C-u" . counsel-unicode-char)
+         )
   :init
   (add-hook 'after-init-hook #'ivy-mode)
   :config
@@ -1060,7 +1065,6 @@
 (bind-key "C-S-B" 'backward-sexp)
 (bind-key "C-S-F" 'forward-sexp)
 
-;;;
 ;;; 按组来设定快捷键
 (use-package hydra :ensure t :defer t
   :init
@@ -1085,7 +1089,13 @@
            ("h" . hl-line-mode)
            ("v" . visual-line-mode)
            ("c" . visual-fill-column-mode)
-           ("t" . my/toggle-theme))
+           ("t" . my/toggle-theme)
+           ("0" . my/toggle-transparency))
+
+(bind-keys :prefix "M-s t"
+           :prefix-map helpful-tools
+           ("d" . insert-date-and-time)
+           ("D" . insert-date))
 
 (provide 'config-best)
 ;;; config-best.el ends here
