@@ -79,39 +79,25 @@
 (setq utf-translate-cjk-mode nil)
 
 (setq-default
- ;; 取消文件锁
- create-lockfiles nil
- ;; 默认编码系统
- buffer-file-coding-system 'utf-8-unix
- ;; 取消文件备份
- make-backup-files nil
- ;; tab为4个空格宽度
- tab-width 4
- ;; 搜索和匹配时忽略大小写
- case-fold-search t
- ;; 当前buffer的默认路径
- default-directory "~"
- ;; 80栏宽, 当超过栏宽时，自动折叠行
- fill-column 80
- ;; 下一行时插入新一行
- next-line-add-newlines nil
- ;; 自动添加新行至文件结尾
- require-final-newline t
- ;; 鼠标粘贴在光标处
- mouse-yank-at-point t ;; alrealy in better-default
- ;; kill整行
- kill-whole-line t
- ;; 锁紧不适用tab符号
- indent-tabs-mode nil
- ;; 开启剪切板
- x-select-enable-clipboard t
+ create-lockfiles nil ;; 取消文件锁
+ buffer-file-coding-system 'utf-8-unix ;; 默认编码系统
+ make-backup-files nil ;; 取消文件备份
+ tab-width 4 ;; tab为4个空格宽度
+ case-fold-search t ;; 搜索和匹配时忽略大小写
+ default-directory "~" ;; 当前buffer的默认路径
+ fill-column 80 ;; 80栏宽, 当超过栏宽时，自动折叠行
+ next-line-add-newlines nil ;; 下一行时插入新一行
+ require-final-newline t ;; 自动添加新行至文件结尾
+ mouse-yank-at-point t ;; 鼠标粘贴在光标处
+ kill-whole-line t ;; kill整行
+ indent-tabs-mode nil ;; 锁紧不适用tab符号
+ x-select-enable-clipboard t ;; 开启剪切板
  select-enable-clipboard t
  x-select-enable-primary t
  select-enable-primary t
  save-interprogram-paste-before-kill t
  apropos-do-all t
- ;; 提醒
- visible-bell t
+ visible-bell t ;; 提醒
  ediff-window-setup-function 'ediff-setup-windows-plain)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq kill-buffer-query-functions
@@ -120,23 +106,16 @@
 
 ;;; MacOS系统的设置与功能增强
 ;;;=========================
-
 (when is-mac
   (setq
-   ;; 删除时默认移至垃圾箱
-   delete-by-moving-to-trash t
-   ;; 垃圾箱路径
-   trash-directory "~/.Trash"
+   delete-by-moving-to-trash t ;; 删除时默认移至垃圾箱
+   trash-directory "~/.Trash" ;; 垃圾箱路径
    ns-pop-up-frames nil
    ns-use-native-fullscreen t)
   (setq mac-option-modifier 'super
         mac-command-modifier 'meta
         mac-function-modifier 'hyper
         mac-right-option-modifier 'none))
-
-;; 在osx-finder中打开
-(use-package reveal-in-osx-finder :ensure t :defer t
-  :if (and is-mac (display-graphic-p)))
 
 ;;; 切词模式
 ;;;=========
@@ -254,13 +233,13 @@
 (use-package time :defer t
   :init
   (add-hook 'after-init-hook #'display-time-mode)
-  (setq display-time-format "%Y-%m-%d/%H:%M"))
+  (setq display-time-format "%H:%M"))
 
 (require 'ansi-color)
 ;; (setq-default ansi-color-for-comint-mode +1)
 
 ;; fringe
-(fringe-mode '(8 . 8))
+(fringe-mode '(0 . 8))
 
 ;;; 字体
 (setq my/font-height (if is-mac 130 100)
@@ -271,37 +250,23 @@
                     :weight 'normal
                     :width 'normal)
 
-;; 不显示菜单栏
-(menu-bar-mode -1)
-;; 不显示工具栏
-(when (fboundp 'tool-bar-mode)
+(menu-bar-mode -1) ;; 不显示菜单栏
+(when (fboundp 'tool-bar-mode) ;; 不显示工具栏
   (tool-bar-mode -1))
-;; 不显示滑动条
-(when (fboundp 'scroll-bar-mode)
+(when (fboundp 'scroll-bar-mode) ;; 不显示滑动条
   (scroll-bar-mode -1))
-;; 不显示水平滑动条
-(when (fboundp 'horizontal-scroll-bar-mode)
+(when (fboundp 'horizontal-scroll-bar-mode) ;; 不显示水平滑动条
   (horizontal-scroll-bar-mode -1))
-;; MacOS系统下开启防锯齿
-(when is-mac
-  (setq mac-allow-anti-aliasing t))
+(when is-mac (setq mac-allow-anti-aliasing t)) ;; MacOS系统下开启防锯齿
 (setq-default
- ;; 行距
- line-spacing 1
- ;; 关闭启动屏幕
- inhibit-startup-screen t
- ;; 取消scrach文件信息
- initial-scratch-message nil
- ;; 在非活动窗口不显示光标
- cursor-in-non-selected-windows nil
- ;; 使用对话框
- use-dialog-box nil
- ;; 忽略提醒声
- ring-bell-function 'ignore
- ;; 消息日志行数
- message-log-max 10000
- ;; 光标类型
- cursor-type 'bar
+ line-spacing 1 ;; 行距
+ inhibit-startup-screen t ;; 关闭启动屏幕
+ initial-scratch-message nil ;; 取消scrach文件信息
+ cursor-in-non-selected-windows nil ;; 在非活动窗口不显示光标
+ use-dialog-box nil ;; 使用对话框
+ ring-bell-function 'ignore ;; 忽略提醒声
+ message-log-max 10000 ;; 消息日志行数
+ cursor-type 'bar ;; 光标类型
  )
 
 (define-fringe-bitmap 'right-curly-arrow
@@ -324,27 +289,21 @@
    #b00000000
    #b00000000])
 
-;;;----------------------------------------------------------------------
-;;; 主题
-;;; - doom-themes
-;;; - lenven
-;;;----------------------------------------------------------------------
+;;; 主题doom-themes
+;;;=================
 (use-package doom-themes :ensure t :defer t
+  :init (load-theme 'doom-vibrant t)
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
         doom-themes-one-brighter-modeline t
-        doom-themes-one-brighter-comments nil))
-(use-package gruvbox-theme :ensure t :defer t)
-(use-package tango-plus-theme :ensure t :defer t)
-(use-package leuven-theme :ensure t :defer t)
-(use-package tangotango-theme :ensure t :defer t)
-(use-package solarized-theme :ensure t :defer t)
-(use-package monokai-theme :ensure t :defer t)
+        doom-themes-one-brighter-comments nil)
+  (doom-themes-visual-bell-config)
+  (add-hook 'org-mode-hook #'doom-themes-org-config))
 ;;; 切换主题
 ;;; https://github.com/habamax/.emacs.d/blob/master/lisp/haba-appearance.el
-(defvar *my-theme-dark* 'doom-molokai)
-(defvar *my-theme-light* 'leuven)
+(defvar *my-theme-dark* 'doom-vibrant)
+(defvar *my-theme-light* 'doom-one-light)
 (defvar *my-current-theme* *my-theme-light*)
 
 ;; disable other themes before loading new one
@@ -372,14 +331,21 @@
                       :box nil)
   (set-face-attribute 'mode-line-inactive nil
                       :underline nil
-                      :box nil))
+                      :box nil)
+  (solaire-mode-swap-bg))
 (bind-key* "C-<f9>" 'my/toggle-theme)
-(my/toggle-theme)
 
-;;;----------------------------------------------------------------------
+(use-package solaire-mode :ensure t :defer t
+  :init (require 'solaire-mode)
+  :config
+  (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
+  (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
+  (add-hook 'after-revert-hook #'turn-on-solaire-mode)
+  (solaire-mode-swap-bg))
+
 ;;; 导航
-;;; - God-mode
-;;;----------------------------------------------------------------------
+;;;======
+
 ;;; 使用god-mode方便导航
 (use-package god-mode :ensure t :defer t
   :diminish god-mode
@@ -391,7 +357,7 @@
   (add-hook 'god-mode-disabled-hook 'my/update-cursor))
 (global-set-key (kbd "<escape>") 'god-local-mode)
 
-;; 窗口导航
+;;; 窗口导航
 (use-package windmove :ensure t :defer t
   :init
   (windmove-default-keybindings)
