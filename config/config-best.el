@@ -332,7 +332,8 @@
   (set-face-attribute 'mode-line-inactive nil
                       :underline nil
                       :box nil)
-  (solaire-mode-swap-bg))
+  (solaire-mode-swap-bg)
+  )
 (bind-key* "C-<f9>" 'my/toggle-theme)
 
 (use-package solaire-mode :ensure t :defer t
@@ -341,7 +342,8 @@
   (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
   (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
   (add-hook 'after-revert-hook #'turn-on-solaire-mode)
-  (solaire-mode-swap-bg))
+  (solaire-mode-swap-bg)
+  )
 
 ;;; 导航
 ;;;======

@@ -1,4 +1,7 @@
 ;; helper packages
+
+(use-package yaml-mode :ensure t :defer t)
+
 (use-package ess-site :ensure ess :defer t
   :mode (("\\.sp\\'"           . S-mode)
          ("/R/.*\\.q\\'"       . R-mode)
@@ -75,7 +78,7 @@
     (setq R-cmd (format "?%s"
                         (read-string "Enter object name:")))
     (ess-execute R-cmd 'buffer nil nil))
-  (define-key "C-c C-d C-o" 'ess-browse-help inferior-ess-mode-map)
+  (bind-key "C-c C-d C-o" 'ess-browse-help inferior-ess-mode-map)
 
   (use-package key-combo :ensure t :defer t :after ess
     :init
