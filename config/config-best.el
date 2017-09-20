@@ -239,7 +239,7 @@
 ;; (setq-default ansi-color-for-comint-mode +1)
 
 ;; fringe
-(fringe-mode '(0 . 8))
+(fringe-mode '(4 . 8))
 
 ;;; 字体
 (setq my/font-height (if is-mac 130 100)
@@ -347,6 +347,36 @@
 
 ;;; 导航
 ;;;======
+
+;;; window number
+(use-package winum :ensure t :defer t
+  :init
+  (add-hook 'after-init-hook #'winum-mode)
+  :config
+  (defun my-winum-assign-func ()
+    (cond
+     ((equal (buffer-name) "*Calculator*")
+      9)
+     ((string-match-p (buffer-name) ".*\\*NeoTree\\*.*")
+      0)
+     (t
+      nil)))
+  (setq winum-auto-setup-mode-line t
+        winum-reverse-frame-list nil
+        winum-mode-line-position 1
+        winum-auto-assign-0-to-minibuffer t)
+  (setq winum-ignored-buffers '(" *which-key*")
+        winum-assign-func 'my-winum-assign-func)
+  (bind-keys ("M-0" . winum-select-window-0-or-10)
+             ("M-1" . winum-select-window-1)
+             ("M-2" . winum-select-window-2)
+             ("M-3" . winum-select-window-3)
+             ("M-4" . winum-select-window-4)
+             ("M-5" . winum-select-window-5)
+             ("M-6" . winum-select-window-6)
+             ("M-7" . winum-select-window-7)
+             ("M-8" . winum-select-window-8)
+             ("M-9" . winum-select-window-9)))
 
 ;;; 使用god-mode方便导航
 (use-package god-mode :ensure t :defer t
@@ -564,6 +594,7 @@
          ("M-s r" . counsel-recentf)
          ("M-s b" . counsel-bookmark)
          ("M-s y" . counsel-yank-pop)
+         ("M-s a" . counsel-apropos)
          ("M-s C-a" . counsel-linux-app)
          ("M-s C-i" . counsel-imenu)
          ("M-s C-l" . counsel-find-library)
@@ -975,6 +1006,7 @@
 (use-package crux :ensure t :defer t
   :bind (("C-a" . crux-move-beginning-of-line))
   :init
+  (require 'crux)
   (bind-keys :prefix-map Manipulate-line
              :prefix "C-o"
              :prefix-docstring "Open line"
