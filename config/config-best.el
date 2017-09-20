@@ -154,6 +154,11 @@
 (use-package desktop :defer t :if (display-graphic-p)
   :init (add-hook 'after-init-hook #'desktop-save-mode)
   :config
+  (bind-keys :prefix "M-s D"
+             :prefix-map desktop-map
+             ("r" . desktop-read)
+             ("s" . desktop-save)
+             ("d" . desktop-remove))
   ;; Automatically save and restore sessions
   (make-directory (concat user-emacs-directory ".cache/desktop") t)
   (setq desktop-dirname (concat user-emacs-directory ".cache/desktop")
@@ -1004,9 +1009,12 @@
   :init (whole-line-or-region-global-mode +1))
 
 (use-package crux :ensure t :defer t
-  :bind (("C-a" . crux-move-beginning-of-line))
+  :bind (("C-a" . crux-move-beginning-of-line)
+         ("M-s RET" . crux-smart-open-line)
+         ("M-s C-RET" . crux-smart-open-line-above))
   :init
   (require 'crux)
+  :config
   (bind-keys :prefix-map Manipulate-line
              :prefix "C-o"
              :prefix-docstring "Open line"

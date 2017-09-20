@@ -19,7 +19,7 @@
 /ac-comphist.dat
 savehist
 tramp
-*.elc
+**/*.elc
 *~
 .#*
 .DS_Store
