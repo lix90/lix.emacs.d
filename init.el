@@ -35,6 +35,11 @@
 (when load-file-name
   (defconst base-path (file-name-directory load-file-name)))
 
+;;; 指定custom.el文件路径
+(setq custom-file (concat base-path "custom.el"))
+;; (when (file-exists-p custom-file)
+;;   (load custom-file))
+
 ;;; 指定包下载路径
 (require 'package)
 (setq package-user-dir
@@ -57,11 +62,6 @@
 		  ("melpa"     . "https://melpa.org/packages/")))))
 
 (package-initialize)
-
-;;; 指定custom.el文件路径
-(setq custom-file (concat base-path "custom.el"))
-(when (file-exists-p custom-file)
-  (load custom-file))
 
 (when (not package-archive-contents)
   (package-refresh-contents))

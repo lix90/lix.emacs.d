@@ -763,9 +763,9 @@
 (use-package yasnippet :ensure t :defer t
   :diminish yas-minor-mode
   :config
+  (setq yas-snippet-dirs (concat user-emacs-directory "snippets"))
   (yas-reload-all)
-  (add-hook 'prog-mode-hook #'yas-minor-mode)
-  (add-hook 'text-mode-hook #'yas-minor-mode))
+  (add-hook 'prog-mode-hook #'yas-minor-mode))
 
 ;;; 代码调试
 ;;;=========
