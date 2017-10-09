@@ -85,8 +85,9 @@
 ;;; C-x 4 ' 在另外的窗口打开shell
 ;;; C-x 4 s 在当前窗口打开shell
 (use-package shell-switcher :ensure t :defer t
-  :bind (("C-x 4 '" . shell-switcher-switch-buffer-other-window)
-         ("C-x 4 s" . shell-switcher-new-shell))
+  :bind (("M-s C-S" . shell-switcher-switch-buffer-other-window)
+         ("M-s C-s" . shell-switcher-new-shell)
+         ("M-s C-b" . shell-switcher-switch-buffer))
   :config
   (setq shell-switcher-new-shell-function 'shell-switcher-make-shell)
   (setq shell-switcher-ansi-term-shell (if is-mac "/usr/local/bin/bash" "/bin/bash"))

@@ -50,10 +50,10 @@
                     "/usr/bin"
                     "/usr/sbin"
                     "/Applications/Emacs.app/Contents/MacOS/bin"
-                    "/Users/lix/.rvm/gems/ruby-2.3.0/bin"
-                    "/Users/lix/.rvm/gems/ruby-2.3.0@global/bin"
-                    "/Users/lix/.rvm/bin"
-                    "/Users/lix/go/bin"
+                    "/Users/my/.rvm/gems/ruby-2.3.0/bin"
+                    "/Users/my/.rvm/gems/ruby-2.3.0@global/bin"
+                    "/Users/my/.rvm/bin"
+                    "/Users/my/go/bin"
                     "/usr/local/mysql/bin"
                     )))
 (when (not is-mac)
@@ -152,13 +152,9 @@
 
 ;; 保存桌面
 (use-package desktop :defer t :if (display-graphic-p)
+  :bind (("M-s D" . desktop-read))
   :init (add-hook 'after-init-hook #'desktop-save-mode)
   :config
-  (bind-keys :prefix "M-s D"
-             :prefix-map desktop-map
-             ("r" . desktop-read)
-             ("s" . desktop-save)
-             ("d" . desktop-remove))
   ;; Automatically save and restore sessions
   (make-directory (concat user-emacs-directory ".cache/desktop") t)
   (setq desktop-dirname (concat user-emacs-directory ".cache/desktop")
@@ -521,16 +517,14 @@
   :bind ("C-=" . er/expand-region)
   :init
   (bind-keys :prefix-map expand-region-map
-             :prefix "M-s e"
+             :prefix "M-s E"
              :prefix-docstring "Expand Region"
              ("f" . er/mark-defun)
              ("c" . er/mark-comment)
              ("e" . er/mark-email)
              ("s" . er/mark-sentence)
              ("p" . er/mark-paragraph)))
-(use-package phi-rectangle :ensure t :defer t
-  :bind (("C-x s" . phi-rectangle-set-mark-command)))
-(bind-key "C-S-M" 'set-mark-command)
+
 ;;; ----------------------------------------------------------------------
 ;;; 搜索与替换工具
 ;;;
@@ -546,8 +540,8 @@
 (use-package anzu :ensure t :defer t
   :diminish anzu-mode
   :init (add-hook 'prog-mode-hook #'anzu-mode)
-  :bind (("M-%" . anzu-query-replace)
-         ("C-M-%" . anzu-query-replace-regexp)))
+  :bind (("M-s ." . anzu-query-replace)
+         ("M-s ," . anzu-query-replace-regexp)))
 
 ;; iedit指南：
 ;; 用于批量修改匹配的symbol或者word或者region
@@ -605,6 +599,8 @@
          ("M-s C-l" . counsel-find-library)
          ("M-s C-f" . counsel-faces)
          ("M-s C-u" . counsel-unicode-char)
+         :map shell-mode-map
+         ("C-c C-l" . counsel-shell-history)
          )
   :init
   (add-hook 'after-init-hook #'ivy-mode)
@@ -644,9 +640,11 @@
 (use-package smartparens :ensure t :defer t
   :diminish smartparens-mode
   :init
-  (add-hook 'prog-mode-hook #'show-smartparens-mode)
-  (add-hook 'prog-mode-hook #'smartparens-mode)
-  (add-hook 'markdown-mode-hook #'smartparens-mode)
+  (show-smartparens-global-mode t)
+  (smartparens-global-mode t)
+  ;; (add-hook 'prog-mode-hook #'show-smartparens-mode)
+  ;; (add-hook 'prog-mode-hook #'smartparens-mode)
+  ;; (add-hook 'markdown-mode-hook #'smartparens-mode)
   :config
   (require 'smartparens-config)
   (sp-use-smartparens-bindings)
@@ -762,10 +760,14 @@
 ;;; Snippets settings
 (use-package yasnippet :ensure t :defer t
   :diminish yas-minor-mode
-  :config
-  (setq yas-snippet-dirs (concat user-emacs-directory "snippets"))
-  (yas-reload-all)
-  (add-hook 'prog-mode-hook #'yas-minor-mode))
+  :bind (:map yas-minor-mode-map
+              ("C-x i i" . yas-insert-snippet)
+              ("C-x i n" . yas-new-snippet)
+              ("C-x i v" . yas-visit-snippet-file)
+              ("C-x i l" . yas-describe-tables)
+              ("C-x i g" . yas-reload-all))
+  :init
+  (yas-global-mode t))
 
 ;;; 代码调试
 ;;;=========
@@ -790,7 +792,7 @@
   (flycheck-add-mode 'javascript-standard 'rjsx-mode)
   ;; use local eslint from node_modules before global
   ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
-  (defun lix/use-eslint-from-node-modules ()
+  (defun my/use-eslint-from-node-modules ()
     (let* ((root (locate-dominating-file
                   (or (buffer-file-name) default-directory)
                   "node_modules"))
@@ -799,7 +801,7 @@
                                           root))))
       (when (and eslint (file-executable-p eslint))
         (setq-local flycheck-javascript-eslint-executable eslint))))
-  (add-hook 'flycheck-mode-hook #'lix/use-eslint-from-node-modules))
+  (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules))
 
 (use-package avy-flycheck :ensure t :defer t :after flycheck
   :config (avy-flycheck-setup))
@@ -859,6 +861,11 @@
   (use-package dired-details :ensure t :defer t)
   (use-package dired-details+ :ensure t :defer t)
   (use-package dired-k :ensure t :defer t)
+  (use-package dired-subtree :ensure t
+    :config
+    (bind-keys :map dired-mode-map
+               ("i" . dired-subtree-insert)
+               (";" . dired-subtree-remove)))
   (require 'dired+)
   (add-hook 'dired-initial-position-hook #'dired-k))
 
@@ -916,7 +923,7 @@
               (lambda () (setq neo-persist-show t))))
              ;;; Code retrieved from https://github.com/jaypei/emacs-neotree/issues/218
 
-  (defun lix/text-scale-twice ()
+  (defun my/text-scale-twice ()
     "Text scale for neotree."
     (interactive)
     (progn
@@ -924,7 +931,7 @@
       (text-scale-decrease 1)))
   (add-hook 'neo-after-create-hook
             (lambda (_)
-              ;;(call-interactively 'lix/text-scale-twice)
+              ;;(call-interactively 'my/text-scale-twice)
               (visual-line-mode -1)
               (setq truncate-lines t)))
 
@@ -1066,12 +1073,16 @@
 ;;; - kill括号
 ;;;
 (bind-key* "C-S-d" 'kill-word)
-(bind-key* "M-s s" 'isearch-forward-regexp)
-(bind-key* "M-s S" 'isearch-backward-regexp)
-(bind-key* "M-s l" 'counsel-find-library)
-(bind-key* "M-s I" 'imenu)
+;; (bind-key* "M-s s" 'isearch-forward-regexp)
+;; (bind-key* "M-s S" 'isearch-backward-regexp)
+;; (bind-key* "M-s I" 'imenu)
+(bind-key* "M-s M" 'woman)
+(bind-key* "<f12>" 'set-mark-command)
+(bind-key "M-s m" 'set-mark-command)
 (bind-key "C-S-B" 'backward-sexp)
 (bind-key "C-S-F" 'forward-sexp)
+(unbind-key "M-s o")
+(unbind-key "M-s h")
 
 ;;; 按组来设定快捷键
 (use-package hydra :ensure t :defer t
@@ -1090,7 +1101,7 @@
     ("B" balance-windows "balance")))
 
 ;;; 模式开关
-(bind-keys :prefix "C-x 7"
+(bind-keys :prefix "M-s M-t"
            :prefix-map my/toggle-toggle
            ("l" . linum-mode)
            ("L" . hlinum-mode)
@@ -1104,6 +1115,32 @@
            :prefix-map helpful-tools
            ("d" . insert-date-and-time)
            ("D" . insert-date))
+
+(setq
+ display-buffer-alist
+ `(
+   ;; … other stuff …
+   (,(rx bos "*shell")
+    (display-buffer-same-window)
+    (reusable-frames . nil))
+   ;; … other stuff …
+   ))
+
+;;; 矩形编辑
+(use-package phi-rectangle :ensure t :defer t :disabled t
+  :commands (phi-rectangle-set-mark-command))
+
+(use-package rect :defer t
+  :bind (("M-s M-r" . rectangle-mark-mode))
+  :config
+  (unbind-key "C-x SPC") ;; 取消原生的keybinding
+  (bind-keys :map rectangle-mark-mode-map
+             ("i" . string-insert-rectangle)
+             ("o" . open-rectangle)
+             ("s" . string-rectangle)
+             ("k" . kill-rectangle)
+             ("y" . yank-rectangle)
+             ("r" . replace-rectangle)))
 
 (provide 'config-best)
 ;;; config-best.el ends here

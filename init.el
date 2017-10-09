@@ -37,8 +37,8 @@
 
 ;;; 指定custom.el文件路径
 (setq custom-file (concat base-path "custom.el"))
-;; (when (file-exists-p custom-file)
-;;   (load custom-file))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 ;;; 指定包下载路径
 (require 'package)
@@ -62,6 +62,10 @@
 		  ("melpa"     . "https://melpa.org/packages/")))))
 
 (package-initialize)
+;; speed-up package-initialize
+;; (package-initialize 'noactivate)
+;; (let ((default-directory package-user-dir)) ;; change to your elpa dir
+;;   (normal-top-level-add-subdirs-to-load-path))
 
 (when (not package-archive-contents)
   (package-refresh-contents))

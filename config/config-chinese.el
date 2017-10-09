@@ -3,13 +3,16 @@
 ;;; Commentary:
 
 ;;; Code:
-(setq default-input-method "pyim")
-(global-set-key (kbd "C-\\") 'toggle-input-method)
 
 (use-package pyim :ensure t :defer t
   :diminish pyim-isearch-mode
-  :init (require 'pyim)
+  :init
+  (require 'pyim)
   :config
+  (set-face-background 'pyim-dagger-face "gray20")
+  (setq default-input-method "pyim")
+  (bind-key* "M-j" 'pyim-convert-code-at-point)
+  (bind-key* "C-\\" 'toggle-input-method)
   ;; 激活 basedict 拼音词库
   (use-package pyim-basedict
     :ensure t
