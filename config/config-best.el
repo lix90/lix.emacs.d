@@ -708,6 +708,8 @@
 ;; * Templates, such as license header.
 ;; * Address, url, telephone number, company name, etc.
 (use-package abbrev :defer t
+  :bind (("M-s ;" . expand-abbrev)
+         ("M-s '" . dabbrev-expand))
   :config
   (setq save-abbrevs 'silently)
   (setq abbrev-file-name
