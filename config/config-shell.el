@@ -79,7 +79,12 @@
   ;; http://www.joshstaiger.org/archives/2005/07/fixing_garbage.html
   (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
   (add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on)
-  (add-hook 'shell-mode-hook #'company-mode))
+  ;;(add-hook 'shell-mode-hook #'company-mode)
+  )
+
+(use-package bash-completion :ensure t :defer t
+  :init (add-hook 'shell-dynamic-complete-functions
+                  'bash-completion-dynamic-complete))
 
 ;;; shell切换
 ;;; C-x 4 ' 在另外的窗口打开shell

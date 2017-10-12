@@ -98,6 +98,7 @@
  save-interprogram-paste-before-kill t
  apropos-do-all t
  visible-bell t ;; 提醒
+ shift-select-mode t ;; disable shift-selection
  ediff-window-setup-function 'ediff-setup-windows-plain)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq kill-buffer-query-functions
@@ -594,11 +595,17 @@
          ("M-s b" . counsel-bookmark)
          ("M-s y" . counsel-yank-pop)
          ("M-s a" . counsel-apropos)
+         ("M-s '" . counsel-switch-to-shell-buffer)
          ("M-s C-a" . counsel-linux-app)
          ("M-s C-i" . counsel-imenu)
          ("M-s C-l" . counsel-find-library)
          ("M-s C-f" . counsel-faces)
          ("M-s C-u" . counsel-unicode-char)
+         ("M-s C-k" . counsel-descbinds)
+         ("M-s C-m" . counsel-mark-ring)
+         ("M-s C-o" . connsel-outline)
+         ("M-s C-c" . counsel-company)
+         ("M-s C-p" . counsel-package)
          :map shell-mode-map
          ("C-c C-l" . counsel-shell-history)
          )
