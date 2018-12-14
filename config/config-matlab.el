@@ -1,12 +1,12 @@
 ;;; matlab
-(use-package matlab-mode :ensure t :defer t :disabled t
+(use-package matlab-mode :ensure t :defer t
   :mode ("\\.m\\'" . matlab-mode)
   :commands (matlab-mode matlab-shell))
 
-(when (not (fboundp 'matlab-mode))
-  (el-get-bundle cute-jumper/matlab-mode))
+;; (when (not (fboundp 'matlab-mode))
+;;   (el-get-bundle cute-jumper/matlab-mode))
 
-(add-to-list 'load-path (concat user-emacs-directory "el-get/matlab-mode/"))
+;; (add-to-list 'load-path (concat user-emacs-directory "el-get/matlab-mode/"))
 
 (eval-after-load 'matlab
   '(progn

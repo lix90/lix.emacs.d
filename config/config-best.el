@@ -9,6 +9,66 @@
 ;;; 包管理
 ;;;=======
 (use-package package-utils :ensure t :defer t)
+(setq-default
+ create-lockfiles nil ;; 取消文件锁
+ buffer-file-coding-system 'utf-8-unix ;; 默认编码系统
+ make-backup-files nil ;; 取消文件备份
+ tab-width 4 ;; tab为4个空格宽度
+ case-fold-search t ;; 搜索和匹配时忽略大小写
+ default-directory "~" ;; 当前buffer的默认路径
+ fill-column 80 ;; 80栏宽, 当超过栏宽时，自动折叠行
+ next-line-add-newlines nil ;; 下一行时插入新一行
+ require-final-newline t ;; 自动添加新行至文件结尾
+ mouse-yank-at-point t ;; 鼠标粘贴在光标处
+ kill-whole-line t ;; kill整行
+ indent-tabs-mode nil ;; 锁紧不适用tab符号
+ x-select-enable-clipboard t ;; 开启剪切板
+ select-enable-clipboard t
+ x-select-enable-primary t
+ select-enable-primary t
+ save-interprogram-paste-before-kill t
+ apropos-do-all t
+ visible-bell t ;; 提醒
+ shift-select-mode t ;; disable shift-selection
+ ediff-window-setup-function 'ediff-setup-windows-plain)
+;;; 设置UTF-8编码方式
+(set-language-environment 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-selection-coding-system 'utf-8)
+(set-locale-environment "en.UTF-8")
+(prefer-coding-system 'utf-8)
+;; disable CJK coding/encoding
+(setq utf-translate-cjk-mode nil)
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq kill-buffer-query-functions
+      (remq 'process-kill-buffer-query-function
+            kill-buffer-query-functions))
+
+(menu-bar-mode -1) ;; 不显示菜单栏
+(when (fboundp 'tool-bar-mode) ;; 不显示工具栏
+  (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode) ;; 不显示滑动条
+  (scroll-bar-mode -1))
+(when (fboundp 'horizontal-scroll-bar-mode) ;; 不显示水平滑动条
+  (horizontal-scroll-bar-mode -1))
+(when is-mac (setq mac-allow-anti-aliasing t)) ;; MacOS系统下开启防锯齿
+(setq-default line-spacing 3 ;; 行距
+              inhibit-startup-screen t ;; 关闭启动屏幕
+              initial-scratch-message nil ;; 取消scrach文件信息
+              cursor-in-non-selected-windows nil ;; 在非活动窗口不显示光标
+              use-dialog-box nil ;; 使用对话框
+              ring-bell-function 'ignore ;; 忽略提醒声
+              message-log-max 10000 ;; 消息日志行数
+              cursor-type 'bar ;; 光标类型
+              )
+
+(setq display-buffer-alist
+      `(;; … other stuff …
+        (,(rx bos "*shell")
+         (display-buffer-same-window)
+         (reusable-frames . nil))
+        ;; … other stuff …
+        ))
 
 (use-package el-get :ensure t :defer t :disabled t
   :init (setq el-get-verbose t))
@@ -20,11 +80,9 @@
 ;; (setq paradox-github-token "d02fae45dd7c0c4845b56635d78448c63d7a7035")
 
 ;;; emacs server
-;;;==============
 ;; (server-mode +1)
 
 ;;; 环境设定
-;;;=========
 (use-package exec-path-from-shell :ensure t :defer t :disabled t
   :if (memq window-system '(mac ns))
   :init
@@ -64,49 +122,12 @@
                     "/usr/bin"
                     "/opt/bin"
                     "~/.local/bin"
-                    "/usr/lib/oracle/12.2/client64/bin"
                     )))
 (setenv "PATH" (mapconcat 'identity exec-path ":"))
 
-;;; 设置UTF-8编码方式
-;;;===================
-(set-language-environment 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-selection-coding-system 'utf-8)
-(set-locale-environment "en.UTF-8")
-(prefer-coding-system 'utf-8)
-;; disable CJK coding/encoding
-(setq utf-translate-cjk-mode nil)
 
-(setq-default
- create-lockfiles nil ;; 取消文件锁
- buffer-file-coding-system 'utf-8-unix ;; 默认编码系统
- make-backup-files nil ;; 取消文件备份
- tab-width 4 ;; tab为4个空格宽度
- case-fold-search t ;; 搜索和匹配时忽略大小写
- default-directory "~" ;; 当前buffer的默认路径
- fill-column 80 ;; 80栏宽, 当超过栏宽时，自动折叠行
- next-line-add-newlines nil ;; 下一行时插入新一行
- require-final-newline t ;; 自动添加新行至文件结尾
- mouse-yank-at-point t ;; 鼠标粘贴在光标处
- kill-whole-line t ;; kill整行
- indent-tabs-mode nil ;; 锁紧不适用tab符号
- x-select-enable-clipboard t ;; 开启剪切板
- select-enable-clipboard t
- x-select-enable-primary t
- select-enable-primary t
- save-interprogram-paste-before-kill t
- apropos-do-all t
- visible-bell t ;; 提醒
- shift-select-mode t ;; disable shift-selection
- ediff-window-setup-function 'ediff-setup-windows-plain)
-(fset 'yes-or-no-p 'y-or-n-p)
-(setq kill-buffer-query-functions
-      (remq 'process-kill-buffer-query-function
-            kill-buffer-query-functions))
 
 ;;; MacOS系统的设置与功能增强
-;;;=========================
 (when is-mac
   (setq
    delete-by-moving-to-trash t ;; 删除时默认移至垃圾箱
@@ -119,19 +140,15 @@
         mac-right-option-modifier 'none))
 
 ;;; 切词模式
-;;;=========
 (use-package subword :defer t
   :diminish subword-mode
-  :init
-  (add-hook 'after-init-hook #'global-subword-mode))
+  :init (add-hook 'after-init-hook #'global-subword-mode))
 
 ;;; 删除选择
-;;;========
 (delete-selection-mode +1)
 (diminish 'delete-selection-mode)
 
 ;;; 开启文档模式
-;;;============
 (use-package eldoc :defer t
   :diminish eldoc-mode
   :init (add-hook 'prog-mode-hook #'eldoc-mode)
@@ -140,7 +157,6 @@
         eldoc-echo-area-use-multiline-p t))
 
 ;;; 保存历史
-;;;=========
 (use-package savehist :ensure t  :defer t
   :diminish savehist-mode
   :if (display-graphic-p)
@@ -153,7 +169,7 @@
 
 ;; 保存桌面
 (use-package desktop :defer t :if (display-graphic-p)
-  :bind (("M-s D" . desktop-read))
+  :bind (("C-c D" . desktop-read))
   :init (add-hook 'after-init-hook #'desktop-save-mode)
   :config
   ;; Automatically save and restore sessions
@@ -179,12 +195,10 @@
 ;;; 保存最近打开的文件
 (use-package recentf :defer t
   :diminish recentf-mode
-  :init
-  (add-hook 'after-init-hook #'recentf-mode)
-  :config
-  (setq recentf-save-file (concat user-emacs-directory ".cache/.recentf")
-        recentf-max-saved-items 100
-        recentf-max-menu-items 25))
+  :init (add-hook 'after-init-hook #'recentf-mode)
+  :config (setq recentf-save-file (concat user-emacs-directory ".cache/.recentf")
+                recentf-max-saved-items 100
+                recentf-max-menu-items 25))
 
 ;; 自动地保存文件位置，下次自动跳转到保存的位置
 (use-package saveplace :ensure t :defer t
@@ -200,7 +214,6 @@
   (setq uniquify-buffer-name-style 'forward))
 
 ;;; 视觉效果
-;;;=========
 (add-hook 'prog-mode-hook
           (lambda()
             (line-number-mode +1)
@@ -218,11 +231,11 @@
 (add-hook 'minibuffer-setup-hook (lambda () (visual-line-mode -1)))
 ;; (add-hook 'text-mode-hook #'turn-on-visual-line-mode)
 
-(use-package linum :defer t
+(use-package linum :defer t :disabled t
   :init
   (setq linum-format "%4s ")
   (setq linum-relative-format "%4s "))
-(use-package hlinum :ensure t :defer t
+(use-package hlinum :ensure t :defer t :disabled t
   :init
   (add-hook 'prog-mode-hook #'hlinum-activate)
   :config
@@ -232,44 +245,25 @@
                       :weight 'bold))
 
 ;; 时间
-(use-package time :defer t
-  :init
-  (add-hook 'after-init-hook #'display-time-mode)
-  (setq display-time-format "%H:%M"))
+(setq display-time-format "%H:%M")
 
 (require 'ansi-color)
 ;; (setq-default ansi-color-for-comint-mode +1)
 
+;;; 主题
 ;; fringe
-(fringe-mode '(4 . 8))
+;; 调整左右两侧边缘
+(fringe-mode '(12 . 12))
 
-;;; 字体
-(setq my/font-height (if is-mac 130 100)
-      my/font-name "Source Code Pro")
+;; 字体
+(setq my/font-height (if is-mac 120 120)
+      my/font-name "Monaco") ;; Source Code Pro
 (set-face-attribute 'default nil
                     :family my/font-name
                     :height my/font-height
                     :weight 'normal
                     :width 'normal)
 
-(menu-bar-mode -1) ;; 不显示菜单栏
-(when (fboundp 'tool-bar-mode) ;; 不显示工具栏
-  (tool-bar-mode -1))
-(when (fboundp 'scroll-bar-mode) ;; 不显示滑动条
-  (scroll-bar-mode -1))
-(when (fboundp 'horizontal-scroll-bar-mode) ;; 不显示水平滑动条
-  (horizontal-scroll-bar-mode -1))
-(when is-mac (setq mac-allow-anti-aliasing t)) ;; MacOS系统下开启防锯齿
-(setq-default
- line-spacing 1 ;; 行距
- inhibit-startup-screen t ;; 关闭启动屏幕
- initial-scratch-message nil ;; 取消scrach文件信息
- cursor-in-non-selected-windows nil ;; 在非活动窗口不显示光标
- use-dialog-box nil ;; 使用对话框
- ring-bell-function 'ignore ;; 忽略提醒声
- message-log-max 10000 ;; 消息日志行数
- cursor-type 'bar ;; 光标类型
- )
 
 (define-fringe-bitmap 'right-curly-arrow
   [#b00000000
@@ -292,7 +286,6 @@
    #b00000000])
 
 ;;; 主题doom-themes
-;;;=================
 (use-package doom-themes :ensure t :defer t
   :init (load-theme 'doom-vibrant t)
   :config
@@ -302,41 +295,45 @@
         doom-themes-one-brighter-comments nil)
   (doom-themes-visual-bell-config)
   (add-hook 'org-mode-hook #'doom-themes-org-config))
+
 ;;; 切换主题
 ;;; https://github.com/habamax/.emacs.d/blob/master/lisp/haba-appearance.el
-(defvar *my-theme-dark* 'doom-vibrant)
-(defvar *my-theme-light* 'doom-one-light)
-(defvar *my-current-theme* *my-theme-light*)
+;;(defvar *my-theme-dark* 'doom-vibrant)
+;;(defvar *my-theme-light* 'doom-one-light)
+;;(defvar *my-current-theme* *my-theme-light*)
 
 ;; disable other themes before loading new one
-(defadvice load-theme (before theme-dont-propagate activate)
-  "Disable theme before loading new one."
-  (mapc #'disable-theme custom-enabled-themes))
+;; (defadvice load-theme (before theme-dont-propagate activate)
+;;   "Disable theme before loading new one."
+;;   (mapc #'disable-theme custom-enabled-themes))
 
-(defun my/next-theme (theme)
-  (if (eq theme 'default)
-      (disable-theme *my-current-theme*)
-    (progn
-      (load-theme theme t)))
-  (setq *my-current-theme* theme))
+;; (defun my/next-theme (theme)
+;;   (if (eq theme 'default)
+;;       (disable-theme *my-current-theme*)
+;;     (progn
+;;       (load-theme theme t)))
+;;   (setq *my-current-theme* theme))
 
-(defun my/toggle-theme ()
-  (interactive)
-  (cond ((eq *my-current-theme* *my-theme-dark*)
-         (my/next-theme *my-theme-light*))
-        ((eq *my-current-theme* *my-theme-light*)
-         (my/next-theme 'default))
-        ((eq *my-current-theme* 'default)
-         (my/next-theme *my-theme-dark*)))
-  (set-face-attribute 'mode-line nil
-                      :underline nil
-                      :box nil)
-  (set-face-attribute 'mode-line-inactive nil
-                      :underline nil
-                      :box nil)
-  (solaire-mode-swap-bg)
-  )
-(bind-key* "C-<f9>" 'my/toggle-theme)
+;; (defun my/toggle-theme ()
+;;   (interactive)
+;;   (cond ((eq *my-current-theme* *my-theme-dark*)
+;;          (my/next-theme *my-theme-light*))
+;;         ((eq *my-current-theme* *my-theme-light*)
+;;          (my/next-theme 'default))
+;;         ((eq *my-current-theme* 'default)
+;;          (my/next-theme *my-theme-dark*)))
+;;   (set-face-attribute 'mode-line nil
+;;                       :underline nil
+;;                       :box nil)
+;;   (set-face-attribute 'mode-line-inactive nil
+;;                       :underline nil
+;;                       :box nil)
+;;   (solaire-mode-swap-bg)
+;;   )
+;; (bind-key* "C-<f9>" 'my/toggle-theme)
+
+(use-package doom-modeline :ensure t  :defer t
+  :hook (after-init . doom-modeline-init))
 
 (use-package solaire-mode :ensure t :defer t
   :init (require 'solaire-mode)
@@ -348,21 +345,16 @@
   )
 
 ;;; 导航
-;;;======
-
 ;;; window number
-(use-package winum :ensure t :defer t
+(use-package winum :ensure t :defer t :disabled t
   :init
   (add-hook 'after-init-hook #'winum-mode)
   :config
   (defun my-winum-assign-func ()
     (cond
-     ((equal (buffer-name) "*Calculator*")
-      9)
-     ((string-match-p (buffer-name) ".*\\*NeoTree\\*.*")
-      0)
-     (t
-      nil)))
+     ((equal (buffer-name) "*Calculator*") 9)
+     ((string-match-p (buffer-name) ".*\\*NeoTree\\*.*") 0)
+     (t nil)))
   (setq winum-auto-setup-mode-line t
         winum-reverse-frame-list nil
         winum-mode-line-position 1
@@ -381,7 +373,7 @@
              ("M-9" . winum-select-window-9)))
 
 ;;; 使用god-mode方便导航
-(use-package god-mode :ensure t :defer t
+(use-package god-mode :ensure t :defer t :disabled t
   :diminish god-mode
   :config
   (defun my/update-cursor ()
@@ -389,7 +381,7 @@
           (if (or god-local-mode buffer-read-only) 'box 'bar)))
   (add-hook 'god-mode-enabled-hook 'my/update-cursor)
   (add-hook 'god-mode-disabled-hook 'my/update-cursor))
-(global-set-key (kbd "<escape>") 'god-local-mode)
+;;(global-set-key (kbd "<escape>") 'god-local-mode)
 
 ;;; 窗口导航
 (use-package windmove :ensure t :defer t
@@ -451,7 +443,6 @@
   (setq mouse-wheel-progressive-speed nil))
 
 ;;; 功能更加强劲的minibar
-;;;=====================
 (use-package which-key :ensure t :defer t
   :diminish which-key-mode
   :init
@@ -491,8 +482,6 @@
     (setq undo-tree-history-directory-alist `((".*" . ,undo-dir)))))
 
 ;;; 文件编辑
-;;;----------------------------------------------------------------------
-;;;
 ;;; 设定写文件时的时间戳
 (use-package time-stamp :ensure t :defer t
   :config
@@ -512,19 +501,17 @@
         auto-save-default nil))
 
 ;;; 标记mark
-;;;==========
 ;; 智能标记
 (use-package expand-region :ensure t :defer t
   :bind ("C-=" . er/expand-region)
-  :init
-  (bind-keys :prefix-map expand-region-map
-             :prefix "M-s E"
-             :prefix-docstring "Expand Region"
-             ("f" . er/mark-defun)
-             ("c" . er/mark-comment)
-             ("e" . er/mark-email)
-             ("s" . er/mark-sentence)
-             ("p" . er/mark-paragraph)))
+  :init (bind-keys :prefix-map expand-region-map
+                   :prefix "<escape> E"
+                   :prefix-docstring "Expand Region"
+                   ("f" . er/mark-defun)
+                   ("c" . er/mark-comment)
+                   ("e" . er/mark-email)
+                   ("s" . er/mark-sentence)
+                   ("p" . er/mark-paragraph)))
 
 ;;; ----------------------------------------------------------------------
 ;;; 搜索与替换工具
@@ -541,17 +528,16 @@
 (use-package anzu :ensure t :defer t
   :diminish anzu-mode
   :init (add-hook 'prog-mode-hook #'anzu-mode)
-  :bind (("M-s ." . anzu-query-replace)
-         ("M-s ," . anzu-query-replace-regexp)))
+  :bind (("C-x C-." . anzu-query-replace)
+         ("C-x C-," . anzu-query-replace-regexp)))
 
 ;; iedit指南：
 ;; 用于批量修改匹配的symbol或者word或者region
-;; C-;/M-s ; 开启或关闭iedit-mode
+;; C-;/<escape> ; 开启或关闭iedit-mode
 ;; 在iedit-mode开启时，通过C-' 可以仅仅显示选中词出现的段落，隐藏其他段落
 ;; 在iedit模式时，编辑一个选区将同时改变其他选取，也就是说，可以当做多光标模式使用
 (use-package iedit :ensure t :defer t
-  :init
-  (bind-key* "C-;" 'iedit-mode))
+  :init (bind-key* "C-;" 'iedit-mode))
 
 ;; 需安装the_silver_searcher
 ;; gentoo linux: `emerge -avt the_silver_searcher`
@@ -560,7 +546,7 @@
 (use-package ag :ensure t :defer t
   :init
   (bind-keys :prefix-map ag-search
-             :prefix "M-s f"
+             :prefix "C-c f"
              :prefix-docstring "Ag Search"
              ("p" . ag-project)
              ("f" . ag-files)
@@ -588,29 +574,34 @@
   :diminish ivy-mode
   :bind (("M-x" . counsel-M-x)
          ("C-s" . counsel-grep-or-swiper)
-         ("M-s f" . counsel-find-file)
-         ("M-s j" . counsel-file-jump)
-         ("M-s p" . counsel-ag)
-         ("M-s r" . counsel-recentf)
-         ("M-s b" . counsel-bookmark)
-         ("M-s y" . counsel-yank-pop)
-         ("M-s a" . counsel-apropos)
-         ("M-s '" . counsel-switch-to-shell-buffer)
-         ("M-s C-a" . counsel-linux-app)
-         ("M-s C-i" . counsel-imenu)
-         ("M-s C-l" . counsel-find-library)
-         ("M-s C-f" . counsel-faces)
-         ("M-s C-u" . counsel-unicode-char)
-         ("M-s C-k" . counsel-descbinds)
-         ("M-s C-m" . counsel-mark-ring)
-         ("M-s C-o" . connsel-outline)
-         ("M-s C-c" . counsel-company)
-         ("M-s C-p" . counsel-package)
          :map shell-mode-map
-         ("C-c C-l" . counsel-shell-history)
+         ("C-c c h" . counsel-shell-history)
+         :map swiper-map
+         ("C-m" . swiper-mc)
+         ("C-a" . swiper-avy)
          )
   :init
   (add-hook 'after-init-hook #'ivy-mode)
+  (bind-keys :prefix-map counsel-tools
+             :prefix "C-c c"
+             :prefix-docstring "Counsel Tools"
+             ("f" . counsel-find-file)
+             ("j" . counsel-find-jump)
+             ("s" . counsel-ag)
+             ("r" . counsel-recentf)
+             ("b" . counsel-bookmark)
+             ("y" . counsel-yank-pop)
+             ("a" . counsel-apropos)
+             ("'" . counsel-switch-to-shell-buffer)
+             ("i" . counsel-imenu)
+             ("l" . counsel-find-library)
+             ("f" . counsel-faces)
+             ("u" . counsel-unicode-char)
+             ("k" . counsel-descbinds)
+             ("m" . counsel-mark-ring)
+             ("o" . counsel-outline)
+             ("c" . counsel-company)
+             ("p" . counsel-package))
   :config
   (setq ivy-re-builders-alist
         '((ivy-switch-buffer . ivy--regex-plus)
@@ -625,8 +616,15 @@
     (recenter))
   (advice-add 'swiper :after #'my/swiper-recenter))
 
-;; 提供模糊搜索
+;;; 提供模糊搜索
 (use-package flx :ensure t :defer t)
+
+;;; 切换buffers
+(bind-keys :prefix-map switch-buffer
+           :prefix "C-c s"
+           :prefix-docstring "Switch Buffers"
+           ("p" . switch-to-prev-buffer)
+           ("n" . switch-to-next-buffer))
 
 ;;;----------------------------------------------------------------------
 ;;; imenu使用指南
@@ -635,7 +633,7 @@
 ;;; 能够分析当前缓冲区中的定义，并生成索引。
 ;;; 对于结构化文档，它生成标题和章节的大纲。
 (use-package imenu-anywhere :ensure t :after ivy
-  :bind ("M-s i" . ivy-imenu-anywhere))
+  :bind ("C-x C-i" . ivy-imenu-anywhere))
 
 (use-package counsel-projectile :ensure t :defer t
   :bind (("C-x C-p" . counsel-projectile-find-file)))
@@ -707,9 +705,9 @@
 ;; * math symbols such as “ra” for →
 ;; * Templates, such as license header.
 ;; * Address, url, telephone number, company name, etc.
-(use-package abbrev :defer t
-  :bind (("M-s ;" . expand-abbrev)
-         ("M-s '" . dabbrev-expand))
+(use-package abbrev :defer t :disabled t
+  :bind (("<escape> ;" . expand-abbrev)
+         ("<escape> '" . dabbrev-expand))
   :config
   (setq save-abbrevs 'silently)
   (setq abbrev-file-name
@@ -718,7 +716,7 @@
                   text-mode-hook))
     (add-hook 'hook #'abbrev-mode)))
 
-(use-package dabbrev :defer t)
+(use-package dabbrev :defer t :disabled t)
 
 (use-package company :ensure t :defer t
   :diminish company-mode
@@ -734,10 +732,10 @@
   (unbind-key "RET" company-active-map)
   (unbind-key "<return>" company-active-map)
   (bind-key "<tab>" #'company-complete-selection company-active-map)
-  (setq company-idle-delay 0.2
-        company-minimum-prefix-length 2
+  (setq company-minimum-prefix-length 2
         company-require-match nil
         company-tooltip-limit 10
+        company-idle-delay 0.2
         company-tooltip-align-annotations t
         company-begin-commands '(self-insert-command))
   ;; set default `company-backends'
@@ -747,12 +745,13 @@
           company-files
           company-yasnippet
           ))
+  (company-tng-configure-default))
   ;; Nicer looking faces
-  (custom-set-faces
-   '(company-tooltip-common
-     ((t (:inherit company-tooltip :weight bold :underline nil))))
-   '(company-tooltip-common-selection
-     ((t (:inherit company-tooltip-selection :weight bold :underline nil))))))
+  ;; (custom-set-faces
+  ;;  '(company-tooltip-common
+  ;;    ((t (:inherit company-tooltip :weight bold :underline nil))))
+  ;;  '(company-tooltip-common-selection
+  ;;    ((t (:inherit company-tooltip-selection :weight bold :underline nil))))))
 
 (use-package company-flx :ensure t :defer t :after company
   :init
@@ -764,7 +763,7 @@
         (concat user-emacs-directory ".cache/.company-statistics" )))
 
 ;;; alternatives
-(use-package auto-complete :ensure t :defer t)
+(use-package auto-complete :ensure t :defer t :disabled t)
 
 ;;; Snippets settings
 (use-package yasnippet :ensure t :defer t
@@ -779,7 +778,6 @@
   (yas-global-mode t))
 
 ;;; 代码调试
-;;;=========
 ;;; Code linter settings
 (use-package flycheck :ensure t :defer t :if (display-graphic-p)
   :diminish flycheck-mode
@@ -817,9 +815,7 @@
 (use-package flycheck-pos-tip :ensure t :defer t :after flycheck
   :init (setq-default tooltip-delay 0.2))
 
-;;;----------------------------------------------------------------------
 ;;; 文件管理
-;;;----------------------------------------------------------------------
 ;;; doc-view mode
 (use-package doc-view :defer t
   :config
@@ -833,6 +829,7 @@
         (concat user-emacs-directory ".cache/.ido_last" )))
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
+
 ;;; bookmark & bookmark+
 ;;; 列出当前的书签列表 C-x r l
 (use-package bookmark
@@ -1026,25 +1023,30 @@
 
 (use-package crux :ensure t :defer t
   :bind (("C-a" . crux-move-beginning-of-line)
-         ("M-s RET" . crux-smart-open-line)
-         ("M-s C-RET" . crux-smart-open-line-above))
-  :init
-  (require 'crux)
-  :config
-  (bind-keys :prefix-map Manipulate-line
-             :prefix "C-o"
-             :prefix-docstring "Open line"
-             ("o" . open-line)
-             ("j" . join-line)
-             ("s" . split-line)
-             ("d" . crux-smart-open-line)
-             ("a" . crux-smart-open-line-above)
-             ("k" . crux-kill-whole-line)))
+         ("<escape> RET" . crux-smart-open-line)
+         ("<escape> C-RET" . crux-smart-open-line-above)
+         ("C-j" . join-line)
+         ("C-S-j" . split-line)
+         ("C-o" . open-line)
+         ("C-S-o" . crux-smart-open-line-above)))
+
+;;:init
+;;(require 'crux)
+;;:config
+;; (bind-keys :prefix-map Manipulate-line
+;;            :prefix "C-o"
+;;            :prefix-docstring "Open line"
+;;            ("o" . open-line)
+;;            ("j" . join-line)
+;;            ("s" . split-line)
+;;            ("d" . crux-smart-open-line)
+;;            ("a" . crux-smart-open-line-above)
+;;            ("k" . crux-kill-whole-line)))
 
 ;; 移动文本
 (use-package move-text :ensure t :defer t
-             :bind (("C-S-n" . move-text-down)
-                    ("C-S-p" . move-text-up)))
+  :bind (("C-S-n" . move-text-down)
+         ("C-S-p" . move-text-up)))
 
 ;; 编程大小写
 (use-package fix-word :ensure t :defer t)
@@ -1082,16 +1084,15 @@
 ;;; - kill括号
 ;;;
 (bind-key* "C-S-d" 'kill-word)
-;; (bind-key* "M-s s" 'isearch-forward-regexp)
-;; (bind-key* "M-s S" 'isearch-backward-regexp)
-;; (bind-key* "M-s I" 'imenu)
-(bind-key* "M-s M" 'woman)
-(bind-key* "<f12>" 'set-mark-command)
-(bind-key "M-s m" 'set-mark-command)
+;; (bind-key* "<escape> s" 'isearch-forward-regexp)
+;; (bind-key* "<escape> S" 'isearch-backward-regexp)
+;; (bind-key* "<escape> I" 'imenu)
+(bind-key* "C-c M" 'woman)
+(bind-key* "C-." 'set-mark-command)
 (bind-key "C-S-B" 'backward-sexp)
 (bind-key "C-S-F" 'forward-sexp)
-(unbind-key "M-s o")
-(unbind-key "M-s h")
+(unbind-key "<escape> o")
+(unbind-key "<escape> h")
 
 ;;; 按组来设定快捷键
 (use-package hydra :ensure t :defer t
@@ -1110,7 +1111,7 @@
     ("B" balance-windows "balance")))
 
 ;;; 模式开关
-(bind-keys :prefix "M-s M-t"
+(bind-keys :prefix "C-c t"
            :prefix-map my/toggle-toggle
            ("l" . linum-mode)
            ("L" . hlinum-mode)
@@ -1120,27 +1121,16 @@
            ("t" . my/toggle-theme)
            ("0" . my/toggle-transparency))
 
-(bind-keys :prefix "M-s t"
+(bind-keys :prefix "C-c C-t"
            :prefix-map helpful-tools
            ("d" . insert-date-and-time)
            ("D" . insert-date))
 
-(setq
- display-buffer-alist
- `(
-   ;; … other stuff …
-   (,(rx bos "*shell")
-    (display-buffer-same-window)
-    (reusable-frames . nil))
-   ;; … other stuff …
-   ))
+
 
 ;;; 矩形编辑
-(use-package phi-rectangle :ensure t :defer t :disabled t
-  :commands (phi-rectangle-set-mark-command))
-
 (use-package rect :defer t
-  :bind (("M-s M-r" . rectangle-mark-mode))
+  :bind ("C-c r" . rectangle-mark-mode)
   :config
   (unbind-key "C-x SPC") ;; 取消原生的keybinding
   (bind-keys :map rectangle-mark-mode-map

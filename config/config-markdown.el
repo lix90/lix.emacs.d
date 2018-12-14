@@ -5,15 +5,17 @@
 ;;; Code:
 (use-package markdown-mode :ensure t :defer t
   :mode (("\\.markdown$" . markdown-mode)
+         ("README\\.md\\'" . gfm-mode)
          ("\\.md$"       . markdown-mode)
          ("\\.txt$" . markdown-mode))
+  :init (setq markdown-command "pandoc")
   :config
   (use-package markdown-mode+ :ensure t :defer t)
-  (add-hook 'markdown-mode-hook #'yas-minor-mode)
-  (setq markdown-command "pandoc"
-        markdown-enable-math t
-        markdown-footnote-location "end"
-        markdown-nested-imenu-heading-index t))
+  ;;(add-hook 'markdown-mode-hook #'yas-minor-mode)
+  (setq ;;markdown-command "pandoc"
+   markdown-enable-math t
+   markdown-footnote-location "end"
+   markdown-nested-imenu-heading-index t))
 
 ;;; 在markdown模式下，C-c ' 通过另外一个buffer来编辑源代码块
 (use-package edit-indirect :ensure t :defer t)

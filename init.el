@@ -25,7 +25,10 @@
 ;; 对旧的CL库提供兼容性支持
 (require 'cl)
 
+;;; 初始化变量
 (defconst is-mac (string= system-type "darwin"))
+(defconst package-mirror "emacs-china") ; 镜像管理
+;; (defconst package-mirror "original")
 
 ;; 在启动时不自动加载安装的包
 (setq package-enable-at-startup nil)
@@ -37,8 +40,7 @@
 
 ;;; 指定custom.el文件路径
 (setq custom-file (concat base-path "custom.el"))
-(when (file-exists-p custom-file)
-  (load custom-file))
+(when (file-exists-p custom-file) (load custom-file))
 
 ;;; 指定包下载路径
 (require 'package)
@@ -46,9 +48,6 @@
       (expand-file-name "elpa" user-emacs-directory))
 
 ;;;----------------------------------------------------------------------
-;;; 镜像管理
-(defconst package-mirror "emacs-china")
-;; (defconst package-mirror "original")
 (cond
  ((string= package-mirror "emacs-china")
   (setq package-archives
@@ -81,7 +80,9 @@
 (eval-when-compile
   (require 'use-package))
 (setq use-package-verbose t)
-(require 'diminish)
+(use-package diminish :ensure t :defer t)
+;;(require 'diminish)
+(require 'bind-key)
 
 ;;;----------------------------------------------------------------------
 ;;; bind-key指南
@@ -110,7 +111,6 @@
 ;;     ("C-M-p" . backward-page))
 ;; 查看用户自定义的键
 ;;   M-x describe-personal-keybindings
-(require 'bind-key)
 
 (use-package benchmark-init :ensure t :defer t :disabled t
   :init (require 'benchmark-init))
@@ -131,20 +131,19 @@
       (load-file file-path))))
 
 ;;; 定义加载模块
+(server-start)
 (setq modules-load '("best" "defuns"))
 (setq modules-load-graphic
-      '(;; tools
-        "git" "chinese" "shell" "misc"
-        "lisp"
+      '("git" "chinese" "shell" "misc" "lisp"
+        "org" "markdown"
+        "sql" "ess-r" "python"
         ;; languages
         ;;"javascript" "web" "php"
         ;; "cc"
         ;; "ruby"
         ;; "java"
-        "sql"
-        "ess-r" "python" "scala"
-        ;;"matlab"
-        "org" "markdown"
+        ;; "scala"
+        ;; "matlab"
         ;;"latex"
         ))
 
@@ -155,4 +154,3 @@
 
 (provide 'init)
 ;;; init.el ends here
-(put 'erase-buffer 'disabled nil)

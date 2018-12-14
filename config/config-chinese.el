@@ -4,7 +4,7 @@
 
 ;;; Code:
 
-(use-package pyim :ensure t :defer t
+(use-package pyim :ensure t :defer t :disabled t
   :diminish pyim-isearch-mode
   :init
   (require 'pyim)

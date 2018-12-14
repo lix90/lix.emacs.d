@@ -42,6 +42,30 @@
         (port :default 3306)
         (password :default "")))
 
+;; (setq sql-connection-alist
+;;       '((mysql-business (sql-product 'mysql)
+;;                         (sql-port 3306)
+;;                         (sql-server "rm-bp17w76ltkok4t0r9po.mysql.rds.aliyuncs.com")
+;;                         (sql-user "lixiang")
+;;                         (sql-database "business"))
+;;         ))
+
+;; (defun my-sql-connect (product connection)
+;;   ;; load the password
+;;   (require my-password "my-password.el.gpg")
+
+;;   ;; update the password to the sql-connection-alist
+;;   (let ((connection-info (assoc connection sql-connection-alist))
+;;         (sql-password (car (last (assoc connection my-sql-password)))))
+;;     (delete sql-password connection-info)
+;;     (nconc connection-info `((sql-password ,sql-password)))
+;;     (setq sql-connection-alist (assq-delete-all connection sql-connection-alist))
+;;     (add-to-list 'sql-connection-alist connection-info))
+
+;;   ;; connect to database
+;;   (setq sql-product product)
+;;   (sql-connect connection))
+
 (add-hook 'sql-interactive-mode-hook
           (lambda()
             (toggle-truncate-lines t)

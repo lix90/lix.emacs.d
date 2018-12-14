@@ -5,7 +5,7 @@
 ;;; Code:
 ;;; Git in Emacs
 (use-package magit :ensure t :defer t
-  :bind (("M-g s" . magit-status))
+  :bind (("C-c m s" . magit-status))
   :config
   (setq vc-follow-symlinks t)
   (setq magit-diff-refine-hunk 'all
