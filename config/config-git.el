@@ -1,17 +1,35 @@
 ;;; config-git.el --- Configuration for git version control:
 
-;;; Commentary:
+;;; Commentary: lix的magit配置文件。包括：
+;;;
+;;; Packages:
+;;; * Magit 主要git工具包
+;;; * magit-gitflow 快速使用gitflow弹窗菜单
+;;; * git-timemachine 可以快速查看文件历史状态
+;;; * gitignore-mode 对 `.gitignore` 文件进行高亮
+;;; * gitconfig-mode 对 `.gitconfig` 文件进行高亮
+;;; ------------------------------------------------------
+;;; keybindings:
+;;; Globally:
+;;; C-c m s 全局查看项目修改状态
+;;; C-c m p 全局调出magit调度弹窗
+;;; Locally:
+;;; C-f 在magit status buffer中按C-f将显示gitflow弹窗菜单
+;;; ------------------------------------------------------
 
 ;;; Code:
 ;;; Git in Emacs
 (use-package magit :ensure t :defer t
-  :bind (("C-c m s" . magit-status))
+  :bind (("C-c m s" . magit-status)
+         ("C-c m p" . magit-dispatch-popup))
   :config
   (setq vc-follow-symlinks t)
   (setq magit-diff-refine-hunk 'all
-        magit-push-always-verify nil)
-  (global-git-commit-mode t) ; use emacs as editor for git commits
+        magit-push-always-verify nil
+        magit-commit-show-diff nil)
+  (global-git-commit-mode t)
   )
+
 ;; 在magit status buffer中，按C-f将显示gitflow弹窗菜单
 (use-package magit-gitflow :ensure t :defer t :after magit
   :init
