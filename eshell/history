@@ -1,28 +1,3 @@
-cd projects/
-cd eeglab_pipeline/
-cd dependencies/
-unzip --help
-unzip extrema.zip 
-mv extrema/* ./
-ff extrema.png
-rm extrama.zip
-rm extrema.zip
-rm extrema
-ll
-cd ~
-cd projects/
-cd thesis/
-cd data_eeg
-cd output-40hz/
-open LPP_Pz_t400-1000_40hz.csv 
-up p
-cd braintools/
-cd freq/
-ff erp_peaks.m 
-cd .emacs.d/
-ls el-get/
-cd el-get/
-ls company-ess/
 ff company-ess/readme.org
 cd ..
 cd data_behav/
@@ -80,7 +55,6 @@ ls output-40hz/
 cd ..
 cd data_behav
 open sup_ff.csv
-ls
 brew cask search listen1
 gcn https://github.com/listen1/listen1_desktop
 cd listen1_desktop/
@@ -88,9 +62,7 @@ npm run dist:mac
 。。
 ..
 rm listen1_desktop/
-ls
 cd projects/
-ls
 cd thesis/
 cd data_behav/
 yd "表现为"
@@ -120,7 +92,6 @@ brew reinstall gcc --without-multilib
 type gcc-6
 gcc-6 -fopenmp -o Parallel Parallel.c
 gcn --recursive https://github.com/dmlc/xgboost
-ls
 cd xgboost
 ff Makefile 
 cd make/
@@ -129,7 +100,6 @@ ff config.mk
 cp make/config.mk ./config.mk; make -j4
 python --version
 runpy2
-ls
 cd python-package
 sudo python setup.py install
 python
@@ -171,13 +141,10 @@ cd projects/
 ..
 cd github/
 mkdir wiki && cd wiki
-ls
 cd wiki
-ls
 simiki init
 simiki g
 simiki p
-ls
 gcn https://github.com/tankywoo/yasimple_x2 themes/yasimple_x2
 ff _config.yml 
 simiki p
@@ -188,22 +155,18 @@ cd simple2/
 ..
 cd content/
 mkdir R
-ls
 mkdir Python
 mkdir Tools
 mkdir Other languages
 mkdir Emacs
-ls
 cd intro/
 ..
 simiki p
-ls
 ff _config.yml 
 gcn https://github.com/tankywoo/yasimple themes/yasimple
 ff _config.yml 
 pip install ghp-import
 git remote -v
-ls
 ls -a
 git init
 git remote -v
@@ -245,7 +208,6 @@ pip uninstall simiki
 which simiki
 fab -l
 pip2 install ghp-import
-ls
 ls output
 ls themes
 ls themes/yasimple
@@ -265,58 +227,44 @@ git branch
 git branch -b gh-pages
 git checkout -b gh-pages
 git checkout gh-pages
-ls
 git add .
 git status
 fab commit
-ls
 git checkout master
-ls
 m git branch
 git branch -m master gh-pages
 git branch -d gh-pages
 git branch -D gh-pages
 git branch -m master gh-pages
-ls
 fab commit
 git status
-ls
 ff _config.yml 
-ls
 ls themes
 cd themes
-ls
 ls -a yasimple_x2
 ls -a yasimple_x2/static/
 cd ..
-ls
 rm wiki
 gcn https://github.com/tankywoo/wiki.tankywoo.com wiki
-ls
 cd wiki
 ff CNAME 
 ff _config.yml 
 simiki p
 simiki g
-ls
 git remote -v
 git remote remove
 git remote remove origin
 git remote -v
 git remote add origin https://lix90.github.io/wiki.git
 fab -l
-ls
 simiki init
-ls
 ls content
 simiki g
-ls
 cd content/
 cd book
 ff eloquent-javascript.md 
 ..
 rm .
-ls
 ..
 rm *
 mkdir R
@@ -324,36 +272,28 @@ cd R
 touch into.md
 mv into.md intro.md
 ff intro.md
-ls
 ..
 simiki g
-ls
 ls themes
 ls themes/yasimple_x2/
 cd themes/yasimple_x2/
-ls
 ls -a
 ..
 gcn https://github.com/tankywoo/yasimple_x2 themes/yasimple_x2
 simiki g
-ls
 ff content/R/intro.md 
 fab commit
 git status
 simiki g
 simiki p
-ls
 simiki init
 simiki g
 ff _config.yml 
 simiki g
-ls
 fab commit
-ls
 ..
 rm wiki
 mkdir wiki
-ls
 cd wiki
 simiki init
 simiki g
@@ -365,18 +305,15 @@ ff .gitmodules
 simiki g
 simiki p
 ff _config.yml 
-ls
 ls content/
 fab commit
 ff fabfile.py
 fab -l
 simiki init
 simiki g
-ls
 fab
 git remote -v
 git init
-ls
 fab -l
 simiki p
 ff _config.yml 
@@ -398,7 +335,6 @@ pip2 show markdown
 fab
 pip2 install fabric
 fab -l
-ls
 ff fabfile.py
 python --help
 python --version
@@ -412,14 +348,11 @@ source "source activate python2"
 fs
 /Users/lix/.emacs.d/eshell/alias 
 ff /Users/lix/.emacs.d/eshell/alias 
-ls
 ..
 cd projects/
 ..
 cd github/
-ls
 cd wiki
-ls
 python --version
 src activate python2
 which activate
@@ -435,15 +368,11 @@ ff _config.yml
 fab -l
 simiki g
 simiki p
-ls
 git remote -v
 git remote add origin https://github.com/lix90/wiki.git
-ls
 ls -a
 git add .
-ls
 git checkout -b master
-ls
 git add .
 git status
 fab commit
@@ -451,16 +380,12 @@ git deploy
 git remote -v
 git branch -a
 git checkout gh-pages
-ls
 git pull
-ls
 git checkout master
-ls
 simiki p
 simiki g
 simiki p
 simiki --help
-ls
 simiki g
 simiki p
 simiki p -w
@@ -477,7 +402,6 @@ simiki p --help
 simiki -w preview
 simiki p -w
 simiki g
-ls
 fab -l
 simiki g
 simiki p
@@ -488,6 +412,40 @@ simiki p
 simiki g
 simiki p -w
 fab deploy
-ls
 ll
 .
+ll
+which ll
+hel
+help
+help eshell
+(help eshell)
+(help "eshell")
+clear
+clc
+clear
+alias 
+xgs
+..
+which ..
+which python
+conda 
+which pip
+pip install yapf rope
+pip install black
+clear
+clc
+whiw
+m
+proxy
+..
+mv datasci-tools tools
+git clone git@git.forchange.cn:datasci/datasci-tools.git
+mv tools/* datasci-tools/
+cd datasci-tools/
+ls
+cd ~
+ls
+emacs config.txt
+open config.txt
+ff config.txt

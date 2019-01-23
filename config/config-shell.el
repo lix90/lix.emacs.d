@@ -67,7 +67,7 @@
 
 ;;; shell配置
 ;;;============================================================
-(use-package shell :defer t
+(use-package shell
   :config
   (add-hook 'shell-mode-hook (lambda() (global-hl-line-mode -1)))
   (setq explicit-shell-file-name "bash"

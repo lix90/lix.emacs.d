@@ -45,6 +45,7 @@
             kill-buffer-query-functions))
 
 (menu-bar-mode -1) ;; 不显示菜单栏
+
 (when (fboundp 'tool-bar-mode) ;; 不显示工具栏
   (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) ;; 不显示滑动条
@@ -245,7 +246,7 @@
                       :weight 'bold))
 
 ;; 时间
-(setq display-time-format "%H:%M")
+;;(setq display-time-format "%H:%M")
 
 (require 'ansi-color)
 ;; (setq-default ansi-color-for-comint-mode +1)
@@ -256,11 +257,9 @@
 (fringe-mode '(12 . 12))
 
 ;; 字体
-(setq my/font-height (if is-mac 120 120)
-      my/font-name "Monaco") ;; Source Code Pro
 (set-face-attribute 'default nil
-                    :family my/font-name
-                    :height my/font-height
+                    :family "Monaco"
+                    :height 140
                     :weight 'normal
                     :width 'normal)
 
@@ -287,7 +286,7 @@
 
 ;;; 主题doom-themes
 (use-package doom-themes :ensure t :defer t
-  :init (load-theme 'doom-vibrant t)
+  :init (load-theme 'doom-spacegrey t)
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
@@ -344,9 +343,14 @@
   (solaire-mode-swap-bg)
   )
 
+(use-package highlight-indent-guides :ensure t :defer t
+  :init
+  (setq highlight-indent-guides-method 'column)
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
 ;;; 导航
 ;;; window number
-(use-package winum :ensure t :defer t :disabled t
+(use-package winum :ensure t :defer t
   :init
   (add-hook 'after-init-hook #'winum-mode)
   :config
@@ -471,9 +475,11 @@
 
 (use-package undo-tree :ensure t :defer t
   :diminish undo-tree-mode
+  :bind (("C-_" . undo-tree-undo)
+         ("M-_" . undo-tree-redo)
+         )
   :init
-  (add-hook 'prog-mode-hook #'undo-tree-mode)
-  (add-hook 'text-mode-hook #'undo-tree-mode)
+  (global-undo-tree-mode t)
   :config
   (setq undo-tree-visualizer-timestamps t
         undo-tree-visualizer-diff t)
@@ -505,7 +511,7 @@
 (use-package expand-region :ensure t :defer t
   :bind ("C-=" . er/expand-region)
   :init (bind-keys :prefix-map expand-region-map
-                   :prefix "<escape> E"
+                   :prefix "C-c e"
                    :prefix-docstring "Expand Region"
                    ("f" . er/mark-defun)
                    ("c" . er/mark-comment)
@@ -562,11 +568,11 @@
 ;;; ivy指南
 ;;;
 ;;; 在ivy模式时
-;;; - 确认可以按Enter或者C-m
-;;; - 完成或者补全按TAB或者C-j
-;;; - 立即完成（不使用自动匹配）按C-M-j
+;;; - 确认可以按Enter
+;;; - 完成或者补全按TAB
+;;; - 立即完成（不使用自动匹配）按C-M-i
 ;;; - 调度动作按M-o，动作根据不同模式变化
-;;; - 调用avy进行搜索跳转光标，按C-'
+;;; - 调用avy进行搜索跳转光标，按M-a
 ;;;
 ;;; counsel指南
 ;;;
@@ -577,8 +583,14 @@
          :map shell-mode-map
          ("C-c c h" . counsel-shell-history)
          :map swiper-map
-         ("C-m" . swiper-mc)
-         ("C-a" . swiper-avy)
+         ("M-m" . swiper-mc)
+         ("M-a" . swiper-avy)
+         ("M-q" . swiper-query-replace)
+         ("M-t" . swiper-toggle-face-matching)
+         :map ivy-mode-map
+         ("C-M-i" . ivy-immediate-done)
+         ("M-a" . ivy-avy)
+         ("M-o" . ivy-occur)
          )
   :init
   (add-hook 'after-init-hook #'ivy-mode)
@@ -616,8 +628,7 @@
     (recenter))
   (advice-add 'swiper :after #'my/swiper-recenter))
 
-;;; 提供模糊搜索
-(use-package flx :ensure t :defer t)
+;;(use-package flx :ensure t :defer t)
 
 ;;; 切换buffers
 (bind-keys :prefix-map switch-buffer
@@ -633,10 +644,10 @@
 ;;; 能够分析当前缓冲区中的定义，并生成索引。
 ;;; 对于结构化文档，它生成标题和章节的大纲。
 (use-package imenu-anywhere :ensure t :after ivy
-  :bind ("C-x C-i" . ivy-imenu-anywhere))
+  :bind ("C-c I" . ivy-imenu-anywhere))
 
 (use-package counsel-projectile :ensure t :defer t
-  :bind (("C-x C-p" . counsel-projectile-find-file)))
+  :bind (("C-c c C-p" . counsel-projectile-find-file)))
 
 ;;; ----------------------------------------------------------------------
 ;;; 括号的操作与编辑
@@ -674,6 +685,7 @@
 (use-package rainbow-delimiters :ensure t :defer t
   :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
 
 ;;; 自动补全与代码片段
 ;;;=================
@@ -720,18 +732,18 @@
 
 (use-package company :ensure t :defer t
   :diminish company-mode
-  :bind (("C-c C-0" . company-complete)
+  :bind (("C-c TAB" . company-complete)
          :map company-active-map
          ("C-n" . company-select-next)
          ("C-p" . company-select-previous)
-         ("C-," . company-search-candidates)
-         ("C-." . company-filter-candidates))
+         ("C-r" . company-search-candidates) ;; "C-r" backward, "C-s" forward
+         ("C-f" . company-filter-candidates)
+         ("TAB" . company-complete-selection))
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
   (unbind-key "RET" company-active-map)
   (unbind-key "<return>" company-active-map)
-  (bind-key "<tab>" #'company-complete-selection company-active-map)
   (setq company-minimum-prefix-length 2
         company-require-match nil
         company-tooltip-limit 10
@@ -745,37 +757,33 @@
           company-files
           company-yasnippet
           ))
-  (company-tng-configure-default))
-  ;; Nicer looking faces
-  ;; (custom-set-faces
-  ;;  '(company-tooltip-common
-  ;;    ((t (:inherit company-tooltip :weight bold :underline nil))))
-  ;;  '(company-tooltip-common-selection
-  ;;    ((t (:inherit company-tooltip-selection :weight bold :underline nil))))))
-
-(use-package company-flx :ensure t :defer t :after company
-  :init
-  (add-hook 'company-mode-hook #'company-flx-mode))
-
-(use-package company-statistics :ensure t :defer t :after company
-  :init
-  (setq company-statistics-file
-        (concat user-emacs-directory ".cache/.company-statistics" )))
-
-;;; alternatives
-(use-package auto-complete :ensure t :defer t :disabled t)
+  (company-tng-configure-default)
+  (use-package company-flx :ensure t :defer t
+    :init
+    (with-eval-after-load 'company (company-flx-mode 1)))
+  (use-package company-statistics :ensure t :defer t
+    :init
+    (setq company-statistics-file
+          (concat user-emacs-directory ".cache/.company-statistics" ))))
+;; Nicer looking faces
+;; (custom-set-faces
+;;  '(company-tooltip-common
+;;    ((t (:inherit company-tooltip :weight bold :underline nil))))
+;;  '(company-tooltip-common-selection
+;;    ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 
 ;;; Snippets settings
 (use-package yasnippet :ensure t :defer t
   :diminish yas-minor-mode
-  :bind (:map yas-minor-mode-map
-              ("C-x i i" . yas-insert-snippet)
-              ("C-x i n" . yas-new-snippet)
-              ("C-x i v" . yas-visit-snippet-file)
-              ("C-x i l" . yas-describe-tables)
-              ("C-x i g" . yas-reload-all))
   :init
-  (yas-global-mode t))
+  (yas-global-mode t)
+  (bind-keys :prefix-map yasnippet
+             :prefix "C-c i"
+             ("i" . yas-insert-snippet)
+             ("n" . yas-new-snippet)
+             ("v" . yas-visit-snippet-file)
+             ("l" . yas-reload-all)))
+
 
 ;;; 代码调试
 ;;; Code linter settings
@@ -786,34 +794,10 @@
               ("C-c f n" . flycheck-next-error)
               ("C-c f p" . flycheck-previous-error))
   :config
-  (setq flycheck-javascript-standard-executable "standard"
-        flycheck-javascript-eslint-executable "eslint"
-        flycheck-eslintrc ".eslintrc.json"
-        flycheck-temp-prefix ".flycheck"
-        flycheck-highlighting-mode 'lines
-        flycheck-indication-mode nil)
-  (setq-default flycheck-disabled-checkers '(javascript-jshint
-                                             json-jsonlist))
-  (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
-  (flycheck-add-mode 'javascript-eslint 'js3-mode)
-  (flycheck-add-mode 'javascript-standard 'rjsx-mode)
-  ;; use local eslint from node_modules before global
-  ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
-  (defun my/use-eslint-from-node-modules ()
-    (let* ((root (locate-dominating-file
-                  (or (buffer-file-name) default-directory)
-                  "node_modules"))
-           (eslint (and root
-                        (expand-file-name "node_modules/eslint/bin/eslint.js"
-                                          root))))
-      (when (and eslint (file-executable-p eslint))
-        (setq-local flycheck-javascript-eslint-executable eslint))))
-  (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules))
-
-(use-package avy-flycheck :ensure t :defer t :after flycheck
-  :config (avy-flycheck-setup))
-(use-package flycheck-pos-tip :ensure t :defer t :after flycheck
-  :init (setq-default tooltip-delay 0.2))
+  (use-package avy-flycheck :ensure t :defer t :after flycheck
+    :config (avy-flycheck-setup))
+  (use-package flycheck-pos-tip :ensure t :defer t :after flycheck
+    :init (setq-default tooltip-delay 0.2)))
 
 ;;; 文件管理
 ;;; doc-view mode
@@ -823,28 +807,33 @@
              ("C-o" . counsel-osx-app)))
 
 ;;; ido
-(use-package ido :defer t
+(use-package ido :defer t :disabled t
   :config
   (setq ido-save-directory-list-file
         (concat user-emacs-directory ".cache/.ido_last" )))
 
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+;;(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 ;;; bookmark & bookmark+
 ;;; 列出当前的书签列表 C-x r l
 (use-package bookmark
   :config
   (setq bookmark-default-file
-        (concat user-emacs-directory ".cache/.emacs-bookmarks.el" )))
-(use-package bookmark+ :defer t
-  :config
-  (setq bmkp-bmenu-state-file
-        (concat user-emacs-directory ".cache/.emacs-bmk-bmenu-state.el")
-        bmkp-bmenu-commands-file
-        (concat user-emacs-directory ".cache/.emacs.bmk-bmenu-commands.el")))
+        (concat user-emacs-directory ".cache/.emacs-bookmarks.el" ))
+  (use-package bookmark+ :defer t
+    :config
+    (setq bmkp-bmenu-state-file
+          (concat user-emacs-directory ".cache/.emacs-bmk-bmenu-state.el")
+          bmkp-bmenu-commands-file
+          (concat user-emacs-directory ".cache/.emacs.bmk-bmenu-commands.el"))))
+
 
 (use-package dired
+  :bind (:map dired-mode-map
+              ("RET" . dired-find-alternate-file)
+              ("^" . (lambda () (interactive) (find-alternate-file ".."))))
   :config
+  ;; open file in alternate buffer
   (put 'dired-find-alternate-file 'disabled nil)
   ;; allow dired to delete or copy dir
   ;; “always” means no asking
@@ -856,24 +845,27 @@
         (or (executable-find "gls")
             (executable-find "ls")))
   (setq dired-dwim-target t)
-  (define-key dired-mode-map (kbd "RET")
-    'dired-find-alternate-file)
   ;; was dired-advertised-find-file
-  (define-key dired-mode-map (kbd "^")
-    (lambda () (interactive) (find-alternate-file "..")))
+  ;; (define-key dired-mode-map (kbd "^")
+  ;;   (lambda () (interactive) (find-alternate-file "..")))
   ;;; 其他dired拓展功能的包
   (use-package dired+ :ensure t :defer t)
   (use-package dired-single :ensure t :defer t)
   (use-package dired-details :ensure t :defer t)
-  (use-package dired-details+ :ensure t :defer t)
-  (use-package dired-k :ensure t :defer t)
+  (use-package dired-details+ :ensure t :defer t
+    :init
+    (require 'dired-details+))
+  (use-package dired-k :ensure t :defer t
+    :bind (:map dired-mode-map
+                ("K" . dired-k)))
   (use-package dired-subtree :ensure t
     :config
     (bind-keys :map dired-mode-map
                ("i" . dired-subtree-insert)
                (";" . dired-subtree-remove)))
   (require 'dired+)
-  (add-hook 'dired-initial-position-hook #'dired-k))
+  (add-hook 'dired-initial-position-hook #'dired-k)
+  )
 
 (use-package neotree :ensure t
   :bind (("<f7>" . neotree-toggle)
@@ -1012,7 +1004,7 @@
 ;; 饥饿删除模式
 (use-package hungry-delete :ensure t :defer t
   :diminish hungry-delete-mode
-  :init (global-hungry-delete-mode +1))
+  :init (global-hungry-delete-mode 1))
 
 (use-package whole-line-or-region :ensure t :defer t :disabled t
   :diminish whole-line-or-region-mode
@@ -1023,25 +1015,10 @@
 
 (use-package crux :ensure t :defer t
   :bind (("C-a" . crux-move-beginning-of-line)
-         ("<escape> RET" . crux-smart-open-line)
-         ("<escape> C-RET" . crux-smart-open-line-above)
          ("C-j" . join-line)
          ("C-S-j" . split-line)
-         ("C-o" . open-line)
-         ("C-S-o" . crux-smart-open-line-above)))
-
-;;:init
-;;(require 'crux)
-;;:config
-;; (bind-keys :prefix-map Manipulate-line
-;;            :prefix "C-o"
-;;            :prefix-docstring "Open line"
-;;            ("o" . open-line)
-;;            ("j" . join-line)
-;;            ("s" . split-line)
-;;            ("d" . crux-smart-open-line)
-;;            ("a" . crux-smart-open-line-above)
-;;            ("k" . crux-kill-whole-line)))
+         ("C-o" . crux-smart-open-line)
+         ("C-O" . crux-smart-open-line-above)))
 
 ;; 移动文本
 (use-package move-text :ensure t :defer t
@@ -1049,7 +1026,10 @@
          ("C-S-p" . move-text-up)))
 
 ;; 编程大小写
-(use-package fix-word :ensure t :defer t)
+(use-package fix-word :ensure t :defer t
+  :bind (("M-c" . fix-word-upcase)
+         ("M-u" . fix-word-downcase)
+         ("M-C" . fix-word-capitalize)))
 
 (use-package whitespace :ensure t :defer t
   :config
@@ -1070,12 +1050,13 @@
 ;; 暴力缩进
 (use-package aggressive-indent :ensure t :defer t
   :diminish aggressive-indent-mode
-  :init (add-hook 'prog-mode-hook #'aggressive-indent-mode)
-  :config
+  :init
+  (global-aggressive-indent-mode t)
   (add-to-list 'aggressive-indent-excluded-modes
                '(python-mode
                  haml-mode
-                 html-mode)))
+                 html-mode
+                 markdown-mode)))
 
 ;;; ----------------------------------------------------------------------
 ;;; 设定快捷键
@@ -1083,16 +1064,14 @@
 ;;; 常用快捷键记录
 ;;; - kill括号
 ;;;
-(bind-key* "C-S-d" 'kill-word)
+;; (bind-key* "C-S-d" 'kill-word)
 ;; (bind-key* "<escape> s" 'isearch-forward-regexp)
 ;; (bind-key* "<escape> S" 'isearch-backward-regexp)
 ;; (bind-key* "<escape> I" 'imenu)
 (bind-key* "C-c M" 'woman)
-(bind-key* "C-." 'set-mark-command)
+(bind-key* "M-m" 'set-mark-command)
 (bind-key "C-S-B" 'backward-sexp)
 (bind-key "C-S-F" 'forward-sexp)
-(unbind-key "<escape> o")
-(unbind-key "<escape> h")
 
 ;;; 按组来设定快捷键
 (use-package hydra :ensure t :defer t
@@ -1112,7 +1091,8 @@
 
 ;;; 模式开关
 (bind-keys :prefix "C-c t"
-           :prefix-map my/toggle-toggle
+           :prefix-map toggler
+           :prefix-docstring "Toggle"
            ("l" . linum-mode)
            ("L" . hlinum-mode)
            ("h" . hl-line-mode)
@@ -1122,7 +1102,7 @@
            ("0" . my/toggle-transparency))
 
 (bind-keys :prefix "C-c C-t"
-           :prefix-map helpful-tools
+           :prefix-map tools
            ("d" . insert-date-and-time)
            ("D" . insert-date))
 
@@ -1140,6 +1120,7 @@
              ("k" . kill-rectangle)
              ("y" . yank-rectangle)
              ("r" . replace-rectangle)))
+
 
 (provide 'config-best)
 ;;; config-best.el ends here

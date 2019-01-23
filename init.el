@@ -131,7 +131,9 @@
       (load-file file-path))))
 
 ;;; 定义加载模块
-(server-start)
+(require 'server)
+(or (server-running-p)
+    (server-start))
 (setq modules-load '("best" "defuns"))
 (setq modules-load-graphic
       '("git" "chinese" "shell" "misc" "lisp"
